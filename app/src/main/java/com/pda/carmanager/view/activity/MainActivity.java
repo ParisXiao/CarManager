@@ -1,7 +1,9 @@
-package com.pda.carmanager;
+package com.pda.carmanager.view.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+
+import com.pda.carmanager.R;
 
 public class MainActivity extends Activity {
 
