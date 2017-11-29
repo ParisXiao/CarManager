@@ -12,6 +12,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //去除title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         //去掉Activity上面的状态栏

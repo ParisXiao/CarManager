@@ -20,6 +20,7 @@ public final class AMUtil<T extends Activity> {
     private ConcurrentHashMap<String , T>  map;
 
 
+
     private AMUtil() {
         map = new ConcurrentHashMap<>();
     }

@@ -13,6 +13,7 @@ public abstract class BaseActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         //将Activity加入管理器
         AMUtil.getManager().putActivity(getClass().getSimpleName(), this);
+
     }
 
     @Override

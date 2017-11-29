@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     tools:context="com.pda.carmanager.view.activity.MainActivity">
 
+    <FrameLayout
+        android:id="@+id/main_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></FrameLayout>
+
     <android.support.percent.PercentRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,20 +19,20 @@
         <ImageButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_widthPercent="33%"
             android:layout_alignParentLeft="true"
-            />
+            app:layout_widthPercent="33%" />
+
         <ImageButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             app:layout_widthPercent="33%" />
+
         <ImageButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_widthPercent="33%"
             android:layout_alignParentRight="true"
-            />
+            app:layout_widthPercent="33%" />
     </android.support.percent.PercentRelativeLayout>
 
 </RelativeLayout>
