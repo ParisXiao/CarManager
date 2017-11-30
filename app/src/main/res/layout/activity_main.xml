@@ -5,10 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.pda.carmanager.view.activity.MainActivity">
-<include
-    android:id="@+id/toolbar"
-    layout="@layout/layout_toolbar_common"
-    />
+
+    <include
+        android:id="@+id/top"
+        layout="@layout/layout_toolbar_common" />
+
     <FrameLayout
         android:id="@+id/main_frame"
         android:layout_width="match_parent"

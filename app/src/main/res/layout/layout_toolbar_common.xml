@@ -1,78 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.AppBarLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:contentInsetStart="0dp"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/toolbar_mid"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:textColor="@color/white"
-                android:textSize="20dp" />
+            android:layout_height="?attr/actionBarSize"
+            app:contentInsetStart="0dp"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:title="">
 
-            <ImageButton
-                android:id="@+id/toolbar_left_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingLeft="20dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_keyboard_arrow_left"
-                android:scaleType="fitCenter"
-                android:background="#00000000"
-                android:clickable="true"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                />
+                <TextView
+                    android:id="@+id/toolbar_mid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/white"
+                    android:textSize="20dp" />
 
-            <TextView
-                android:id="@+id/toolbar_left"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/margin_content"
-                android:layout_toRightOf="@id/toolbar_left_btn"
-                android:gravity="center_vertical"
-                android:textColor="@color/white"
-                android:textSize="18dp"
-                android:text="返回"
-                android:clickable="true"/>
+                <ImageButton
+                    android:id="@+id/toolbar_left_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:background="#00000000"
+                    android:clickable="true"
+                    android:paddingLeft="20dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_keyboard_arrow_left"
 
-            <ImageButton
-                android:id="@+id/toolbar_right_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingRight="@dimen/padding_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="#00000000"
-                android:scaleType="fitCenter"
-                android:clickable="true"
-               />
+                    />
 
-            <TextView
-                android:id="@+id/toolbar_right"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginRight="@dimen/margin_content"
-                android:layout_alignParentRight="true"
-                android:layout_toLeftOf="@id/toolbar_right_btn"
-                android:gravity="center_vertical"
-                android:textColor="@color/white"
-                android:textSize="18dp"
-                android:clickable="true"/>
-        </RelativeLayout>
-    </android.support.v7.widget.Toolbar>
-</android.support.design.widget.AppBarLayout>
+                <TextView
+                    android:id="@+id/toolbar_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/margin_content"
+                    android:layout_toRightOf="@id/toolbar_left_btn"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:text="返回"
+                    android:textColor="@color/white"
+                    android:textSize="18dp" />
+
+                <ImageButton
+                    android:id="@+id/toolbar_right_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="#00000000"
+                    android:clickable="true"
+                    android:paddingRight="@dimen/padding_content"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:id="@+id/toolbar_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/margin_content"
+                    android:layout_toLeftOf="@id/toolbar_right_btn"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:textSize="18dp" />
+            </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -39,15 +39,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ImageButton imb_management;
     private ImageButton imb_message;
     private ImageButton imb_mine;
+    private int[] resSelectIds = {R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher};
+    private int[] resIds = {R.mipmap.ic_launcher_round, R.mipmap.ic_launcher_round, R.mipmap.ic_launcher_round};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //去除title
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //去掉Activity上面的状态栏
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         initView();
     }
@@ -65,6 +62,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             fragmentTransaction.commitAllowingStateLoss();
 
         }
+
     }
 
     private void initView() {
@@ -86,9 +84,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         imb_message.setOnClickListener(this);
         imb_mine = (ImageButton) findViewById(R.id.imb_mine);
         imb_mine.setOnClickListener(this);
+        imageButtons = new ImageButton[]{imb_management, imb_message, imb_mine};
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         initFragment();
+        startView();
     }
 
     private void showFragment(int position) {
@@ -106,6 +106,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         currentPosition = position;
     }
 
+    public void startView() {
+        refreshImageButtons(0);
+        toolbar_mid.setText("车位管理");
+        showFragment(0);
+    }
 
     /**
      * 刷新底部控件
@@ -113,9 +118,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void refreshImageButtons(int position) {
         for (int i = 0; i < imageButtons.length; i++) {
             if (i == position) {
-//                imageButtons[i].setImageResource(resSelectIds[i]);
+                imageButtons[i].setImageResource(resSelectIds[i]);
             } else {
-//                imageButtons[i].setImageResource(resIds[i]);
+                imageButtons[i].setImageResource(resIds[i]);
             }
         }
     }
