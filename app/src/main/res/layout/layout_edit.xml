@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <org.angmarch.views.NiceSpinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/nice_spinner1"
+        android:text="渝"
+        android:textColor="@color/black"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
+    <org.angmarch.views.NiceSpinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/nice_spinner2"
+        android:text="A"
+        android:textColor="@color/black"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="14dp"
+        android:layout_toEndOf="@+id/nice_spinner1" />
+    <com.pda.carmanager.view.widght.PwdEditText
+        android:id="@+id/pwd_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_alignBaseline="@+id/nice_spinner2"
+        android:layout_alignBottom="@+id/nice_spinner2"
+        android:layout_toEndOf="@+id/nice_spinner2"
+        android:layout_marginStart="14dp" />
+</RelativeLayout>

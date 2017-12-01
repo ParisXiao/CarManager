@@ -1,1 +1,2 @@
 include ':app', ':libqrcode'
+include ':spinner_lib'
