@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
+import com.pda.carmanager.view.widght.IdentifyingCodeView;
 import com.pda.carmanager.view.widght.PwdEditText;
 
 import org.angmarch.views.NiceSpinner;
@@ -31,7 +32,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
     private PopupWindow popupWindow;
     private NiceSpinner nice_spinner1;
     private NiceSpinner nice_spinner2;
-    private PwdEditText pwd_edit;
+    private IdentifyingCodeView pwd_edit;
     private LinkedList<String> data1=new LinkedList<>(Arrays.asList("渝", "京", "津", "沪","冀"));
     private LinkedList<String> data2=new LinkedList<>(Arrays.asList("A", "B", "C", "D"));
 
@@ -57,7 +58,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         nice_spinner1.setTextColor(Color.BLACK);
         nice_spinner2 = (NiceSpinner) view.findViewById(R.id.nice_spinner2);
         nice_spinner2.setTextColor(Color.BLACK);
-        pwd_edit = (PwdEditText)view.findViewById(R.id.pwd_edit);
+        pwd_edit = (IdentifyingCodeView)view.findViewById(R.id.pwd_edit);
         nice_spinner1.attachDataSource(data1);
         nice_spinner2.attachDataSource(data2);
         nice_spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -82,6 +83,17 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
                 nice_spinner2.setText(data2.get(0));
             }
         });
+        pwd_edit.setInputCompleteListener(new IdentifyingCodeView.InputCompleteListener() {
+            @Override
+            public void inputComplete() {
+
+            }
+
+            @Override
+            public void deleteContent() {
+
+            }
+        });
 
     }
 
@@ -102,11 +114,6 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
 
     private void submit() {
         // validate
-        String edit = pwd_edit.getText().toString().trim();
-        if (TextUtils.isEmpty(edit)) {
-            Toast.makeText(this, "edit不能为空", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         // TODO validate success, do something
 

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <org.angmarch.views.NiceSpinner
         android:layout_width="wrap_content"
@@ -21,7 +22,7 @@
         android:layout_centerVertical="true"
         android:layout_marginStart="14dp"
         android:layout_toEndOf="@+id/nice_spinner1" />
-    <com.pda.carmanager.view.widght.PwdEditText
+    <com.pda.carmanager.view.widght.IdentifyingCodeView
         android:id="@+id/pwd_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,5 +30,12 @@
         android:layout_alignBaseline="@+id/nice_spinner2"
         android:layout_alignBottom="@+id/nice_spinner2"
         android:layout_toEndOf="@+id/nice_spinner2"
-        android:layout_marginStart="14dp" />
+        android:layout_marginStart="14dp"
+        android:layout_centerVertical="true"
+        app:icv_et_bg_focus="@drawable/shape_icv_et_bg_focus"
+        app:icv_et_bg_normal="@drawable/shape_icv_et_bg_normal"
+        app:icv_et_divider_drawable="@drawable/shape_divider_identifying"
+        app:icv_et_number="5"
+        app:icv_et_text_color="#000000"
+        app:icv_et_width="40dp"/>
 </RelativeLayout>
