@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -92,6 +93,8 @@ public class IdentifyingCodeView extends RelativeLayout {
     private void initTextViews(Context context, int etNumber, int etWidth, Drawable etDividerDrawable, float etTextSize, int etTextColor) {
         // 设置 editText 的输入长度
         et.setCursorVisible(false);//将光标隐藏
+        et.setInputType(InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+//        et.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
         et.setFilters(new InputFilter[]{new InputFilter.LengthFilter(etNumber)}); //最大输入长度
         // 设置分割线的宽度
         if (etDividerDrawable != null) {
