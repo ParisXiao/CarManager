@@ -1,11 +1,9 @@
-package com.pda.carmanager.view.activity;
+package com.pda.carmanager.view.test;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -22,7 +20,6 @@ import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.util.BluetoothUtil;
-import com.pda.carmanager.util.PrintUtil;
 
 import java.util.List;
 

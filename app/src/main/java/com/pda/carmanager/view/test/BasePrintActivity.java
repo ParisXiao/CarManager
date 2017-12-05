@@ -1,4 +1,4 @@
-package com.pda.carmanager.view.activity;
+package com.pda.carmanager.view.test;
 
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
