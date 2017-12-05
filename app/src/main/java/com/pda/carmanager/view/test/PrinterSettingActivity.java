@@ -4,6 +4,8 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -20,6 +22,8 @@ import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.util.BluetoothUtil;
+import com.pda.carmanager.util.PrintUtil;
+import com.xys.libzxing.zxing.encoding.EncodingUtils;
 
 import java.util.List;
 
@@ -29,6 +33,8 @@ public class PrinterSettingActivity extends BasePrintActivity implements View.On
     Button mBtnSetting;
     Button mBtnTest;
     Button mBtnPrint;
+    Button mBtnZXing;
+    Bitmap bitmapZxing;
 
 
     DeviceListAdapter mAdapter;
@@ -55,6 +61,7 @@ public class PrinterSettingActivity extends BasePrintActivity implements View.On
         mBtnSetting = (Button) findViewById(R.id.btn_goto_setting);
         mBtnTest = (Button) findViewById(R.id.btn_test_conntect);
         mBtnPrint = (Button) findViewById(R.id.btn_print);
+        mBtnZXing = (Button) findViewById(R.id.btn_test_zxing);
 
         mLvPairedDevices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -105,6 +112,8 @@ public class PrinterSettingActivity extends BasePrintActivity implements View.On
             case R.id.btn_print:
                 connectDevice(TASK_TYPE_PRINT);
                 break;
+            case R.id.btn_test_zxing:
+
         }
     }
 
@@ -127,9 +136,10 @@ public class PrinterSettingActivity extends BasePrintActivity implements View.On
     public void onConnected(BluetoothSocket socket, int taskType) {
         switch (taskType){
             case TASK_TYPE_PRINT:
-
-//                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test_image);
-//                PrintUtil.printTest(socket, bitmap,);
+//                Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+//                Bitmap bitmap= EncodingUtils.createQRCode("www.baidu.com", 300, 300, logoBitmap);
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test_image);
+                PrintUtil.printTest(socket, bitmap,"垫江","001","渝A74110","2017-12-5 08:29:12","11","重庆解放碑","002","2017-12-1 09:11:09","2017-12-2 12:12:56");
 
                 break;
         }

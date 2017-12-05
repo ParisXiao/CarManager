@@ -330,52 +330,55 @@ public class PrintUtil {
             // 店铺名 居中 放大
             pUtil.printAlignment(1);
             pUtil.printLargeText("泊讯停车临街车位缴费小票");
-            pUtil.printLine(3);
-            pUtil.printAlignment(0);
             pUtil.printLine(2);
+            pUtil.printAlignment(0);
+            pUtil.printLine(1);
 
             pUtil.printText("本次停车信息");
-            pUtil.printLine(2);
+            pUtil.printLine(1);
 
             pUtil.printTwoColumn("停车街道:", address);
-            pUtil.printLine(2);
+            pUtil.printLine(1);
 
             pUtil.printTwoColumn("车位编号:", StopNum);
-            pUtil.printLine(2);
+            pUtil.printLine(1);
 
             pUtil.printTwoColumn("车牌号:",carNum);
-            pUtil.printLine(2);
+            pUtil.printLine(1);
 
             pUtil.printTwoColumn("停车时刻:",stopTime);
-            pUtil.printLine(2);
+            pUtil.printLine(1);
 
             // 分隔线
             pUtil.printDashLine();
-            pUtil.printLine(2);
+            pUtil.printLine(1);
 
             //打印商品列表
             pUtil.printText("欠费记录");
-            pUtil.printTabSpace(2);
+            pUtil.printTabSpace(5);
             pUtil.printLargeText("￥"+Arrears);
-            pUtil.printLine(2);
-            pUtil.printTwoColumn("停车街道:", Arrears);
-            pUtil.printLine(2);
+            pUtil.printLine(1);
+            pUtil.printTwoColumn("停车街道:", ArrearsAddress);
+            pUtil.printLine(1);
 
             pUtil.printTwoColumn("车位编号:", ArrearsStopNum);
-            pUtil.printLine(2);
+            pUtil.printLine(1);
 
-            pUtil.printTwoColumn("停车时段:", ArrearsStart+"至"+ArrearsEnd);
-            pUtil.printLine(2);
+            pUtil.printTwoColumn("停车时段:", ArrearsStart+"至");
+            pUtil.printLine();
+            pUtil.printAlignment(2);
+            pUtil.printText(ArrearsEnd);
+            pUtil.printLine(1);
 
             pUtil.printTwoColumn("欠费金额:", Arrears);
 
-            pUtil.printLine(4);
+            pUtil.printLine(3);
             pUtil.printAlignment(1);
             pUtil.printText("您离开时可用支付宝或微信");
             pUtil.printLine();
             pUtil.printAlignment(1);
             pUtil.printText("扫描下方二维码自主缴费");
-            pUtil.printLine(2);
+            pUtil.printLine(1);
             pUtil.printAlignment(1);
             pUtil.printBitmap(bitmap);
 

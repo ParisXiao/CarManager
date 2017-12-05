@@ -25,9 +25,6 @@ public abstract class NiceSpinnerBaseAdapter<T> extends BaseAdapter {
         mTextColor = textColor;
         mBackgroundSelector = backgroundSelector;
     }
-
-    //这个方法将返回下拉列表的形制，可以在这里修改和二次定制开发。
-    //张飞注解
     @Override
     @SuppressWarnings("unchecked")
     public View getView(int position, View convertView, ViewGroup parent) {
