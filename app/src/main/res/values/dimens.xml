@@ -9,4 +9,5 @@
 
     <dimen name="line">0.5dp</dimen>
     <dimen name="line_height">44dp</dimen>
+    <dimen name="common_margin">16dp</dimen>
 </resources>
