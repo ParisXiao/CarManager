@@ -30,6 +30,7 @@ public class PrinterSettingActivity extends BasePrintActivity implements View.On
     Button mBtnTest;
     Button mBtnPrint;
 
+
     DeviceListAdapter mAdapter;
     int mSelectedPosition = -1;
 

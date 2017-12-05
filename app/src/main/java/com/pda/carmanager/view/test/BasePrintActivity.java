@@ -28,6 +28,7 @@ public abstract class BasePrintActivity extends AppCompatActivity {
 
     /**
      * 蓝牙连接成功后回调，该方法在子线程执行，可执行耗时操作
+     *
      */
     public abstract void onConnected(BluetoothSocket socket, int taskType);
 
