@@ -1,18 +1,18 @@
 [
     {
-        "merged": "D:\\CarAdministration\\CarManager\\CarManager\\spinner_lib\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-v21\\abc_btn_colored_material.xml",
-        "source": "C:\\Users\\Admin\\.android\\build-cache\\de97b7307e53f911f9286da64aa64228cf930642\\output\\res\\drawable-v21\\abc_btn_colored_material.xml"
+        "merged": "D:\\andriodWorkSpace\\CarManager\\spinner_lib\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-v21\\selector.xml",
+        "source": "D:\\andriodWorkSpace\\CarManager\\spinner_lib\\build\\intermediates\\bundles\\debug\\res\\drawable-v21\\selector.xml"
     },
     {
-        "merged": "D:\\CarAdministration\\CarManager\\CarManager\\spinner_lib\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-v21\\selector.xml",
-        "source": "D:\\CarAdministration\\CarManager\\CarManager\\spinner_lib\\build\\intermediates\\bundles\\debug\\res\\drawable-v21\\selector.xml"
+        "merged": "D:\\andriodWorkSpace\\CarManager\\spinner_lib\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-v21\\abc_btn_colored_material.xml",
+        "source": "C:\\Users\\Administrator\\.android\\build-cache\\14e4f382ac4ac6905d3215b95a92d5ca59a417e2\\output\\res\\drawable-v21\\abc_btn_colored_material.xml"
     },
     {
-        "merged": "D:\\CarAdministration\\CarManager\\CarManager\\spinner_lib\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-v21\\abc_action_bar_item_background_material.xml",
-        "source": "C:\\Users\\Admin\\.android\\build-cache\\de97b7307e53f911f9286da64aa64228cf930642\\output\\res\\drawable-v21\\abc_action_bar_item_background_material.xml"
+        "merged": "D:\\andriodWorkSpace\\CarManager\\spinner_lib\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-v21\\abc_edit_text_material.xml",
+        "source": "C:\\Users\\Administrator\\.android\\build-cache\\14e4f382ac4ac6905d3215b95a92d5ca59a417e2\\output\\res\\drawable-v21\\abc_edit_text_material.xml"
     },
     {
-        "merged": "D:\\CarAdministration\\CarManager\\CarManager\\spinner_lib\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-v21\\abc_edit_text_material.xml",
-        "source": "C:\\Users\\Admin\\.android\\build-cache\\de97b7307e53f911f9286da64aa64228cf930642\\output\\res\\drawable-v21\\abc_edit_text_material.xml"
+        "merged": "D:\\andriodWorkSpace\\CarManager\\spinner_lib\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-v21\\abc_action_bar_item_background_material.xml",
+        "source": "C:\\Users\\Administrator\\.android\\build-cache\\14e4f382ac4ac6905d3215b95a92d5ca59a417e2\\output\\res\\drawable-v21\\abc_action_bar_item_background_material.xml"
     }
 ]

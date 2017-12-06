@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +23,13 @@ import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.util.BluetoothUtil;
+import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PrintUtil;
 import com.xys.libzxing.zxing.encoding.EncodingUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PrinterSettingActivity extends BasePrintActivity implements View.OnClickListener{
 
@@ -74,6 +78,7 @@ public class PrinterSettingActivity extends BasePrintActivity implements View.On
         mBtnSetting.setOnClickListener(this);
         mBtnTest.setOnClickListener(this);
         mBtnPrint.setOnClickListener(this);
+        mBtnZXing.setOnClickListener(this);
 
         mAdapter = new DeviceListAdapter(this);
         mLvPairedDevices.setAdapter(mAdapter);
@@ -113,6 +118,20 @@ public class PrinterSettingActivity extends BasePrintActivity implements View.On
                 connectDevice(TASK_TYPE_PRINT);
                 break;
             case R.id.btn_test_zxing:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String password="123456";
+                        String strBase64 = new String(Base64.encode(password.getBytes(), Base64.DEFAULT));
+                        String[] key = new String[]{"username","password","encode"};
+                        Map<String,String> map=new HashMap<String, String>();
+                        map.put("username","xiaoli");
+                        map.put("password",strBase64);
+                        map.put("encode","1213");
+                        OKHttpUtil.GetMessage(PrinterSettingActivity.this,key,map);
+                    }
+                }).start();
+                break;
 
         }
     }
