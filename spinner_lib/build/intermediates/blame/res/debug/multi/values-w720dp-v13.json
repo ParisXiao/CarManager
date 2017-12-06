@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "D:\\andriodWorkSpace\\CarManager\\spinner_lib\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-w720dp-v13\\values-w720dp-v13.xml",
+        "outputFile": "D:\\CarAdministration\\CarManager\\CarManager\\spinner_lib\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-w720dp-v13\\values-w720dp-v13.xml",
         "map": [
             {
                 "to": {
@@ -11,7 +11,7 @@
                     "endOffset": 127
                 },
                 "from": {
-                    "file": "C:\\Users\\Administrator\\.android\\build-cache\\14e4f382ac4ac6905d3215b95a92d5ca59a417e2\\output\\res\\values-w720dp-v13\\values-w720dp-v13.xml",
+                    "file": "C:\\Users\\Admin\\.android\\build-cache\\de97b7307e53f911f9286da64aa64228cf930642\\output\\res\\values-w720dp-v13\\values-w720dp-v13.xml",
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,

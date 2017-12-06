@@ -136,10 +136,10 @@ public class PrinterSettingActivity extends BasePrintActivity implements View.On
     public void onConnected(BluetoothSocket socket, int taskType) {
         switch (taskType){
             case TASK_TYPE_PRINT:
-//                Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-//                Bitmap bitmap= EncodingUtils.createQRCode("www.baidu.com", 300, 300, logoBitmap);
-                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test_image);
-                PrintUtil.printTest(socket, bitmap,"垫江","001","渝A74110","2017-12-5 08:29:12","11","重庆解放碑","002","2017-12-1 09:11:09","2017-12-2 12:12:56");
+                Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+                Bitmap bitmap= EncodingUtils.createQRCode("www.baidu.com", 360, 360, logoBitmap);
+//                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test_image);
+                PrintUtil.printTest(socket, bitmap,"石桥铺","001","渝A74110","2017年12月6日 08:29:12","11","重庆解放碑","002","2017年12月1日 09:11:09","2017年12月2日 12:12:56");
 
                 break;
         }

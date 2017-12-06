@@ -16,7 +16,16 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/zxing_edit"
         android:text="生成二维码" />
-
+    <Button
+        android:id="@+id/zxingsao_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/zxing_edit"
+        android:text="扫描二维码" />
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <ImageView
         android:id="@+id/zxing_img"
         android:layout_width="200dp"

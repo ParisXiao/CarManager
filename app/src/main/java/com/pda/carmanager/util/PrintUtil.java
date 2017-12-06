@@ -3,6 +3,7 @@ package com.pda.carmanager.util;
 import android.bluetooth.BluetoothSocket;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 
 import com.github.promeg.pinyinhelper.Pinyin;
@@ -19,8 +20,8 @@ public class PrintUtil {
     private OutputStreamWriter mWriter = null;
     private OutputStream mOutputStream = null;
 
-    public final static int WIDTH_PIXEL = 384;
-    public final static int IMAGE_SIZE = 320;
+    public final static int WIDTH_PIXEL = 360;
+    public final static int IMAGE_SIZE = 360;
 
     /**
      * 初始化Pos实例
@@ -221,8 +222,8 @@ public class PrintUtil {
     }
 
     public void printBitmap(Bitmap bmp) throws IOException {
-        bmp = compressPic(bmp);
-        byte[] bmpByteArray = draw2PxPoint(bmp);
+        bmp = PrintBitmapUtil.compressPic(bmp);
+        byte[] bmpByteArray = PrintBitmapUtil.draw2PxPoint(bmp);
         printRawBytes(bmpByteArray);
     }
 
@@ -230,54 +231,136 @@ public class PrintUtil {
      * 假设一个360*360的图片，分辨率设为24, 共分15行打印 每一行,是一个 360 * 24 的点阵,y轴有24个点,存储在3个byte里面。
      * 即每个byte存储8个像素点信息。因为只有黑白两色，所以对应为1的位是黑色，对应为0的位是白色
      **************************************************************************/
-    private byte[] draw2PxPoint(Bitmap bmp) {
-        //先设置一个足够大的size，最后在用数组拷贝复制到一个精确大小的byte数组中
+//    private byte[] draw2PxPoint(Bitmap bmp) {
+//        //先设置一个足够大的size，最后在用数组拷贝复制到一个精确大小的byte数组中
+//        int size = bmp.getWidth() * bmp.getHeight() / 8 + 1000;
+//        byte[] tmp = new byte[size];
+//        int k = 0;
+//        // 设置行距为0
+//        tmp[k++] = 0x1B;
+//        tmp[k++] = 0x33;
+//        tmp[k++] = 0x00;
+//        // 居中打印
+//        tmp[k++] = 0x1B;
+//        tmp[k++] = 0x61;
+//        tmp[k++] = 1;
+//        for (int j = 0; j < bmp.getHeight() / 24f; j++) {
+//            tmp[k++] = 0x1B;
+//            tmp[k++] = 0x2A;// 0x1B 2A 表示图片打印指令
+//            tmp[k++] = 33; // m=33时，选择24点密度打印
+//            tmp[k++] = (byte) (bmp.getWidth() % 256); // nL
+//            tmp[k++] = (byte) (bmp.getWidth() / 256); // nH
+//            for (int i = 0; i < bmp.getWidth(); i++) {
+//                for (int m = 0; m < 3; m++) {
+//                    for (int n = 0; n < 8; n++) {
+//                        byte b = px2Byte(i, j * 24 + m * 8 + n, bmp);
+//                        tmp[k] += tmp[k] + b;
+//                    }
+//                    k++;
+//                }
+//            }
+//            tmp[k++] = 10;// 换行
+//        }
+//        // 恢复默认行距
+//        tmp[k++] = 0x1B;
+//        tmp[k++] = 0x32;
+//
+//        byte[] result = new byte[k];
+//        System.arraycopy(tmp, 0, result, 0, k);
+//        return result;
+//    }
+/*************************************************************************
+ * 假设一个240*240的图片，分辨率设为24, 共分10行打印
+ * 每一行,是一个 240*24 的点阵, 每一列有24个点,存储在3个byte里面。
+ * 每个byte存储8个像素点信息。因为只有黑白两色，所以对应为1的位是黑色，对应为0的位是白色
+ **************************************************************************/
+
+    /**
+     * 把一张Bitmap图片转化为打印机可以打印的字节流
+     *
+     * @param bmp
+     * @return
+     */
+    public static byte[] draw2PxPoint(Bitmap bmp) {
+        //用来存储转换后的 bitmap 数据。为什么要再加1000，这是为了应对当图片高度无法
+        //整除24时的情况。比如bitmap 分辨率为 240 * 250，占用 7500 byte，
+        //但是实际上要存储11行数据，每一行需要 24 * 240 / 8 =720byte 的空间。再加上一些指令存储的开销，
+        //所以多申请 1000byte 的空间是稳妥的，不然运行时会抛出数组访问越界的异常。
         int size = bmp.getWidth() * bmp.getHeight() / 8 + 1000;
-        byte[] tmp = new byte[size];
+        byte[] data = new byte[size];
         int k = 0;
-        // 设置行距为0
-        tmp[k++] = 0x1B;
-        tmp[k++] = 0x33;
-        tmp[k++] = 0x00;
-        // 居中打印
-        tmp[k++] = 0x1B;
-        tmp[k++] = 0x61;
-        tmp[k++] = 1;
+        //设置行距为0的指令
+        data[k++] = 0x1B;
+        data[k++] = 0x33;
+        data[k++] = 0x00;
+        // 逐行打印
         for (int j = 0; j < bmp.getHeight() / 24f; j++) {
-            tmp[k++] = 0x1B;
-            tmp[k++] = 0x2A;// 0x1B 2A 表示图片打印指令
-            tmp[k++] = 33; // m=33时，选择24点密度打印
-            tmp[k++] = (byte) (bmp.getWidth() % 256); // nL
-            tmp[k++] = (byte) (bmp.getWidth() / 256); // nH
+            //打印图片的指令
+            data[k++] = 0x1B;
+            data[k++] = 0x2A;
+            data[k++] = 33;
+            data[k++] = (byte) (bmp.getWidth() % 256); //nL
+            data[k++] = (byte) (bmp.getWidth() / 256); //nH
+            //对于每一行，逐列打印
             for (int i = 0; i < bmp.getWidth(); i++) {
+                //每一列24个像素点，分为3个字节存储
                 for (int m = 0; m < 3; m++) {
+                    //每个字节表示8个像素点，0表示白色，1表示黑色
                     for (int n = 0; n < 8; n++) {
                         byte b = px2Byte(i, j * 24 + m * 8 + n, bmp);
-                        tmp[k] += tmp[k] + b;
+                        data[k] += data[k] + b;
                     }
                     k++;
                 }
             }
-            tmp[k++] = 10;// 换行
+            data[k++] = 10;//换行
         }
-        // 恢复默认行距
-        tmp[k++] = 0x1B;
-        tmp[k++] = 0x32;
-
-        byte[] result = new byte[k];
-        System.arraycopy(tmp, 0, result, 0, k);
-        return result;
+        return data;
     }
 
+//    /**
+//     * 图片二值化，黑色是1，白色是0
+//     *
+//     * @param x   横坐标
+//     * @param y   纵坐标
+//     * @param bit 位图
+//     * @return
+//     */
+//    private byte px2Byte(int x, int y, Bitmap bit) {
+//        if (x < bit.getWidth() && y < bit.getHeight()) {
+//            byte b;
+//            int pixel = bit.getPixel(x, y);
+//            int red = (pixel & 0x00ff0000) >> 16; // 取高两位
+//            int green = (pixel & 0x0000ff00) >> 8; // 取中两位
+//            int blue = pixel & 0x000000ff; // 取低两位
+//            int gray = RGB2Gray(red, green, blue);
+//            if (gray < 128) {
+//                b = 1;
+//            } else {
+//                b = 0;
+//            }
+//            return b;
+//        }
+//        return 0;
+//    }
+//
+//    /**
+//     * 图片灰度的转化
+//     */
+//    private int RGB2Gray(int r, int g, int b) {
+//        int gray = (int) (0.29900 * r + 0.58700 * g + 0.11400 * b); // 灰度转化公式
+//        return gray;
+//    }
+
     /**
-     * 图片二值化，黑色是1，白色是0
+     * 灰度图片黑白化，黑色是1，白色是0
      *
      * @param x   横坐标
      * @param y   纵坐标
      * @param bit 位图
      * @return
      */
-    private byte px2Byte(int x, int y, Bitmap bit) {
+    public static byte px2Byte(int x, int y, Bitmap bit) {
         if (x < bit.getWidth() && y < bit.getHeight()) {
             byte b;
             int pixel = bit.getPixel(x, y);
@@ -298,11 +381,36 @@ public class PrintUtil {
     /**
      * 图片灰度的转化
      */
-    private int RGB2Gray(int r, int g, int b) {
-        int gray = (int) (0.29900 * r + 0.58700 * g + 0.11400 * b); // 灰度转化公式
+    private static int RGB2Gray(int r, int g, int b) {
+        int gray = (int) (0.29900 * r + 0.58700 * g + 0.11400 * b);  //灰度转化公式
         return gray;
     }
-
+    /**
+     * 对图片进行压缩(不去除透明度)
+     * @param bitmapOrg
+     */
+    public static Bitmap compressBitmap(Bitmap bitmapOrg) {
+        // 加载需要操作的图片，这里是一张图片
+//        Bitmap bitmapOrg = BitmapFactory.decodeResource(getResources(),R.drawable.alipay);
+        // 获取这个图片的宽和高
+        int width = bitmapOrg.getWidth();
+        int height = bitmapOrg.getHeight();
+        // 定义预转换成的图片的宽度和高度
+        int newWidth = 360;
+        int newHeight = 360;
+        // 计算缩放率，新尺寸除原始尺寸
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // 创建操作图片用的matrix对象
+        Matrix matrix = new Matrix();
+        // 缩放图片动作
+        matrix.postScale(scaleWidth, scaleHeight);
+        // 创建新的图片
+        Bitmap resizedBitmap = Bitmap.createBitmap(bitmapOrg, 0, 0, width,height, matrix, true);
+        // 将上面创建的Bitmap转换成Drawable对象，使得其可以使用在ImageView, ImageButton中
+//        BitmapDrawable bmd = new BitmapDrawable(resizedBitmap);
+        return resizedBitmap;
+    }
     /**
      * 对图片进行压缩（去除透明度）
      *
@@ -329,14 +437,12 @@ public class PrintUtil {
             PrintUtil pUtil = new PrintUtil(bluetoothSocket.getOutputStream(), "GBK");
             // 店铺名 居中 放大
             pUtil.printAlignment(1);
-            pUtil.printLargeText("泊讯停车临街车位缴费小票");
-            pUtil.printLine(2);
-            pUtil.printAlignment(0);
-            pUtil.printLine(1);
+            pUtil.printLargeText("泊讯停车|临街车位缴费小票");
+            pUtil.printLine(3);
 
             pUtil.printText("本次停车信息");
             pUtil.printLine(1);
-
+            pUtil.printAlignment(0);
             pUtil.printTwoColumn("停车街道:", address);
             pUtil.printLine(1);
 
@@ -352,11 +458,12 @@ public class PrintUtil {
             // 分隔线
             pUtil.printDashLine();
             pUtil.printLine(1);
+            pUtil.printDashLine();
+            pUtil.printLine(2);
 
             //打印商品列表
             pUtil.printText("欠费记录");
-            pUtil.printTabSpace(5);
-            pUtil.printLargeText("￥"+Arrears);
+            pUtil.printTwoColumn("欠费记录:","￥"+Arrears);
             pUtil.printLine(1);
             pUtil.printTwoColumn("停车街道:", ArrearsAddress);
             pUtil.printLine(1);
@@ -364,21 +471,28 @@ public class PrintUtil {
             pUtil.printTwoColumn("车位编号:", ArrearsStopNum);
             pUtil.printLine(1);
 
-            pUtil.printTwoColumn("停车时段:", ArrearsStart+"至");
+            pUtil.printTwoColumn("停车时段:", ArrearsStart);
             pUtil.printLine();
+
             pUtil.printAlignment(2);
-            pUtil.printText(ArrearsEnd);
+            pUtil.printText("至"+ArrearsEnd);
             pUtil.printLine(1);
+            pUtil.printAlignment(0);
+            pUtil.printTwoColumn("欠费金额:", Arrears+"元");
 
-            pUtil.printTwoColumn("欠费金额:", Arrears);
 
-            pUtil.printLine(3);
+            // 分隔线
+            pUtil.printDashLine();
+            pUtil.printLine(1);
+            pUtil.printDashLine();
+            pUtil.printLine(2);
+
             pUtil.printAlignment(1);
             pUtil.printText("您离开时可用支付宝或微信");
             pUtil.printLine();
             pUtil.printAlignment(1);
             pUtil.printText("扫描下方二维码自主缴费");
-            pUtil.printLine(1);
+            pUtil.printLine(2);
             pUtil.printAlignment(1);
             pUtil.printBitmap(bitmap);
 

@@ -1,2 +1,2 @@
-include ':app', ':libqrcode'
+include ':app', ':libzxing'
 include ':spinner_lib'
