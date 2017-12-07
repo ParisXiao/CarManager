@@ -91,6 +91,96 @@ public class PrintUtil {
     }
 
     /**
+     * 自定义打印二维码
+     * @param img
+     */
+    public  void printBitmap2 (Bitmap img) {
+
+//        // 获取这个图片的宽和高
+//        float width = img.getWidth();
+//        float height = img.getHeight();
+//        // 创建操作图片用的matrix对象
+//        Matrix matrix = new Matrix();
+//        // 计算宽高缩放率
+//        float scaleWidth = ((float) 575) / width;
+//        float scaleHeight = 1.0f;
+//        // 缩放图片动作
+//        matrix.postScale(scaleWidth, scaleHeight);
+//        Bitmap bitmap = Bitmap.createBitmap(img, 0, 0, (int) width,
+//                (int) height, matrix, true);
+
+        try {
+//                 条码打印指令
+            byte[] PRINT_CODE = new byte[9];
+            PRINT_CODE[0] = 0x1d;
+            PRINT_CODE[1] = 0x68;
+            PRINT_CODE[2] = 120;
+            PRINT_CODE[3] = 0x1d;
+            PRINT_CODE[4] = 0x48;
+            PRINT_CODE[5] = 0x10;
+            PRINT_CODE[6] = 0x1d;
+            PRINT_CODE[7] = 0x6B;
+            PRINT_CODE[8] = 0x02;
+
+
+//                 打印二维码
+            Bitmap bmp = img;
+
+            byte[] data = new byte[]{0x1B, 0x33, 0x00};
+            print(data);
+            data[0] = (byte) 0x00;
+            data[1] = (byte) 0x00;
+            data[2] = (byte) 0x00;    //重置参数
+
+            int pixelColor;
+
+            // ESC * m nL nH 点阵图
+            byte[] escBmp = new byte[]{0x1B, 0x2A, 0x00, 0x00, 0x00};
+
+            escBmp[2] = (byte) 0x21;
+
+            //nL, nH
+            escBmp[3] = (byte) (bmp.getWidth() % 256);
+            escBmp[4] = (byte) (bmp.getWidth() / 256);
+
+            // 每行进行打印
+            for (int i = 0; i < bmp.getHeight() / 24 + 1; i++) {
+                print(escBmp);
+                for (int j = 0; j < bmp.getWidth(); j++) {
+                    for (int k = 0; k < 24; k++) {
+                        if (((i * 24) + k) < bmp.getHeight()) {
+                            pixelColor = bmp.getPixel(j, (i * 24) + k);
+                            if (pixelColor != -1) {
+                                data[k / 8] += (byte) (128 >> (k % 8));
+                            }
+                        }
+                    }
+
+                    print(data);
+                    // 重置参数
+                    data[0] = (byte) 0x00;
+                    data[1] = (byte) 0x00;
+                    data[2] = (byte) 0x00;
+                }
+                //换行
+                byte[] byte_send1 = new byte[2];
+                byte_send1[0] = 0x0d;
+                byte_send1[1] = 0x0a;
+                print(byte_send1);
+            }
+
+            //换行
+            byte[] byte_send2 = new byte[2];
+            byte_send2[0] = 0x0d;
+            byte_send2[1] = 0x0a;
+            //发送测试信息
+            print(byte_send2);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /**
      * 绝对打印位置
      *
      * @return

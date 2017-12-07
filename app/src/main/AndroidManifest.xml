@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.pda.carmanager">
+
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,11 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.test.PrinterSettingActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:screenOrientation="portrait"
+        <activity
+            android:name=".view.activity.SplashActivity"
             android:configChanges="orientation|keyboardHidden"
-            >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,18 +26,19 @@
             </intent-filter>
         </activity>
         <!--<activity android:name=".view.test.ZXingActivity"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/Theme.AppCompat.NoActionBar"-->
-            <!--android:configChanges="orientation|keyboardHidden"-->
-            <!--/>-->
+        <!--android:screenOrientation="portrait"-->
+        <!--android:theme="@style/Theme.AppCompat.NoActionBar"-->
+        <!--android:configChanges="orientation|keyboardHidden"-->
+        <!--/>-->
         <activity
             android:name="com.xys.libzxing.zxing.activity.CaptureActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden">
 
         </activity>
+
+        <activity android:name=".view.activity.MainActivity"/>
     </application>
 
 </manifest>

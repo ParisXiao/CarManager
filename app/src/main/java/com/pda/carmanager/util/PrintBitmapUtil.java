@@ -6,6 +6,7 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.util.Log;
 
+
 /**
  * Created by Admin on 2017/12/6.
  */
@@ -211,4 +212,13 @@ public class PrintBitmapUtil {
         return null;
     }
 
+
+    private byte[] intToByteArray (int gs) {
+        byte[] b = new byte[4];
+        b[0] = (byte) (gs);
+        b[1] = (byte) (gs >> 8);
+        b[2] = (byte) (gs >> 16);
+        b[3] = (byte) (gs >> 24);
+        return b;
+    }
 }
