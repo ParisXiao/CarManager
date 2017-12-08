@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
+import com.pda.carmanager.util.StatusBarUtil;
 import com.pda.carmanager.view.fragment.ManagementFragment;
 import com.pda.carmanager.view.fragment.MessageFragment;
 import com.pda.carmanager.view.fragment.MineFragment;

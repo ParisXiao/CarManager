@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
+import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.HideSoftKeyboardUtil;
 
@@ -64,7 +65,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_login:
-                DialogUtil.showMessage(LoginActivity.this,"登录中...");
+//                DialogUtil.showMessage(LoginActivity.this,"登录中...");
+                AMUtil.actionStart(LoginActivity.this,MainActivity.class);
+                finish();
                 break;
             case R.id.name_edit:
                 name_edit.setCursorVisible(true);

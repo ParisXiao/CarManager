@@ -4,6 +4,12 @@
     <string name="hint_password">请输入密码</string>
     <string name="hint_encode">请输入机构代码</string>
     <string name="btn_login">登录</string>
+    <string name="btn_logout">注销</string>
     <string name="text_management_my">我管理的车位</string>
     <string name="text_management_add">新增车位</string>
+    <string name="text_sbdk">上班打卡</string>
+    <string name="text_xbdk">下班打卡</string>
+    <string name="text_sfjl">收费记录</string>
+    <string name="text_ycss">异常申诉</string>
+
 </resources>

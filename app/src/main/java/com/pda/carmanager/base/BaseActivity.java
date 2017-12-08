@@ -4,13 +4,18 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.pda.carmanager.R;
 import com.pda.carmanager.util.AMUtil;
+import com.pda.carmanager.util.StatusBarUtil;
+import com.pda.carmanager.view.activity.MainActivity;
 
 
 public abstract class BaseActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //修改状态栏字体颜色
+//        StatusBarUtil.transparencyBar(this);
         //将Activity加入管理器
         AMUtil.getManager().putActivity(getClass().getSimpleName(), this);
 
