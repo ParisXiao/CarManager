@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,5 +35,7 @@ public class MessageFragment extends Fragment {
         context = getActivity();
         recycler_message = (RecyclerView) view.findViewById(R.id.recycler_message);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
+        LinearLayoutManager manager = new LinearLayoutManager(context);
+        recycler_message.setLayoutManager(manager);
     }
 }

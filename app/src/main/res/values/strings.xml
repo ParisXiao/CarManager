@@ -11,5 +11,13 @@
     <string name="text_xbdk">下班打卡</string>
     <string name="text_sfjl">收费记录</string>
     <string name="text_ycss">异常申诉</string>
+    <string name="text_time">时间:</string>
+    <string name="text_chargerPrice">消费金额:</string>
+    <string name="text_loading">加载中...</string>
+    <string name="text_updataing">更新中...</string>
+    <string name="text_refresh_down">下拉刷新</string>
+    <string name="text_refresh_up">加载更多</string>
+    <string name="text_loaded">松开刷新数据</string>
+    <string name="text_updataed">松开加载更多</string>
 
 </resources>

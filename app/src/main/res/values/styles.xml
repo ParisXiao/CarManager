@@ -18,4 +18,30 @@
         <item name="android:background">@color/colorPrimary</item>
     </style>
 
+    <style name="myProgressBarStyleLoad">
+        　　
+        <item name="android:indeterminateDrawable">@drawable/rotate_myprogress_load</item>
+        　　
+        <item name="android:minWidth">@dimen/progress_size</item>
+        　　
+        <item name="android:maxWidth">@dimen/progress_size</item>
+        　　
+        <item name="android:minHeight">@dimen/progress_size</item>
+        　　
+        <item name="android:maxHeight">@dimen/progress_size</item>
+    </style>
+
+    <style name="myProgressBarStyleUpdata">
+        　　
+        <item name="android:indeterminateDrawable">@drawable/rotate_myprogress_updata</item>
+        　　
+        <item name="android:minWidth">@dimen/progress_size</item>
+        　　
+        <item name="android:maxWidth">@dimen/progress_size</item>
+        　　
+        <item name="android:minHeight">@dimen/progress_size</item>
+        　　
+        <item name="android:maxHeight">@dimen/progress_size</item>
+    </style>
+
 </resources>
