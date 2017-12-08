@@ -39,28 +39,36 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ImageButton imb_management;
     private ImageButton imb_message;
     private ImageButton imb_mine;
-    private int[] resSelectIds = {R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher};
-    private int[] resIds = {R.mipmap.ic_launcher_round, R.mipmap.ic_launcher_round, R.mipmap.ic_launcher_round};
+    private int[] resIds = {R.drawable.nav_cheweiguanli, R.drawable.nav_xinxizhongxin, R.drawable.nav_wodexinxi};
+    private int[] resSelectIds = {R.drawable.nav_cheweiguanli_on, R.drawable.nav_xinxizhongxin_on, R.drawable.nav_wodexinxi_on};
+    private ManagementFragment managementFragment;
+    private MessageFragment messageFragment;
+    private MineFragment mineFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.show(managementFragment);
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     private void initFragment() {
         fragmentList = new ArrayList<>();
-        fragmentList.add(new ManagementFragment());
-        fragmentList.add(new MessageFragment());
-        fragmentList.add(new MineFragment());
+        managementFragment=new ManagementFragment();
+        messageFragment=new MessageFragment();
+        mineFragment=new MineFragment();
+        fragmentList.add(managementFragment);
+        fragmentList.add(messageFragment);
+        fragmentList.add(mineFragment);
         fragmentManager = getSupportFragmentManager();
         for (Fragment fragment : fragmentList) {
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.main_frame, fragment);
-            fragmentTransaction.hide(fragment);
-            fragmentTransaction.commitAllowingStateLoss();
-
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.add(R.id.main_frame, fragment);
+                fragmentTransaction.hide(fragment);
+                fragmentTransaction.commitAllowingStateLoss();
         }
 
     }
@@ -109,7 +117,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void startView() {
         refreshImageButtons(0);
         toolbar_mid.setText("车位管理");
-        showFragment(0);
     }
 
     /**
@@ -146,12 +153,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 showFragment(0);
                 break;
             case R.id.imb_message:
-                toolbar_mid.setText("我的信息");
+                toolbar_mid.setText("信息中心");
                 refreshImageButtons(1);
                 showFragment(1);
                 break;
             case R.id.imb_mine:
-                toolbar_mid.setText("个人中心");
+                toolbar_mid.setText("我的信息");
                 refreshImageButtons(2);
                 showFragment(2);
                 break;

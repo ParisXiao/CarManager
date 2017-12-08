@@ -18,7 +18,6 @@
         android:bottomLeftRadius="25dp"
         android:bottomRightRadius="25dp"
         />
-
     <!--
        渐变色
        android:startColor  颜色值 起始颜色

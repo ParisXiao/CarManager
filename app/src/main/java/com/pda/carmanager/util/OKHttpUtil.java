@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 public class OKHttpUtil {
     private static final String TAG = OKHttpUtil.class.getSimpleName();
 
+
     /**
      * 查看返回数据结构
      *
@@ -48,20 +49,19 @@ public class OKHttpUtil {
             client.setReadTimeout(30, TimeUnit.SECONDS);
             try {
                 RequestBody body = new FormEncodingBuilder()
-                        .add("useid","")
-                        .add("token","")
-                        .add("platform", "pda")
-                        .add("Data", Data)
+//                        .add("useid"," ")
+//                        .add("token"," ")
+//                        .add("platform", "pda")
+//                        .add("Data", Data)
                         .build();
                 Request request = new Request.Builder()
-                        .addHeader("Access-Control-Allow-Origin","*")
                         .url(UrlConfig.HttpUrl)
                         .post(body)
                         .build();
                 Response response = client.newCall(request).execute();
                 Log.d(TAG, "response:" + response);
                 if (response.isSuccessful()) {
-                    Log.d(TAG, response.body().string());
+                    Log.d(TAG, "R"+response.body().string());
                 }
             } catch (Exception e) {
                 Log.d(TAG, e.toString());

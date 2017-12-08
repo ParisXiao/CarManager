@@ -22,7 +22,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:textColor="@color/black"
-                android:textSize="20dp" />
+                android:text="泊讯"
+                android:textSize="@dimen/texttitle_size" />
 
             <ImageButton
                 android:id="@+id/toolbar_left_btn"

@@ -12,10 +12,8 @@
       android:bottomRightRadius 整型 右下角半径
      -->
     <corners
-        android:topLeftRadius="10dp"
-        android:topRightRadius="10dp"
+        android:radius="15dp"
         />
-
     <!--
        渐变色
        android:startColor  颜色值 起始颜色
@@ -57,15 +55,15 @@
        android:height 整型 高度
     -->
     <!--<size-->
-    <!--android:width="600dp"-->
-    <!--/>-->
+        <!--android:width="600dp"-->
+        <!--/>-->
 
     <!--
         内部填充
         android:color 颜色值 填充颜色
     -->
     <solid
-        android:color="#ffffff"
+        android:color="#FD8C00"
         />
 
     <!--
@@ -76,7 +74,7 @@
         android:dashGap   整型 表示描边为虚线时，虚线之间的间隔 即“ - - - - ”
     -->
     <!--<stroke-->
-    <!--android:width="1dp"-->
-    <!--android:color="#B3B3B3"-->
-    <!--/>-->
+        <!--android:width="2dp"-->
+        <!--android:color="#dcdcdc"-->
+        <!--/>-->
 </shape>

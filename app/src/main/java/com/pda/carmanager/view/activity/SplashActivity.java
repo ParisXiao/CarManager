@@ -3,6 +3,7 @@ package com.pda.carmanager.view.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.KeyEvent;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
@@ -43,5 +44,13 @@ public class SplashActivity extends BaseActivity {
             }
         }, SPLASH_DISPLAY_LENGHT);
 
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
