@@ -20,4 +20,23 @@
     <string name="text_loaded">松开刷新数据</string>
     <string name="text_updataed">松开加载更多</string>
 
+    <string name="myPark">我管理的车位</string>
+
+
+    <string name="choose_carType">请选择车辆类型</string>
+    <string name="choose_carNumType">请选择车牌类型</string>
+    <string name="carType_small">小车</string>
+    <string name="carType_big">货车</string>
+    <string name="carType_new">新能源车牌</string>
+    <string name="carType_stu">教练车牌</string>
+    <string name="carNum">车牌号</string>
+    <string name="camera">点击拍照</string>
+
+    <string name="exit">取消</string>
+    <string name="next">下一步</string>
+
+
+
+
+
 </resources>

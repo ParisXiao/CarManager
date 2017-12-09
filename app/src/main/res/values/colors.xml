@@ -23,10 +23,10 @@
 
     <color name="text_msgtime">#B9B9B9</color>
 
-    <color name="sw_color1">#C10B0B</color>
-    <color name="sw_color2">#49ff00</color>
-    <color name="sw_color3">#0087FF</color>
-    <color name="sw_color4">#7200FF</color>
+    <color name="park_blue">#0D7EF0</color>
+
+
+
 
 
 </resources>

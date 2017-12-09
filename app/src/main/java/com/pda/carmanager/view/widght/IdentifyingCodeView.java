@@ -241,6 +241,9 @@ public class IdentifyingCodeView extends RelativeLayout {
     public int getTextCount() {
         return mEtNumber;
     }
+    public void setTextCount(int mEtNumber){
+        this.mEtNumber=mEtNumber;
+    }
 
     // 输入完成 和 删除成功 的监听
     private InputCompleteListener inputCompleteListener;

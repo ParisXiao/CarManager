@@ -38,4 +38,6 @@ dependencies {
     compile files('libs/okio-1.11.0.jar')
     compile 'com.daimajia.numberprogressbar:library:1.4@aar'
     compile 'com.pnikosis:materialish-progress:1.7'
+    //开关按钮
+    compile 'com.github.zcweng:switch-button:0.0.3@aar'
 }
