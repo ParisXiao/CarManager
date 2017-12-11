@@ -31,9 +31,25 @@
     <string name="carType_stu">教练车牌</string>
     <string name="carNum">车牌号</string>
     <string name="camera">点击拍照</string>
+    <string name="camera_del">长按删除</string>
 
     <string name="exit">取消</string>
     <string name="next">下一步</string>
+
+    <string name="title_pay">缴费信息</string>
+    <string name="car_message">车辆信息</string>
+    <string name="car_num">车牌号：</string>
+    <string name="stop_time">停车时段：</string>
+    <string name="pay_type">支付方式</string>
+    <string name="aipay">支付宝支付</string>
+    <string name="weixin">微信支付</string>
+    <string name="user_manager">(用户扫收费员)</string>
+    <string name="title_user_manager">用户扫收费员</string>
+    <string name="manager_user">(收费员扫用户)</string>
+    <string name="pay_sure">确认</string>
+    <string name="zxing">收款二维码</string>
+    <string name="choose_paytype">请选择收费方式</string>
+    <string name="empty_view">亲，您还没有消息哦！！！</string>
 
 
 

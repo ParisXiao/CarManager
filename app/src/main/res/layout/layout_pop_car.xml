@@ -48,17 +48,14 @@
         android:textColor="@color/text_msgtime"
         android:textSize="@dimen/text_size" />
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_marginRight="10dp"
+           >
 
             <TextView
                 android:id="@+id/text_carType_new"
@@ -67,30 +64,27 @@
                 android:text="@string/carType_new"
                 android:textColor="@color/text_msgtime"
                 android:textSize="@dimen/text_size"
-
+                android:layout_centerVertical="true"
                 />
 
             <com.suke.widget.SwitchButton
                 android:id="@+id/btn_catType_new"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="15dp"
-                android:layout_toRightOf="@+id/text_carType_new"
+                android:layout_alignParentRight="true"
                 app:sb_background="#A7A7A7"
                 app:sb_checked_color="@color/text_red"
+                android:layout_centerVertical="true"
                 app:sb_show_indicator="false" />
-        </LinearLayout>
+        </RelativeLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+    >
 
             <TextView
                 android:id="@+id/text_carType_stu"
@@ -98,29 +92,46 @@
                 android:layout_height="wrap_content"
                 android:text="@string/carType_stu"
                 android:textColor="@color/text_msgtime"
+                android:layout_centerVertical="true"
                 android:textSize="@dimen/text_size" />
 
             <com.suke.widget.SwitchButton
                 android:id="@+id/btn_catType_stu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="15dp"
-                android:layout_toRightOf="@+id/text_carType_new"
                 app:sb_background="#A7A7A7"
                 app:sb_checked_color="@color/text_red"
                 app:sb_show_indicator="false" />
-        </LinearLayout>
-    </RelativeLayout>
-    <TextView
-        android:layout_width="wrap_content"
+        </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:text="@string/carNum"
-        android:textColor="@color/text_msgtime"
-        android:textSize="@dimen/text_size" />
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/carNum"
+            android:textColor="@color/text_msgtime"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/text_size" />
+        <Button
+            android:id="@+id/btn_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/theme_button_area"
+            android:text="贵A"
+            android:textSize="@dimen/text_bigSize"
+            android:textColor="@color/black"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            />
+    </RelativeLayout>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="60dp"
@@ -130,17 +141,9 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         >
-        <Button
-            android:id="@+id/btn_area"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/theme_button_area"
-            android:text="贵A"
-            android:textSize="@dimen/text_bigSize"
-            android:textColor="@color/black"
-            />
+
         <com.pda.carmanager.view.widght.IdentifyingCodeView
-            android:id="@+id/carNum_edit"
+            android:id="@+id/carNum_edit1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icv_et_bg_focus="@drawable/shape_icv_et_bg_focus"
@@ -148,7 +151,32 @@
             app:icv_et_divider_drawable="@drawable/shape_divider_identifying"
             app:icv_et_number="5"
             app:icv_et_text_color="#000000"
-            app:icv_et_width="40dp"/>
+            app:icv_et_width="50dp"/>
+        <com.pda.carmanager.view.widght.IdentifyingCodeView
+            android:id="@+id/carNum_edit2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icv_et_bg_focus="@drawable/shape_icv_et_bg_focus"
+            app:icv_et_bg_normal="@drawable/shape_icv_et_bg_normal"
+            app:icv_et_divider_drawable="@drawable/shape_divider_identifying"
+            app:icv_et_number="6"
+            app:icv_et_text_color="#000000"
+            app:icv_et_width="40dp"
+            android:visibility="gone"
+            app:icv_et_text_size="6dp"
+            />
+        <com.pda.carmanager.view.widght.IdentifyingCodeView
+            android:id="@+id/carNum_edit3"
+            android:layout_width="220dp"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            app:icv_et_bg_focus="@drawable/shape_icv_et_bg_focus"
+            app:icv_et_bg_normal="@drawable/shape_icv_et_bg_normal"
+            app:icv_et_divider_drawable="@drawable/shape_divider_identifying"
+            app:icv_et_number="4"
+            app:icv_et_text_color="#000000"
+            android:visibility="gone"
+            app:icv_et_width="50dp"/>
         <TextView
             android:id="@+id/text_stucar"
             android:layout_width="wrap_content"
@@ -159,39 +187,63 @@
             android:text="学"
             />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
+
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            >
+            android:layout_weight="1">
+
             <ImageView
                 android:id="@+id/camera_1"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:src="@drawable/paizhao"
                 android:layout_centerInParent="true"
+                android:src="@drawable/paizhao"
+
                 />
+
+            <TextView
+                android:id="@+id/text_camera1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/camera_1"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="@string/camera"
+                android:textColor="@color/text_msgtime"
+                android:textSize="@dimen/text_smallSize" />
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            >
+            android:layout_weight="1">
+
             <ImageView
                 android:id="@+id/camera_2"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:src="@drawable/paizhao"
-                android:layout_centerInParent="true"/>
+                android:layout_centerInParent="true"
+                android:src="@drawable/paizhao" />
+            <TextView
+                android:id="@+id/text_camera2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/camera_2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="@string/camera"
+                android:textColor="@color/text_msgtime"
+                android:textSize="@dimen/text_smallSize" />
         </RelativeLayout>
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

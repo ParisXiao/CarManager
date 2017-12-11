@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ import android.widget.Scroller;
  */
 
 public class PullRefreshRecyclerView extends RecyclerView {
-
+    private View emptyView;
     private float mLastY = -1; // save event y
     /**
      * 滚动需要的时间
@@ -153,9 +154,12 @@ public class PullRefreshRecyclerView extends RecyclerView {
 
     @Override
     public void setAdapter(Adapter adapter) {
+        final Adapter oldAdapter = getAdapter();
+        if (oldAdapter != null) {
+            oldAdapter.unregisterAdapterDataObserver(observer);
+        }
         this.adapter = adapter;
         mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(adapter);
-
         super.setAdapter(mHeaderAndFooterWrapper);
 
         //添加头,确保是第一个
@@ -166,6 +170,11 @@ public class PullRefreshRecyclerView extends RecyclerView {
         if (getParent() instanceof MessageRelativeLayout) {
             mParent = (MessageRelativeLayout) getParent();
         }
+        if (mHeaderAndFooterWrapper != null) {
+            adapter.registerAdapterDataObserver(observer);
+        }
+
+        checkIfEmpty();
     }
 
     /**
@@ -443,6 +452,42 @@ public class PullRefreshRecyclerView extends RecyclerView {
     private boolean isSlideToBottom() {
         return computeVerticalScrollExtent() + computeVerticalScrollOffset() >= computeVerticalScrollRange();
     }
+
+    /**
+     * 数据为空View
+     */
+    final private AdapterDataObserver observer = new AdapterDataObserver() {
+        @Override
+        public void onChanged() {
+            checkIfEmpty();
+        }
+
+        @Override
+        public void onItemRangeInserted(int positionStart, int itemCount) {
+            checkIfEmpty();
+        }
+
+        @Override
+        public void onItemRangeRemoved(int positionStart, int itemCount) {
+            checkIfEmpty();
+        }
+    };
+    private void checkIfEmpty() {
+        if (emptyView != null && getAdapter() != null) {
+            final boolean emptyViewVisible =
+                    getAdapter().getItemCount() == 0;
+            emptyView.setVisibility(emptyViewVisible ? VISIBLE : GONE);
+            setVisibility(emptyViewVisible ? GONE : VISIBLE);
+        }
+    }
+
+
+    public void setEmptyView(View emptyView) {
+        this.emptyView = emptyView;
+        checkIfEmpty();
+    }
+
+
 }
 
 

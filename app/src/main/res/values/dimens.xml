@@ -12,9 +12,13 @@
     <dimen name="common_margin">16dp</dimen>
 
     <dimen name="text_size">16sp</dimen>
+    <dimen name="textblue_size">14sp</dimen>
     <dimen name="text_smallSize">10sp</dimen>
     <dimen name="text_bigSize">20sp</dimen>
     <dimen name="texttitle_size">18sp</dimen>
+
+
+    <dimen name="textpay_size">24sp</dimen>
 
     <dimen name="progress_size">40dp</dimen>
     <!--recycle分割间距-->

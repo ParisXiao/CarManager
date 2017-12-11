@@ -3,15 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/refreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_message"
+        <com.pda.carmanager.pullrefresh.PullRefreshRecyclerView
+            android:id="@+id/pullRefresh_msg"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+        </com.pda.carmanager.pullrefresh.PullRefreshRecyclerView>
+    <include
+        android:id="@+id/id_empty_view"
+        layout="@layout/layout_empty_view"/>
 </RelativeLayout>

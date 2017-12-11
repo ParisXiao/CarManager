@@ -64,7 +64,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_mypark);
         initView();
         initData();
@@ -143,7 +143,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
         chooseNew = (SwitchButton) view.findViewById(R.id.btn_catType_new);
         chooseStu = (SwitchButton) view.findViewById(R.id.btn_catType_stu);
         AreaBtn = (Button) view.findViewById(R.id.btn_area);
-        identifyingCodeView = (IdentifyingCodeView) view.findViewById(R.id.carNum_edit);
+        identifyingCodeView = (IdentifyingCodeView) view.findViewById(R.id.carNum_edit1);
         camera1 = (ImageView) view.findViewById(R.id.camera_1);
         camera2 = (ImageView) view.findViewById(R.id.camera_2);
         Next = (Button) view.findViewById(R.id.pop1_next);
@@ -219,7 +219,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void payCar() {
-
+        AMUtil.actionStartForResult(MyParkActivity.this,PayMessageActivity.class);
     }
 
     @Override

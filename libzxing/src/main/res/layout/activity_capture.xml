@@ -1,9 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@android:color/transparent"
-    android:orientation="vertical">
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/black"
+        >
+
+        <TextView
+            android:id="@+id/toolbar_mid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="收费员扫用户"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <ImageButton
+            android:id="@+id/toolbar_left_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="#00000000"
+            android:clickable="true"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/btn_back_white"
+            />
+
+
+    </RelativeLayout>
 
     <SurfaceView
         android:id="@+id/capture_preview"
@@ -70,4 +102,4 @@
             android:background="@drawable/shadow" />
     </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>

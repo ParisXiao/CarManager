@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 
 import com.pda.carmanager.R;
+import com.pda.carmanager.config.UrlConfig;
 import com.pda.carmanager.util.BluetoothUtil;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PrintUtil;
@@ -31,7 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PrinterSettingActivity extends BasePrintActivity implements View.OnClickListener{
+public class PrinterSettingActivity extends BasePrintActivity implements View.OnClickListener {
 
     ListView mLvPairedDevices;
     Button mBtnSetting;
@@ -105,7 +106,7 @@ public class PrinterSettingActivity extends BasePrintActivity implements View.On
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_goto_setting:
                 startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
                 break;
@@ -125,10 +126,10 @@ public class PrinterSettingActivity extends BasePrintActivity implements View.On
                         String strBase64 = new String(Base64.encode(password.getBytes(), Base64.DEFAULT));
                         String[] key = new String[]{"username","password","encode"};
                         Map<String,String> map=new HashMap<String, String>();
-                        map.put("username","xiaoli");
                         map.put("password",strBase64);
                         map.put("encode","1213");
                         OKHttpUtil.GetMessage(PrinterSettingActivity.this,key,map);
+//                        OKHttpUtil.SendDataByPost(UrlConfig.HttpUrl);
                     }
                 }).start();
                 break;
@@ -136,29 +137,30 @@ public class PrinterSettingActivity extends BasePrintActivity implements View.On
         }
     }
 
-    private void connectDevice(int taskType){
-        if(mSelectedPosition >= 0){
+    private void connectDevice(int taskType) {
+        if (mSelectedPosition >= 0) {
             BluetoothDevice device = mAdapter.getItem(mSelectedPosition);
-            if(device!= null)
+            if (device != null)
                 super.connectDevice(device, taskType);
-        }else{
+        } else {
             Toast.makeText(this, "还未选择打印设备", Toast.LENGTH_SHORT).show();
         }
     }
 
     /**
      * 打印参数
+     *
      * @param socket
      * @param taskType
      */
     @Override
     public void onConnected(BluetoothSocket socket, int taskType) {
-        switch (taskType){
+        switch (taskType) {
             case TASK_TYPE_PRINT:
                 Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-                Bitmap bitmap= EncodingUtils.createQRCode("www.baidu.com", 360, 360, logoBitmap);
+                Bitmap bitmap = EncodingUtils.createQRCode("www.baidu.com", 360, 360, logoBitmap);
 //                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test_image);
-                PrintUtil.printTest(socket, bitmap,"石桥铺","001","渝A74110","2017年12月6日 08:29:12","11","重庆解放碑","002","2017年12月1日 09:11:09","2017年12月2日 12:12:56");
+                PrintUtil.printTest(socket, bitmap, "石桥铺", "001", "渝A74110", "2017年12月6日 08:29:12", "11", "重庆解放碑", "002", "2017年12月1日 09:11:09", "2017年12月2日 12:12:56");
 
                 break;
         }
