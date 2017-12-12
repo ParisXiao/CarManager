@@ -51,6 +51,11 @@
     <string name="choose_paytype">请选择收费方式</string>
     <string name="empty_view">亲，您还没有消息哦！！！</string>
 
+    <string name="add_park">新增车位</string>
+    <string name="add_error">新增申诉</string>
+    <string name="shensu_note">申诉记录</string>
+    <string name="system_quit">再按一次退出系统</string>
+
 
 
 

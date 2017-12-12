@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include
+        layout="@layout/layout_toolbar_common"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.8"
+        >
+        <LinearLayout
+            android:id="@+id/linear_sbdk_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/theme_button_daka"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:id="@+id/daka_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="点击"
+                android:textColor="@color/black"
+                android:textSize="@dimen/texttitle_size"
+                />
+            <TextView
+                android:id="@+id/text_sbdk_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="申诉"
+                android:textColor="@color/black"
+                android:textSize="@dimen/texttitle_size"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/shensu_note"
+            android:textColor="@color/text_msgtime"
+            android:padding="10dp"
+
+            />
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.2">
+
+        <com.androidkun.PullToRefreshRecyclerView
+            android:id="@+id/pullRefresh_myError"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
+
+</LinearLayout>

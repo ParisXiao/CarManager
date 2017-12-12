@@ -16,6 +16,8 @@ import com.pda.carmanager.R;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.view.activity.ChargeRecordActivity;
 import com.pda.carmanager.view.activity.DakaActivity;
+import com.pda.carmanager.view.activity.ErrorNoteActivity;
+import com.pda.carmanager.view.activity.LoginActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -79,9 +81,10 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 AMUtil.actionStart(context, ChargeRecordActivity.class);
                 break;
             case R.id.rel_ycss:
+                AMUtil.actionStart(context, ErrorNoteActivity.class);
                 break;
             case R.id.button_logout:
-
+                AMUtil.actionStart(context, LoginActivity.class);
                 break;
         }
     }

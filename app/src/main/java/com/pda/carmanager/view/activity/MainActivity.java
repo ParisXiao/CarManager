@@ -1,16 +1,20 @@
 package com.pda.carmanager.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
@@ -28,7 +32,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private FragmentManager fragmentManager;
     private ImageButton[] imageButtons;
     List<Fragment> fragmentList;
-
+    long exitTime = 0;//两次退出计时
     private int currentPosition;
     private TextView toolbar_mid;
     private ImageButton toolbar_left_btn;
@@ -58,18 +62,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private void initFragment() {
         fragmentList = new ArrayList<>();
-        managementFragment=new ManagementFragment();
-        messageFragment=new MessageFragment();
-        mineFragment=new MineFragment();
+        managementFragment = new ManagementFragment();
+        messageFragment = new MessageFragment();
+        mineFragment = new MineFragment();
         fragmentList.add(managementFragment);
         fragmentList.add(messageFragment);
         fragmentList.add(mineFragment);
         fragmentManager = getSupportFragmentManager();
         for (Fragment fragment : fragmentList) {
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.add(R.id.main_frame, fragment);
-                fragmentTransaction.hide(fragment);
-                fragmentTransaction.commitAllowingStateLoss();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.main_frame, fragment);
+            fragmentTransaction.hide(fragment);
+            fragmentTransaction.commitAllowingStateLoss();
         }
 
     }
@@ -164,5 +168,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 showFragment(2);
                 break;
         }
+    }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if ((System.currentTimeMillis() - exitTime) > 2000) //System.currentTimeMillis()无论何时调用，肯定大于2000
+                    {
+                        Toast.makeText(MainActivity.this, R.string.system_quit, Toast.LENGTH_SHORT).show();
+                        exitTime = System.currentTimeMillis();
+                    } else {
+                        finish();
+                    }
+                }
+                return true;
+        }
+        return true;
     }
 }

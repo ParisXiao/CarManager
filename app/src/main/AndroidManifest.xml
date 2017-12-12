@@ -78,6 +78,13 @@
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeRed"/>
+        <activity android:name=".view.activity.AddParkActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".view.activity.ErrorNoteActivity" />
+        <activity android:name=".view.activity.AddErrorActivity" />
     </application>
 
 </manifest>

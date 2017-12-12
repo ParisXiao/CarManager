@@ -1,71 +1,79 @@
-package com.pda.carmanager.view.fragment;
+package com.pda.carmanager.view.activity;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.LayoutInflater;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.androidkun.PullToRefreshRecyclerView;
-import com.androidkun.callback.PullToRefreshListener;
 import com.pda.carmanager.R;
+import com.pda.carmanager.adapter.ErrorAdapter;
 import com.pda.carmanager.adapter.MessageAdapter;
-import com.pda.carmanager.bean.MsgBean;
+import com.pda.carmanager.base.BaseActivity;
+import com.pda.carmanager.bean.ErrorBean;
 import com.pda.carmanager.pullrefresh.SpacesItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * Created by Admin on 2017/11/29.
+ * Created by Administrator on 2017/12/12 0012.
  */
 
-public class MessageFragment extends Fragment implements PullToRefreshListener {
-    private Activity context;
-    private PullToRefreshRecyclerView pullRefresh_msg;
-    private List<MsgBean> msgBeanList=null;
-    private MessageAdapter messageAdapter;
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_message, null);
-        initView(view);
-
-        return view;
-    }
+public class ErrorNoteActivity extends BaseActivity implements View.OnClickListener {
+    private TextView toolbar_mid;
+    private ImageButton toolbar_left_btn;
+    private ImageButton toolbar_right_btn;
+    private Toolbar toolbar;
+    private LinearLayout linear_sbdk_btn;
+    private PullToRefreshRecyclerView pullRefresh_myError;
+    private List<ErrorBean> errorBeanList=null;
+    private ErrorAdapter errorAdapter;
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_errornote);
+        initView();
     }
 
-    private void initView(View view) {
-        context = getActivity();
-        pullRefresh_msg = (PullToRefreshRecyclerView) view.findViewById(R.id.pullRefresh_msg);
-        View emptyView = View.inflate(context, R.layout.layout_empty_view, null);
+    private void initView() {
+        toolbar_mid = (TextView) findViewById(R.id.toolbar_mid);
+        toolbar_left_btn = (ImageButton) findViewById(R.id.toolbar_left_btn);
+        toolbar_right_btn = (ImageButton) findViewById(R.id.toolbar_right_btn);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        linear_sbdk_btn = (LinearLayout) findViewById(R.id.linear_sbdk_btn);
+
+        toolbar_left_btn.setOnClickListener(this);
+        toolbar_right_btn.setOnClickListener(this);
+        linear_sbdk_btn.setOnClickListener(this);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar_left_btn.setVisibility(View.VISIBLE);
+        toolbar_mid.setText(R.string.text_ycss);
+        pullRefresh_myError = (PullToRefreshRecyclerView) findViewById(R.id.pullRefresh_myError);
+        View emptyView = View.inflate(this, R.layout.layout_empty_view, null);
         emptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
-        pullRefresh_msg.setEmptyView(emptyView);
-        pullRefresh_msg.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        pullRefresh_msg.addItemDecoration(new SpacesItemDecoration(getResources().getDimensionPixelSize(R.dimen.padding_middle)));
-        pullRefresh_msg.setHasFixedSize(true);
+        pullRefresh_myError.setEmptyView(emptyView);
+        pullRefresh_myError.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        pullRefresh_myError.setHasFixedSize(false);
         //设置是否开启上拉加载
-        pullRefresh_msg.setLoadingMoreEnabled(true);
+        pullRefresh_myError.setLoadingMoreEnabled(false);
         //设置是否开启下拉刷新
-        pullRefresh_msg.setPullRefreshEnabled(true);
+        pullRefresh_myError.setPullRefreshEnabled(false);
         //设置是否显示上次刷新的时间
-        pullRefresh_msg.displayLastRefreshTime(true);
+        pullRefresh_myError.displayLastRefreshTime(false);
         //设置刷新回调
-        pullRefresh_msg.setPullToRefreshListener(this);
+//        pullRefresh_myError.setPullToRefreshListener(this);
         //主动触发下拉刷新操作
-        //pullRefresh_msg.onRefresh();
-        msgBeanList=new ArrayList<>();
+        //pullRefresh_myError.onRefresh();
+        errorBeanList=new ArrayList<>();
 //        msgBeanList.add(new MsgBean("2017年12月11日","23:20","泊讯消息","泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯"));
 //        msgBeanList.add(new MsgBean("2017年12月11日","23:20","泊讯消息","泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯"));
 //        msgBeanList.add(new MsgBean("2017年12月11日","23:20","泊讯消息","泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯"));
@@ -74,32 +82,21 @@ public class MessageFragment extends Fragment implements PullToRefreshListener {
 //        msgBeanList.add(new MsgBean("2017年12月11日","23:20","泊讯消息","泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯"));
 //        msgBeanList.add(new MsgBean("2017年12月11日","23:20","泊讯消息","泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯"));
 //        msgBeanList.add(new MsgBean("2017年12月11日","23:20","泊讯消息","泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯"));
-        messageAdapter=new MessageAdapter(context,msgBeanList);
-        pullRefresh_msg.setAdapter(messageAdapter);
-    }
-    @Override
-    public void onRefresh() {
-        pullRefresh_msg.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                pullRefresh_msg.setRefreshComplete();
-                messageAdapter.notifyDataSetChanged();
-            }
-        }, 2000);
+        errorAdapter=new ErrorAdapter(ErrorNoteActivity.this,errorBeanList);
+        pullRefresh_myError.setAdapter(errorAdapter);
     }
 
     @Override
-    public void onLoadMore() {
-        pullRefresh_msg.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                pullRefresh_msg.setLoadMoreComplete(); //加载数据完成
-                //模拟加载数据的情况
-                for (int i = 0; i < 10; i++) {
-                    msgBeanList.add(new MsgBean("2017年12月11日","23:20","泊讯消息","泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯"));
-                }
-                messageAdapter.notifyDataSetChanged();
-            }
-        }, 2000);
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.toolbar_left_btn:
+                finish();
+                break;
+            case R.id.linear_sbdk_btn:
+                Intent intent=new Intent(ErrorNoteActivity.this,AddErrorActivity.class);
+                startActivity(intent);
+                break;
+
+        }
     }
 }

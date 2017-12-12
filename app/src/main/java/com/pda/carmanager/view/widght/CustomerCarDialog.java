@@ -178,7 +178,7 @@ public class CustomerCarDialog extends Dialog {
                     mPosition = position;
                     scrollview.smoothScrollTo(0, position);
                 }
-                setHour = jianchengs[(mPosition / itemHeight - jianchengs.length-1) % jianchengs.length-1];
+                setHour = jianchengs[(mPosition / itemHeight - jianchengs.length-1) % jianchengs.length+1];
                 break;
 
             case 2:

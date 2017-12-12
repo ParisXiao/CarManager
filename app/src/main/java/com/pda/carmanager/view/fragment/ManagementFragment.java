@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.util.AMUtil;
+import com.pda.carmanager.view.activity.AddParkActivity;
 import com.pda.carmanager.view.activity.MyParkActivity;
 
 
@@ -46,6 +47,7 @@ public class ManagementFragment extends Fragment implements View.OnClickListener
                 AMUtil.actionStart(context, MyParkActivity.class);
                 break;
             case R.id.add_park:
+                AMUtil.actionStart(context, AddParkActivity.class);
                 break;
         }
     }

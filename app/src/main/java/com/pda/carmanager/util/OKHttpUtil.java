@@ -3,7 +3,6 @@ package com.pda.carmanager.util;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Base64;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -27,6 +26,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import it.sauronsoftware.base64.Base64;
 
 
 /**
@@ -77,7 +78,7 @@ public class OKHttpUtil {
 //
 //                        )
 //                        .build();
-                RequestBody body = RequestBody.create(JSON, new String("{'data':'"+getBase64(mJson.toString())+"'}"));
+                RequestBody body = RequestBody.create(JSON, new String("{'data':'"+ Base64.encode(mJson.toString(), "UTF-8")+"'}"));
                 Request request = new Request.Builder()
 
                         .url(UrlConfig.HttpUrl)
@@ -96,17 +97,6 @@ public class OKHttpUtil {
         } catch (Exception e) {
 
         }
-    }
-    public static String getBase64(String str) {
-        String result = "";
-        if( str != null) {
-            try {
-                result = new String(Base64.encode(str.getBytes("utf-8"), Base64.NO_WRAP),"utf-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }
-        return result;
     }
     public static  String SendDataByPost(String urlStr){
         URL url = null;
