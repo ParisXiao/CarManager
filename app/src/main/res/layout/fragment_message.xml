@@ -4,13 +4,9 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <com.pda.carmanager.pullrefresh.PullRefreshRecyclerView
-            android:id="@+id/pullRefresh_msg"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <com.androidkun.PullToRefreshRecyclerView
+        android:id="@+id/pullRefresh_msg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
-        </com.pda.carmanager.pullrefresh.PullRefreshRecyclerView>
-    <include
-        android:id="@+id/id_empty_view"
-        layout="@layout/layout_empty_view"/>
 </RelativeLayout>

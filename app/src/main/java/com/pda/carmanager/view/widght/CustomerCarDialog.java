@@ -96,8 +96,8 @@ public class CustomerCarDialog extends Dialog {
                         .getWidth(), (itemHeight * 3)));
                 sv02.setLayoutParams(new LinearLayout.LayoutParams(tv02
                         .getWidth(), (itemHeight * 3)));
-                sv01.scrollTo(0, 33 * itemHeight);
-                sv02.scrollTo(0, 26 * itemHeight);
+                sv01.scrollTo(0, jianchengs.length * itemHeight);
+                sv02.scrollTo(0, zimus.length * itemHeight);
 
             }
         });
@@ -168,32 +168,32 @@ public class CustomerCarDialog extends Dialog {
         switch (flag) {
             case 1:
                 int mPosition = 0;
-                if (position <= 32 * itemHeight) {
-                    mPosition = position + 34 * itemHeight;
+                if (position <= (jianchengs.length-1) * itemHeight) {
+                    mPosition = position + jianchengs.length * itemHeight;
                     scrollview.scrollTo(0, mPosition);
-                } else if (position >= 64 * itemHeight) {
-                    mPosition = position - 33 * itemHeight;
+                } else if (position >= 2*(jianchengs.length-1)* itemHeight) {
+                    mPosition = position - jianchengs.length * itemHeight;
                     scrollview.scrollTo(0, mPosition);
                 } else {
                     mPosition = position;
                     scrollview.smoothScrollTo(0, position);
                 }
-                setHour = jianchengs[(mPosition / itemHeight - 32) % 32];
+                setHour = jianchengs[(mPosition / itemHeight - jianchengs.length-1) % jianchengs.length-1];
                 break;
 
             case 2:
                 int hPosition = 0;
-                if (position <= 25 * itemHeight) {
-                    hPosition = position + 26 * itemHeight;
+                if (position <= (zimus.length-1) * itemHeight) {
+                    hPosition = position + zimus.length * itemHeight;
                     scrollview.scrollTo(0, hPosition);
-                } else if (position >= 50 * itemHeight) {
-                    hPosition = position - 26 * itemHeight;
+                } else if (position >= 2*(zimus.length-1) * itemHeight) {
+                    hPosition = position - zimus.length * itemHeight;
                     scrollview.scrollTo(0, hPosition);
                 } else {
                     hPosition = position;
                     scrollview.smoothScrollTo(0, position);
                 }
-                setMinute = zimus[(hPosition / itemHeight) % 26 + 1];
+                setMinute = zimus[(hPosition / itemHeight) % zimus.length + 1];
                 break;
         }
 
@@ -208,9 +208,10 @@ public class CustomerCarDialog extends Dialog {
     private void setMinuteDial(TextView tv) {
         StringBuffer buff = new StringBuffer();
         for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < jianchengs.length; j++) {
-                    buff.append(jianchengs[i]);
+            for (int j = 0; j < zimus.length; j++) {
+                buff.append(zimus[j]);
             }
+
         }
 
         tv.setText(buff);
@@ -222,12 +223,12 @@ public class CustomerCarDialog extends Dialog {
      * @param tv
      */
     private void setHourDial(TextView tv) {
+
         StringBuffer buff = new StringBuffer();
         for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < zimus.length; j++) {
-                    buff.append(zimus[i]);
+            for (int j = 0; j < jianchengs.length; j++) {
+                buff.append(jianchengs[j]);
             }
-
         }
 
         tv.setText(buff);

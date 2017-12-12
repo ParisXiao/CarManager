@@ -5,15 +5,17 @@ import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.androidkun.PullToRefreshRecyclerView;
+import com.androidkun.callback.PullToRefreshListener;
 import com.pda.carmanager.R;
 import com.pda.carmanager.adapter.ChargeAdapter;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.bean.ChargeBean;
-import com.pda.carmanager.pullrefresh.MessageRelativeLayout;
-import com.pda.carmanager.pullrefresh.PullRefreshRecyclerView;
+import com.pda.carmanager.bean.MsgBean;
 import com.pda.carmanager.pullrefresh.SpacesItemDecoration;
 
 import java.util.ArrayList;
@@ -23,10 +25,9 @@ import java.util.List;
  * Created by Administrator on 2017/12/8 0008.
  */
 
-public class ChargeRecordActivity extends BaseActivity implements View.OnClickListener {
+public class ChargeRecordActivity extends BaseActivity implements View.OnClickListener,PullToRefreshListener {
 
-    private PullRefreshRecyclerView pullRefresh_Charge;
-    private MessageRelativeLayout refreshLayout_ChargeMsg;
+    private PullToRefreshRecyclerView pullRefresh_Charge;
     private ChargeAdapter chargeAdapter;
     private List<ChargeBean> chargeBeanList = null;
     private TextView toolbar_mid;
@@ -44,12 +45,24 @@ public class ChargeRecordActivity extends BaseActivity implements View.OnClickLi
 
     private void initView() {
 
-        pullRefresh_Charge = (PullRefreshRecyclerView) findViewById(R.id.pullRefresh_Charge);
-        refreshLayout_ChargeMsg = (MessageRelativeLayout) findViewById(R.id.refreshLayout_ChargeMsg);
+        pullRefresh_Charge = (PullToRefreshRecyclerView) findViewById(R.id.pullRefresh_Charge);
+        View emptyView = View.inflate(this, R.layout.layout_empty_view, null);
+        emptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        pullRefresh_Charge.setEmptyView(emptyView);
         pullRefresh_Charge.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         pullRefresh_Charge.addItemDecoration(new SpacesItemDecoration(getResources().getDimensionPixelSize(R.dimen.padding_middle)));
         pullRefresh_Charge.setHasFixedSize(true);
-
+//设置是否开启上拉加载
+        pullRefresh_Charge.setLoadingMoreEnabled(true);
+        //设置是否开启下拉刷新
+        pullRefresh_Charge.setPullRefreshEnabled(true);
+        //设置是否显示上次刷新的时间
+        pullRefresh_Charge.displayLastRefreshTime(true);
+        //设置刷新回调
+        pullRefresh_Charge.setPullToRefreshListener(this);
+        //主动触发下拉刷新操作
+        //pullRefresh_msg.onRefresh();
         toolbar_mid = (TextView) findViewById(R.id.toolbar_mid);
         toolbar_mid.setOnClickListener(this);
         toolbar_left_btn = (ImageButton) findViewById(R.id.toolbar_left_btn);
@@ -74,35 +87,6 @@ public class ChargeRecordActivity extends BaseActivity implements View.OnClickLi
         chargeBeanList.add(new ChargeBean("贵A78487", "2017-12-8 12:22:33至2017-12-9 12:22:33", "68.00元"));
         chargeAdapter=new ChargeAdapter(this, chargeBeanList);
         pullRefresh_Charge.setAdapter(chargeAdapter);
-        pullRefresh_Charge.setOnRefreshListener(new PullRefreshRecyclerView.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                //刷新数据
-
-                //结束刷新
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        pullRefresh_Charge.stopRefresh();
-                        refreshLayout_ChargeMsg.setMessage("更新了18条数据");
-                    }
-                }, 2000);
-
-            }
-
-            @Override
-            public void onLoadMore() {
-                //加载更多
-
-                //结束加载
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        pullRefresh_Charge.stopLoadMore();
-                    }
-                }, 2000);
-            }
-        });
 
     }
 
@@ -113,5 +97,30 @@ public class ChargeRecordActivity extends BaseActivity implements View.OnClickLi
                 finish();
                 break;
         }
+    }
+    @Override
+    public void onRefresh() {
+        pullRefresh_Charge.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                pullRefresh_Charge.setRefreshComplete();
+                chargeAdapter.notifyDataSetChanged();
+            }
+        }, 2000);
+    }
+
+    @Override
+    public void onLoadMore() {
+        pullRefresh_Charge.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                pullRefresh_Charge.setLoadMoreComplete(); //加载数据完成
+                //模拟加载数据的情况
+                for (int i = 0; i < 10; i++) {
+                    chargeBeanList.add(new ChargeBean("贵A78487", "2017-12-8 12:22:33至2017-12-9 12:22:33", "68.00元"));
+                }
+                chargeAdapter.notifyDataSetChanged();
+            }
+        }, 2000);
     }
 }

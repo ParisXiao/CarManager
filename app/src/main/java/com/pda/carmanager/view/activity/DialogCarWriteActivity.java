@@ -1,5 +1,6 @@
 package com.pda.carmanager.view.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,12 +17,11 @@ import android.widget.TextView;
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.config.CommonlConfig;
-import com.pda.carmanager.observer.cameraobserver.ObservableInterface;
-import com.pda.carmanager.observer.cameraobserver.PhotoViewDatachangeInterface;
-import com.pda.carmanager.observer.cameraobserver.VisitorObserver;
+import com.pda.carmanager.inter.PhotoInter;
 import com.pda.carmanager.util.PhotoUtils;
 import com.pda.carmanager.view.widght.CustomerCarDialog;
 import com.pda.carmanager.view.widght.IdentifyingCodeView;
+import com.pda.carmanager.view.widght.PhotoShowDialog;
 import com.suke.widget.SwitchButton;
 
 import java.io.File;
@@ -32,7 +32,7 @@ import java.util.List;
  * Created by Administrator on 2017/12/10 0010.
  */
 
-public class DialogCarWriteActivity extends BaseActivity implements View.OnClickListener, ObservableInterface {
+public class DialogCarWriteActivity extends BaseActivity implements View.OnClickListener, PhotoInter {
     private Button chooseSmall;
     private Button chooseBig;
     private TextView text_carType_new;
@@ -57,9 +57,9 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
     private String IMG_PATH;
     private static final int PHOTO_CAPTURE = 0x11;// 拍照
     private List<Bitmap> maps = new ArrayList<Bitmap>();
-    private List<String> bitmapUrl;
-    private PhotoViewDatachangeInterface datachangeInterface;
     private int flage = 0;
+    private TextView text_camera1;
+    private TextView text_camera2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +109,10 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
         carNum_edit2.setOnClickListener(this);
         carNum_edit3 = (IdentifyingCodeView) findViewById(R.id.carNum_edit3);
         carNum_edit3.setOnClickListener(this);
+        text_camera1 = (TextView) findViewById(R.id.text_camera1);
+        text_camera1.setOnClickListener(this);
+        text_camera2 = (TextView) findViewById(R.id.text_camera2);
+        text_camera2.setOnClickListener(this);
     }
 
     private void initData() {
@@ -200,19 +204,14 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
             case R.id.camera_1:
                 if (maps.size() >= 1) {
 
-//                    PhotoShowDialog.showPhotoDialog(activity, maps.get(0));
+                    PhotoShowDialog.showPhotoDialog(DialogCarWriteActivity.this, maps.get(0));
                 } else {
                     takePhoto();
                 }
                 break;
             case R.id.camera_2:
                 if (maps.size() >= 2) {
-//                    Intent intent = new Intent(Intent.ACTION_VIEW);
-//                    File file=new File(fileInfo.get(position).getFilePath());
-//                    Uri mUri = Uri.parse("file://"+file.getPath());
-//                    intent.setDataAndType(mUri, "image/*");
-//                    startActivity(intent);
-//                    PhotoShowDialog.showPhotoDialog(activity, maps.get(1));
+                    PhotoShowDialog.showPhotoDialog(DialogCarWriteActivity.this, maps.get(1));
                 } else {
                     takePhoto();
                 }
@@ -231,9 +230,28 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
         intent.putExtra(MediaStore.EXTRA_OUTPUT,
                 Uri.fromFile(new File(IMG_PATH, "temp.jpg")));
         startActivityForResult(intent, PHOTO_CAPTURE);
-        VisitorObserver.init().addObservered(DialogCarWriteActivity.this);
         flage = CommonlConfig.PHOTO_KEY;
         return;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_CANCELED)
+            return;
+
+        if (requestCode == PHOTO_CAPTURE) {
+            Bitmap bitmap = PhotoUtils.decodeUriAsBitmap(Uri.fromFile(new File(IMG_PATH, "temp.jpg")), PhotoUtils.getBitmapDegree(Uri.fromFile(new File(IMG_PATH, "temp.jpg")).getPath()));
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            bitmap = PhotoUtils.createWatermark(bitmap);
+            bitmap = PhotoUtils.createWatermark(bitmap);
+            maps.add(bitmap);
+            setPhoto();
+        }
     }
 
     private void removePhoto(final int index) {
@@ -251,8 +269,6 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
                     if (maps.size() >= 1)
                         maps.remove(1);
                 }
-                if (datachangeInterface != null)
-                    datachangeInterface.photoNmunberChange(maps.size());
                 setPhoto();
             }
         });
@@ -262,45 +278,33 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
 
     }
 
-    @Override
-    public void setPhoto(Bitmap bitmap) {
-//        if (flage == CommonlConfig.PHOTO_KEY) {
-//
-//            if (maps.size() >= 2) {
-//                maps.remove(0);
-//            }
-//            maps.add(bitmap);
-//            if (datachangeInterface != null)
-//                datachangeInterface.photoNmunberChange(maps.size());
-//            setPhoto();
-//        }
-//        flage = 0;
-    }
 
     private void setPhoto() {
         for (int i = 0; i < maps.size(); i++) {
             if (i == 0) {
                 camera_1.setImageBitmap(maps.get(i));
+                text_camera1.setText(R.string.camera_del);
             } else if (i == 1) {
                 camera_2.setImageBitmap(maps.get(i));
+                text_camera2.setText(R.string.camera_del);
             }
         }
         int size = maps.size();
         if (size == 0) {
+            text_camera1.setText(R.string.camera);
+            text_camera2.setText(R.string.camera);
             camera_1.setImageResource(R.drawable.paizhao);
             camera_2.setImageResource(R.drawable.paizhao);
         } else if (size == 1) {
             camera_2.setImageResource(R.drawable.paizhao);
+            text_camera1.setText(R.string.camera_del);
+            text_camera2.setText(R.string.camera);
         }
 
     }
 
-    public PhotoViewDatachangeInterface getDatachangeInterface() {
-        return datachangeInterface;
-    }
+    @Override
+    public void addBitmapList(List<Bitmap> bitmaps) {
 
-    public void setDatachangeInterface(PhotoViewDatachangeInterface datachangeInterface) {
-        this.datachangeInterface = datachangeInterface;
     }
-
 }

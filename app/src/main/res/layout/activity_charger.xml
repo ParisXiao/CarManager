@@ -6,16 +6,8 @@
 <include
     layout="@layout/layout_toolbar_common"
     />
-    <com.pda.carmanager.pullrefresh.MessageRelativeLayout
-        android:id="@+id/refreshLayout_ChargeMsg"
+    <com.androidkun.PullToRefreshRecyclerView
+        android:id="@+id/pullRefresh_Charge"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.pda.carmanager.pullrefresh.PullRefreshRecyclerView
-            android:id="@+id/pullRefresh_Charge"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </com.pda.carmanager.pullrefresh.PullRefreshRecyclerView>
-    </com.pda.carmanager.pullrefresh.MessageRelativeLayout>
+        android:layout_height="match_parent"/>
 </LinearLayout>

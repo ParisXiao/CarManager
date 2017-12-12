@@ -11,7 +11,15 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    allprojects {
+        repositories {
+            maven { url "https://jitpack.io" }
+            maven{
+                url "https://maven.google.com"
+            }
 
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -40,4 +48,7 @@ dependencies {
     compile 'com.pnikosis:materialish-progress:1.7'
     //开关按钮
     compile 'com.github.zcweng:switch-button:0.0.3@aar'
+    compile project(path: ':pulltorefreshlibrary')
+    compile files('libs/photoview-library-1.2.2.jar')
+    compile 'com.github.arcadefire:nice-spinner:1.3.1'
 }
