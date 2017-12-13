@@ -7,16 +7,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.androidkun.PullToRefreshRecyclerView;
 import com.pda.carmanager.R;
 import com.pda.carmanager.adapter.ErrorAdapter;
-import com.pda.carmanager.adapter.MessageAdapter;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.bean.ErrorBean;
-import com.pda.carmanager.pullrefresh.SpacesItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +31,10 @@ public class ErrorNoteActivity extends BaseActivity implements View.OnClickListe
     private Toolbar toolbar;
     private LinearLayout linear_sbdk_btn;
     private PullToRefreshRecyclerView pullRefresh_myError;
-    private List<ErrorBean> errorBeanList=null;
+    private List<ErrorBean> errorBeanList = null;
     private ErrorAdapter errorAdapter;
+    private ImageView empty_img;
+    private TextView empty_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,10 @@ public class ErrorNoteActivity extends BaseActivity implements View.OnClickListe
         View emptyView = View.inflate(this, R.layout.layout_empty_view, null);
         emptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
+        empty_img = (ImageView) emptyView.findViewById(R.id.empty_img);
+        empty_text = (TextView) emptyView.findViewById(R.id.empty_text);
+        empty_img.setImageDrawable(getResources().getDrawable(R.drawable.shensujilu));
+        empty_text.setText(R.string.empty_shensu_view);
         pullRefresh_myError.setEmptyView(emptyView);
         pullRefresh_myError.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         pullRefresh_myError.setHasFixedSize(false);
@@ -73,7 +78,7 @@ public class ErrorNoteActivity extends BaseActivity implements View.OnClickListe
 //        pullRefresh_myError.setPullToRefreshListener(this);
         //主动触发下拉刷新操作
         //pullRefresh_myError.onRefresh();
-        errorBeanList=new ArrayList<>();
+        errorBeanList = new ArrayList<>();
 //        msgBeanList.add(new MsgBean("2017年12月11日","23:20","泊讯消息","泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯"));
 //        msgBeanList.add(new MsgBean("2017年12月11日","23:20","泊讯消息","泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯"));
 //        msgBeanList.add(new MsgBean("2017年12月11日","23:20","泊讯消息","泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯"));
@@ -82,8 +87,9 @@ public class ErrorNoteActivity extends BaseActivity implements View.OnClickListe
 //        msgBeanList.add(new MsgBean("2017年12月11日","23:20","泊讯消息","泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯"));
 //        msgBeanList.add(new MsgBean("2017年12月11日","23:20","泊讯消息","泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯"));
 //        msgBeanList.add(new MsgBean("2017年12月11日","23:20","泊讯消息","泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯泊讯"));
-        errorAdapter=new ErrorAdapter(ErrorNoteActivity.this,errorBeanList);
+        errorAdapter = new ErrorAdapter(ErrorNoteActivity.this, errorBeanList);
         pullRefresh_myError.setAdapter(errorAdapter);
+
     }
 
     @Override
@@ -93,7 +99,7 @@ public class ErrorNoteActivity extends BaseActivity implements View.OnClickListe
                 finish();
                 break;
             case R.id.linear_sbdk_btn:
-                Intent intent=new Intent(ErrorNoteActivity.this,AddErrorActivity.class);
+                Intent intent = new Intent(ErrorNoteActivity.this, AddErrorActivity.class);
                 startActivity(intent);
                 break;
 

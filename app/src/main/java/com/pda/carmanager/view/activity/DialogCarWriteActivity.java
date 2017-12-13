@@ -8,11 +8,14 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
@@ -21,6 +24,7 @@ import com.pda.carmanager.inter.PhotoInter;
 import com.pda.carmanager.util.PhotoUtils;
 import com.pda.carmanager.view.widght.CustomerCarDialog;
 import com.pda.carmanager.view.widght.IdentifyingCodeView;
+import com.pda.carmanager.view.widght.LicenseKeyboardUtil;
 import com.pda.carmanager.view.widght.PhotoShowDialog;
 import com.suke.widget.SwitchButton;
 
@@ -50,22 +54,27 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
     private Button pop_choose_big;
     private SwitchButton btn_catType_new;
     private SwitchButton btn_catType_stu;
-    private Button btn_area;
-    private IdentifyingCodeView carNum_edit1;
-    private IdentifyingCodeView carNum_edit2;
-    private IdentifyingCodeView carNum_edit3;
     private String IMG_PATH;
     private static final int PHOTO_CAPTURE = 0x11;// 拍照
     private List<Bitmap> maps = new ArrayList<Bitmap>();
     private int flage = 0;
     private TextView text_camera1;
     private TextView text_camera2;
+    private LicenseKeyboardUtil keyboardUtil;
+    private EditText edit_key1;
+    private EditText edit_key2;
+    private EditText edit_key3;
+    private EditText edit_key4;
+    private EditText edit_key5;
+    private EditText edit_key6;
+    private EditText[] editTexts={edit_key1,edit_key2,edit_key3,edit_key4,edit_key5};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.layout_pop_car);
+
         initView();
         initData();
     }
@@ -78,7 +87,6 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
         chooseNew = (SwitchButton) findViewById(R.id.btn_catType_new);
         text_carType_stu = (TextView) findViewById(R.id.text_carType_stu);
         chooseStu = (SwitchButton) findViewById(R.id.btn_catType_stu);
-        AreaBtn = (Button) findViewById(R.id.btn_area);
         text_stucar = (TextView) findViewById(R.id.text_stucar);
         camera_1 = (ImageView) findViewById(R.id.camera_1);
         camera_2 = (ImageView) findViewById(R.id.camera_2);
@@ -101,18 +109,20 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
         btn_catType_new.setOnClickListener(this);
         btn_catType_stu = (SwitchButton) findViewById(R.id.btn_catType_stu);
         btn_catType_stu.setOnClickListener(this);
-        btn_area = (Button) findViewById(R.id.btn_area);
-        btn_area.setOnClickListener(this);
-        carNum_edit1 = (IdentifyingCodeView) findViewById(R.id.carNum_edit1);
-        carNum_edit1.setOnClickListener(this);
-        carNum_edit2 = (IdentifyingCodeView) findViewById(R.id.carNum_edit2);
-        carNum_edit2.setOnClickListener(this);
-        carNum_edit3 = (IdentifyingCodeView) findViewById(R.id.carNum_edit3);
-        carNum_edit3.setOnClickListener(this);
         text_camera1 = (TextView) findViewById(R.id.text_camera1);
         text_camera1.setOnClickListener(this);
         text_camera2 = (TextView) findViewById(R.id.text_camera2);
         text_camera2.setOnClickListener(this);
+
+        edit_key1 = (EditText) findViewById(R.id.edit_key1);
+        edit_key2 = (EditText) findViewById(R.id.edit_key2);
+        edit_key3 = (EditText) findViewById(R.id.edit_key3);
+        edit_key4 = (EditText) findViewById(R.id.edit_key4);
+        edit_key5 = (EditText) findViewById(R.id.edit_key5);
+        edit_key6 = (EditText) findViewById(R.id.edit_key6);
+        edit_key6.setVisibility(View.GONE);
+        text_stucar.setVisibility(View.GONE);
+        keyboardUtil=new LicenseKeyboardUtil(this,editTexts,0);
     }
 
     private void initData() {
@@ -122,18 +132,12 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
                 if (isChecked) {
-                    carNum_edit1.setVisibility(View.GONE);
-                    carNum_edit2.setVisibility(View.VISIBLE);
-                    carNum_edit3.setVisibility(View.GONE);
                     text_stucar.setVisibility(View.GONE);
 
                     chooseNew.setChecked(true);
                     chooseStu.setChecked(false);
                     text_stucar.setVisibility(View.GONE);
                 } else {
-                    carNum_edit2.setVisibility(View.GONE);
-                    carNum_edit1.setVisibility(View.VISIBLE);
-                    carNum_edit3.setVisibility(View.GONE);
                     text_stucar.setVisibility(View.GONE);
                 }
 
@@ -143,17 +147,11 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
                 if (isChecked) {
-                    carNum_edit1.setVisibility(View.GONE);
-                    carNum_edit3.setVisibility(View.VISIBLE);
-                    carNum_edit2.setVisibility(View.GONE);
                     text_stucar.setVisibility(View.VISIBLE);
                     chooseNew.setChecked(false);
                     chooseStu.setChecked(true);
                     text_stucar.setVisibility(View.VISIBLE);
                 } else {
-                    carNum_edit2.setVisibility(View.GONE);
-                    carNum_edit1.setVisibility(View.VISIBLE);
-                    carNum_edit3.setVisibility(View.GONE);
                     text_stucar.setVisibility(View.GONE);
                 }
             }
@@ -192,15 +190,15 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
                 chooseSmall.setBackground(getResources().getDrawable(R.drawable.shape_choose));
 
                 break;
-            case R.id.btn_area:
-                areaDialog.show();
-                areaDialog.setOnDateDialogListener(new CustomerCarDialog.DateDialogListener() {
-                    @Override
-                    public void getDate() {
-                        AreaBtn.setText(areaDialog.getSettingHour() + areaDialog.getSettingMinute());
-                    }
-                });
-                break;
+//            case R.id.btn_area:
+//                areaDialog.show();
+//                areaDialog.setOnDateDialogListener(new CustomerCarDialog.DateDialogListener() {
+//                    @Override
+//                    public void getDate() {
+//                        AreaBtn.setText(areaDialog.getSettingHour() + areaDialog.getSettingMinute());
+//                    }
+//                });
+//                break;
             case R.id.camera_1:
                 if (maps.size() >= 1) {
 
@@ -305,6 +303,49 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
 
     @Override
     public void addBitmapList(List<Bitmap> bitmaps) {
+
+    }
+
+    private void submit() {
+        // validate
+        String key1 = edit_key1.getText().toString().trim();
+        if (TextUtils.isEmpty(key1)) {
+            Toast.makeText(this, "key1不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String key2 = edit_key2.getText().toString().trim();
+        if (TextUtils.isEmpty(key2)) {
+            Toast.makeText(this, "key2不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String key3 = edit_key3.getText().toString().trim();
+        if (TextUtils.isEmpty(key3)) {
+            Toast.makeText(this, "key3不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String key4 = edit_key4.getText().toString().trim();
+        if (TextUtils.isEmpty(key4)) {
+            Toast.makeText(this, "key4不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String key5 = edit_key5.getText().toString().trim();
+        if (TextUtils.isEmpty(key5)) {
+            Toast.makeText(this, "key5不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String key6 = edit_key6.getText().toString().trim();
+        if (TextUtils.isEmpty(key6)) {
+            Toast.makeText(this, "key6不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // TODO validate success, do something
+
 
     }
 }

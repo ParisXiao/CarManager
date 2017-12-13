@@ -128,7 +128,7 @@ public class PrinterSettingActivity extends BasePrintActivity implements View.On
                         Map<String,String> map=new HashMap<String, String>();
                         map.put("password",strBase64);
                         map.put("encode","1213");
-                        OKHttpUtil.GetMessage(PrinterSettingActivity.this,key,map);
+//                        OKHttpUtil.GetMessage(PrinterSettingActivity.this,key,map);
 //                        OKHttpUtil.SendDataByPost(UrlConfig.HttpUrl);
                     }
                 }).start();

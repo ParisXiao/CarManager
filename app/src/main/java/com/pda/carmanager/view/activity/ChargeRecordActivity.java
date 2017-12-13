@@ -1,12 +1,12 @@
 package com.pda.carmanager.view.activity;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.androidkun.PullToRefreshRecyclerView;
@@ -15,7 +15,6 @@ import com.pda.carmanager.R;
 import com.pda.carmanager.adapter.ChargeAdapter;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.bean.ChargeBean;
-import com.pda.carmanager.bean.MsgBean;
 import com.pda.carmanager.pullrefresh.SpacesItemDecoration;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ import java.util.List;
  * Created by Administrator on 2017/12/8 0008.
  */
 
-public class ChargeRecordActivity extends BaseActivity implements View.OnClickListener,PullToRefreshListener {
+public class ChargeRecordActivity extends BaseActivity implements View.OnClickListener, PullToRefreshListener {
 
     private PullToRefreshRecyclerView pullRefresh_Charge;
     private ChargeAdapter chargeAdapter;
@@ -33,6 +32,8 @@ public class ChargeRecordActivity extends BaseActivity implements View.OnClickLi
     private TextView toolbar_mid;
     private ImageButton toolbar_left_btn;
     private Toolbar toolbar;
+    private ImageView empty_img;
+    private TextView empty_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,10 @@ public class ChargeRecordActivity extends BaseActivity implements View.OnClickLi
         View emptyView = View.inflate(this, R.layout.layout_empty_view, null);
         emptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
+        empty_img = (ImageView) emptyView.findViewById(R.id.empty_img);
+        empty_text = (TextView) emptyView.findViewById(R.id.empty_text);
+        empty_img.setImageDrawable(getResources().getDrawable(R.drawable.shoufeijilu_no));
+        empty_text.setText(R.string.empty_charge_view);
         pullRefresh_Charge.setEmptyView(emptyView);
         pullRefresh_Charge.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         pullRefresh_Charge.addItemDecoration(new SpacesItemDecoration(getResources().getDimensionPixelSize(R.dimen.padding_middle)));
@@ -72,6 +77,7 @@ public class ChargeRecordActivity extends BaseActivity implements View.OnClickLi
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar_left_btn.setVisibility(View.VISIBLE);
+
     }
 
     private void initData() {
@@ -85,7 +91,7 @@ public class ChargeRecordActivity extends BaseActivity implements View.OnClickLi
         chargeBeanList.add(new ChargeBean("贵A78487", "2017-12-8 12:22:33至2017-12-9 12:22:33", "68.00元"));
         chargeBeanList.add(new ChargeBean("贵A78487", "2017-12-8 12:22:33至2017-12-9 12:22:33", "68.00元"));
         chargeBeanList.add(new ChargeBean("贵A78487", "2017-12-8 12:22:33至2017-12-9 12:22:33", "68.00元"));
-        chargeAdapter=new ChargeAdapter(this, chargeBeanList);
+        chargeAdapter = new ChargeAdapter(this, chargeBeanList);
         pullRefresh_Charge.setAdapter(chargeAdapter);
 
     }
@@ -98,6 +104,7 @@ public class ChargeRecordActivity extends BaseActivity implements View.OnClickLi
                 break;
         }
     }
+
     @Override
     public void onRefresh() {
         pullRefresh_Charge.postDelayed(new Runnable() {

@@ -50,11 +50,17 @@
     <string name="zxing">收款二维码</string>
     <string name="choose_paytype">请选择收费方式</string>
     <string name="empty_view">亲，您还没有消息哦！！！</string>
+    <string name="empty_charge_view">还没有收款记录哦！！！</string>
+    <string name="empty_shensu_view">还没有申诉记录哦！！！</string>
 
     <string name="add_park">新增车位</string>
     <string name="add_error">新增申诉</string>
     <string name="shensu_note">申诉记录</string>
     <string name="system_quit">再按一次退出系统</string>
+    <string name="text_dialog_vip1">泊迅会议车辆，自动支付</string>
+    <string name="text_dialog_vip2">不需打印小票</string>
+    <string name="text_dialog_vip_com">完成</string>
+
 
 
 

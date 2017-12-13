@@ -9,5 +9,5 @@ import android.view.View;
 public interface ParkItemOnInter {
     void writeCarNum();
     void payCar();
-    void AutoPayCar();
+    void AutoPayCar(String carNum);
 }

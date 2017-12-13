@@ -99,7 +99,7 @@ public class MyParkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         parkItemOnInter.payCar();
                         break;
                     case "4":
-                        parkItemOnInter.AutoPayCar();
+                        parkItemOnInter.AutoPayCar(parkBeanList.get(position).getCarNum());
                         break;
                 }
             }
