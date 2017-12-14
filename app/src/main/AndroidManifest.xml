@@ -119,6 +119,8 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".view.activity.KeyInputActivity" />
+        <activity android:name=".view.activity.ContentActivity" />
 
         <service
             android:name="com.baidu.location.f"

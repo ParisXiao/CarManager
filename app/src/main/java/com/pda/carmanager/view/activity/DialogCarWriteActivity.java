@@ -7,13 +7,17 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,13 +65,25 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
     private TextView text_camera1;
     private TextView text_camera2;
     private LicenseKeyboardUtil keyboardUtil;
-    private EditText edit_key1;
-    private EditText edit_key2;
-    private EditText edit_key3;
-    private EditText edit_key4;
-    private EditText edit_key5;
-    private EditText edit_key6;
-    private EditText[] editTexts={edit_key1,edit_key2,edit_key3,edit_key4,edit_key5};
+    private TextView text_area1;
+    private TextView text_area2;
+    private TextView text_key1;
+    private TextView text_key2;
+    private TextView text_key3;
+    private TextView text_key4;
+    private TextView text_key5;
+    private TextView text_key6;
+    private LinearLayout linear_input;
+    private int inputType = 0;
+    private static final int RequsetInput = 110;
+    private String area1;
+    private String area2;
+    private String key1;
+    private String key2;
+    private String key3;
+    private String key4;
+    private String key5;
+    private String key6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +103,8 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
         chooseNew = (SwitchButton) findViewById(R.id.btn_catType_new);
         text_carType_stu = (TextView) findViewById(R.id.text_carType_stu);
         chooseStu = (SwitchButton) findViewById(R.id.btn_catType_stu);
+        linear_input = (LinearLayout) findViewById(R.id.linear_input);
+        linear_input.setOnClickListener(this);
         text_stucar = (TextView) findViewById(R.id.text_stucar);
         camera_1 = (ImageView) findViewById(R.id.camera_1);
         camera_2 = (ImageView) findViewById(R.id.camera_2);
@@ -98,7 +116,6 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
         chooseBig.setOnClickListener(this);
         chooseNew.setOnClickListener(this);
         chooseStu.setOnClickListener(this);
-        AreaBtn.setOnClickListener(this);
         pop1_exit.setOnClickListener(this);
         pop1_next.setOnClickListener(this);
         pop_choose_small = (Button) findViewById(R.id.pop_choose_small);
@@ -114,31 +131,48 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
         text_camera2 = (TextView) findViewById(R.id.text_camera2);
         text_camera2.setOnClickListener(this);
 
-        edit_key1 = (EditText) findViewById(R.id.edit_key1);
-        edit_key2 = (EditText) findViewById(R.id.edit_key2);
-        edit_key3 = (EditText) findViewById(R.id.edit_key3);
-        edit_key4 = (EditText) findViewById(R.id.edit_key4);
-        edit_key5 = (EditText) findViewById(R.id.edit_key5);
-        edit_key6 = (EditText) findViewById(R.id.edit_key6);
-        edit_key6.setVisibility(View.GONE);
+        text_key1 = (TextView) findViewById(R.id.text_key1);
+        text_key2 = (TextView) findViewById(R.id.text_key2);
+        text_key3 = (TextView) findViewById(R.id.text_key3);
+        text_key4 = (TextView) findViewById(R.id.text_key4);
+        text_key5 = (TextView) findViewById(R.id.text_key5);
+        text_key6 = (TextView) findViewById(R.id.text_key6);
+        text_area1 = (TextView) findViewById(R.id.text_area1);
+        text_area2 = (TextView) findViewById(R.id.text_area2);
+        text_key6.setVisibility(View.GONE);
         text_stucar.setVisibility(View.GONE);
-        keyboardUtil=new LicenseKeyboardUtil(this,editTexts,0);
     }
 
     private void initData() {
         IMG_PATH = PhotoUtils.getSDPath(this);
         areaDialog = new CustomerCarDialog(this, "贵", "A");
         chooseNew.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
                 if (isChecked) {
-                    text_stucar.setVisibility(View.GONE);
-
                     chooseNew.setChecked(true);
-                    chooseStu.setChecked(false);
-                    text_stucar.setVisibility(View.GONE);
+
+
+
+                    if (chooseStu.isChecked()){
+                        chooseStu.setChecked(false);
+                    }
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            text_stucar.setVisibility(View.GONE);
+                            text_key6.setVisibility(View.VISIBLE);
+                            text_key5.setVisibility(View.VISIBLE);
+                            inputType = 1;
+                        }
+                    },500);
+
                 } else {
                     text_stucar.setVisibility(View.GONE);
+                    text_key6.setVisibility(View.GONE);
+                    text_key5.setVisibility(View.VISIBLE);
+                    inputType = 0;
                 }
 
             }
@@ -147,12 +181,26 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
                 if (isChecked) {
-                    text_stucar.setVisibility(View.VISIBLE);
-                    chooseNew.setChecked(false);
                     chooseStu.setChecked(true);
-                    text_stucar.setVisibility(View.VISIBLE);
+
+                    if (chooseNew.isChecked()){
+                        chooseNew.setChecked(false);
+                    }
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            text_stucar.setVisibility(View.VISIBLE);
+                            text_key6.setVisibility(View.GONE);
+                            text_key5.setVisibility(View.GONE);
+                            text_stucar.setVisibility(View.VISIBLE);
+                            inputType = 2;
+                        }
+                    },500);
                 } else {
                     text_stucar.setVisibility(View.GONE);
+                    text_key6.setVisibility(View.GONE);
+                    text_key5.setVisibility(View.VISIBLE);
+                    inputType = 0;
                 }
             }
         });
@@ -220,6 +268,11 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
             case R.id.pop1_next:
 
                 break;
+            case R.id.linear_input:
+                Intent intent = new Intent(DialogCarWriteActivity.this, KeyInputActivity.class);
+                intent.putExtra("inputType", inputType);
+                startActivityForResult(intent, RequsetInput);
+                break;
         }
     }
 
@@ -238,18 +291,44 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
         if (resultCode == Activity.RESULT_CANCELED)
             return;
 
-        if (requestCode == PHOTO_CAPTURE) {
-            Bitmap bitmap = PhotoUtils.decodeUriAsBitmap(Uri.fromFile(new File(IMG_PATH, "temp.jpg")), PhotoUtils.getBitmapDegree(Uri.fromFile(new File(IMG_PATH, "temp.jpg")).getPath()));
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case PHOTO_CAPTURE:
+                    Bitmap bitmap = PhotoUtils.decodeUriAsBitmap(Uri.fromFile(new File(IMG_PATH, "temp.jpg")), PhotoUtils.getBitmapDegree(Uri.fromFile(new File(IMG_PATH, "temp.jpg")).getPath()));
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    bitmap = PhotoUtils.createWatermark(bitmap);
+                    bitmap = PhotoUtils.createWatermark(bitmap);
+                    maps.add(bitmap);
+                    setPhoto();
+                    break;
+                case RequsetInput:
+                    Bundle bundle = data.getExtras();
+                    area1 = bundle.getString("area1");
+                    area2 = bundle.getString("area2");
+                    key1 = bundle.getString("key1");
+                    key2 = bundle.getString("key2");
+                    key3 = bundle.getString("key3");
+                    key4 = bundle.getString("key4");
+                    key5 = bundle.getString("key5");
+                    key6 = bundle.getString("key6");
+                    Log.d("InputString", key4);
+                            text_key1.setText(key1);
+                            text_key2.setText(key2);
+                            text_key3.setText(key3);
+                            text_key4.setText(key4);
+                            text_key5.setText(key5);
+                            text_key6.setText(key6);
+                            text_area1.setText(area1);
+                            text_area2.setText(area2);
+
+                    break;
             }
-            bitmap = PhotoUtils.createWatermark(bitmap);
-            bitmap = PhotoUtils.createWatermark(bitmap);
-            maps.add(bitmap);
-            setPhoto();
         }
+
     }
 
     private void removePhoto(final int index) {
@@ -306,46 +385,4 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
 
     }
 
-    private void submit() {
-        // validate
-        String key1 = edit_key1.getText().toString().trim();
-        if (TextUtils.isEmpty(key1)) {
-            Toast.makeText(this, "key1不能为空", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String key2 = edit_key2.getText().toString().trim();
-        if (TextUtils.isEmpty(key2)) {
-            Toast.makeText(this, "key2不能为空", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String key3 = edit_key3.getText().toString().trim();
-        if (TextUtils.isEmpty(key3)) {
-            Toast.makeText(this, "key3不能为空", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String key4 = edit_key4.getText().toString().trim();
-        if (TextUtils.isEmpty(key4)) {
-            Toast.makeText(this, "key4不能为空", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String key5 = edit_key5.getText().toString().trim();
-        if (TextUtils.isEmpty(key5)) {
-            Toast.makeText(this, "key5不能为空", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String key6 = edit_key6.getText().toString().trim();
-        if (TextUtils.isEmpty(key6)) {
-            Toast.makeText(this, "key6不能为空", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // TODO validate success, do something
-
-
-    }
 }

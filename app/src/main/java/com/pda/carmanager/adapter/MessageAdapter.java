@@ -1,6 +1,8 @@
 package com.pda.carmanager.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import com.pda.carmanager.R;
 import com.pda.carmanager.bean.ChargeBean;
 import com.pda.carmanager.bean.MsgBean;
+import com.pda.carmanager.view.activity.ContentActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +72,18 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         ((MyViewHolder) holder).msg_hour.setText(msgBeenList.get(position).getMsg_hour());
         ((MyViewHolder) holder).msg_title.setText(msgBeenList.get(position).getMsg_title());
         ((MyViewHolder) holder).msg_content.setText(msgBeenList.get(position).getMsg_content());
+        ((MyViewHolder) holder).msg_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(context, ContentActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putString("Title",msgBeenList.get(position).getMsg_title());
+                bundle.putString("Content",msgBeenList.get(position).getMsg_content());
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            }
+        });
+
     }
 
     @Override

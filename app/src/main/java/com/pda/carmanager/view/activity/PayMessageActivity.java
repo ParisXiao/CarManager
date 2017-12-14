@@ -1,6 +1,8 @@
 package com.pda.carmanager.view.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -13,9 +15,11 @@ import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
-import com.pda.carmanager.util.AMUtil;
-import com.pda.carmanager.view.test.ZXingActivity;
+import com.pda.carmanager.util.DialogUtil;
 import com.xys.libzxing.zxing.activity.CaptureActivity;
+import com.xys.libzxing.zxing.encoding.EncodingUtils;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Created by Administrator on 2017/12/11 0011.
@@ -100,15 +104,48 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
                     startActivityForResult(new Intent(PayMessageActivity.this, CaptureActivity.class), 0);
                     finish();
                 }else  if (flag.equals("aimg")) {
-                    Intent intent=new Intent(PayMessageActivity.this,ZXingImageActivity.class);
-                    startActivity(intent);
+                    // 位图
+                    try {
+                        /**
+                         * 参数：1.文本 2 3.二维码的宽高 4.二维码中间的那个logo
+                         */
+                        Intent intent=new Intent(PayMessageActivity.this,ZXingImageActivity.class);
+                        Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+                        Bitmap bitmap = EncodingUtils.createQRCode("测试", 600, 600, logoBitmap);
+                        ByteArrayOutputStream baos=new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                        byte [] bitmapByte =baos.toByteArray();
+                        intent.putExtra("zxingBitmap", bitmapByte);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
+
                     finish();
                 }else if (flag.equals("wsao")){
                     startActivityForResult(new Intent(PayMessageActivity.this, CaptureActivity.class), 0);
                     finish();
                 }else if (flag.equals("wimg")){
-                    Intent intent=new Intent(PayMessageActivity.this,ZXingImageActivity.class);
-                    startActivity(intent);
+
+                    // 位图
+                    try {
+                        /**
+                         * 参数：1.文本 2 3.二维码的宽高 4.二维码中间的那个logo
+                         */
+                        Intent intent=new Intent(PayMessageActivity.this,ZXingImageActivity.class);
+                        Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+                        Bitmap bitmap = EncodingUtils.createQRCode("测试", 600, 600, logoBitmap);
+                        ByteArrayOutputStream baos=new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                        byte [] bitmapByte =baos.toByteArray();
+                        intent.putExtra("zxingBitmap", bitmapByte);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                     finish();
                 }
                 break;

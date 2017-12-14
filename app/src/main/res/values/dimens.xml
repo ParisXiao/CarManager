@@ -24,6 +24,8 @@
     <!--recycle分割间距-->
     <dimen name="padding_middle">20dp</dimen>
 
+    <dimen name="dimen_edit">30dp</dimen>
+
 
 
 

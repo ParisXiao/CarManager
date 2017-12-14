@@ -127,6 +127,7 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/linear_input"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginLeft="10dp"
@@ -134,62 +135,96 @@
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:orientation="horizontal">
-            <EditText
-                android:id="@+id/edit_key1"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/shape_edit"
-                />
-            <EditText
-                android:id="@+id/edit_key2"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/shape_edit"
-                android:layout_marginLeft="10dp"
-                />
-            <EditText
-                android:id="@+id/edit_key3"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/shape_edit"
-                android:layout_marginLeft="10dp"
-                />
-            <EditText
-                android:id="@+id/edit_key4"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/shape_edit"
-                android:layout_marginLeft="10dp"
-                />
-            <EditText
-                android:id="@+id/edit_key5"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/shape_edit"
-                android:layout_marginLeft="10dp"
-                />
 
-            <EditText
-                android:id="@+id/edit_key6"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+            <TextView
+                android:id="@+id/text_area1"
+                android:layout_width="@dimen/dimen_edit"
+                android:layout_height="@dimen/dimen_edit"
                 android:background="@drawable/shape_edit"
-                android:layout_marginLeft="10dp"
-                android:visibility="gone"
-                />
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textSize="@dimen/text_size" />
 
+            <TextView
+                android:id="@+id/text_area2"
+                android:layout_width="@dimen/dimen_edit"
+                android:layout_height="@dimen/dimen_edit"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/shape_edit"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textSize="@dimen/text_size" />
 
+            <TextView
+                android:id="@+id/text_key1"
+                android:layout_width="@dimen/dimen_edit"
+                android:layout_height="@dimen/dimen_edit"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/shape_edit"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:id="@+id/text_key2"
+                android:layout_width="@dimen/dimen_edit"
+                android:layout_height="@dimen/dimen_edit"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/shape_edit"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:id="@+id/text_key3"
+                android:layout_width="@dimen/dimen_edit"
+                android:layout_height="@dimen/dimen_edit"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/shape_edit"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textSize="@dimen/text_size" />
+            <TextView
+                android:id="@+id/text_key4"
+                android:layout_width="@dimen/dimen_edit"
+                android:layout_height="@dimen/dimen_edit"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/shape_edit"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:id="@+id/text_key5"
+                android:layout_width="@dimen/dimen_edit"
+                android:layout_height="@dimen/dimen_edit"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/shape_edit"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:id="@+id/text_key6"
+                android:layout_width="@dimen/dimen_edit"
+                android:layout_height="@dimen/dimen_edit"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:background="@drawable/shape_edit"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size"
+                android:visibility="gone" />
 
 
             <TextView
                 android:id="@+id/text_stucar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:text="学"
                 android:textColor="@color/black"
-                android:layout_marginLeft="10dp"
                 android:textSize="@dimen/text_bigSize"
-                 />
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout
@@ -207,8 +242,7 @@
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/paizhao"
-                    />
+                    android:src="@drawable/paizhao" />
 
                 <TextView
                     android:id="@+id/text_camera1"
@@ -289,10 +323,6 @@
 
         </LinearLayout>
     </LinearLayout>
-    <android.inputmethodservice.KeyboardView
-        android:id="@+id/keyboard_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        />
+
+
 </RelativeLayout>

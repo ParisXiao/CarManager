@@ -1,56 +1,52 @@
 package com.pda.carmanager.view.activity;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
-import com.pda.carmanager.util.DialogUtil;
-import com.xys.libzxing.zxing.encoding.EncodingUtils;
+import com.pda.carmanager.view.widght.JustifyTextView;
 
 /**
- * Created by Administrator on 2017/12/11 0011.
+ * Created by Admin on 2017/12/14.
  */
 
-public class ZXingImageActivity extends BaseActivity implements View.OnClickListener {
+public class ContentActivity extends BaseActivity implements View.OnClickListener {
     private TextView toolbar_mid;
     private ImageButton toolbar_left_btn;
     private Toolbar toolbar;
-    private ImageView zxing_img;
+    private TextView content_title;
+    private JustifyTextView text_content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_zxingimg);
+        setContentView(R.layout.activity_content);
         initView();
+        initData();
+    }
+
+    private void initData() {
+        Bundle bundle=getIntent().getExtras();
+        content_title.setText(bundle.getString("Title"));
+        text_content.setText(bundle.getString("Content"));
     }
 
     private void initView() {
         toolbar_mid = (TextView) findViewById(R.id.toolbar_mid);
-        toolbar_mid.setText(R.string.title_user_manager);
         toolbar_left_btn = (ImageButton) findViewById(R.id.toolbar_left_btn);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        zxing_img = (ImageView) findViewById(R.id.zxing_img);
+        content_title = (TextView) findViewById(R.id.content_title);
+        text_content = (JustifyTextView) findViewById(R.id.text_content);
 
         toolbar_left_btn.setOnClickListener(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar_left_btn.setVisibility(View.VISIBLE);
-        Intent intent=getIntent();
-        if(intent !=null)
-        {
-            byte [] bis=intent.getByteArrayExtra("zxingBitmap");
-            Bitmap bitmap=BitmapFactory.decodeByteArray(bis, 0, bis.length);
-            zxing_img.setImageBitmap(bitmap);
-        }
+        toolbar_mid.setText(R.string.content_view);
     }
 
     @Override

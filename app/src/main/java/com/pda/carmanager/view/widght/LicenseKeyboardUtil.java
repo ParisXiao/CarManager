@@ -6,6 +6,7 @@ import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.pda.carmanager.R;
 
@@ -21,10 +22,10 @@ public class LicenseKeyboardUtil {
     private Keyboard k2;// 数字字母键盘
     private String provinceShort[];
     private String letterAndDigit[];
-    private EditText edits[];
+    private TextView edits[];
     private int currentEditText = 0;//默认当前光标在第一个EditText
 
-    public LicenseKeyboardUtil(Context ctx, EditText edits[], int position) {
+    public LicenseKeyboardUtil(Context ctx, TextView edits[], int position) {
         this.ctx = ctx;
         this.edits = edits;
         k1 = new Keyboard(ctx, R.xml.province_short_keyboard);

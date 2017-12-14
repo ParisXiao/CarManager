@@ -46,12 +46,12 @@
           android:right   整型 右内边距
           android:bottom 整型 下内边距
       -->
-    <padding
-        android:left="10dp"
-        android:top="10dp"
-        android:right="10dp"
-        android:bottom="10dp"
-        />
+    <!--<padding-->
+        <!--android:left="10dp"-->
+        <!--android:top="10dp"-->
+        <!--android:right="10dp"-->
+        <!--android:bottom="10dp"-->
+        <!--/>-->
 
     <!--
        size 大小

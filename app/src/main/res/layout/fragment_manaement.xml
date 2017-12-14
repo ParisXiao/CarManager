@@ -21,17 +21,17 @@
             >
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_centerInParent="true"
-                android:gravity="center_horizontal"
+                android:gravity="center"
                 >
                 <ImageView
                     android:id="@+id/img_mypark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/chewei"
-                    android:layout_marginTop="10dp" />
+                     />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -54,10 +54,10 @@
           android:layout_margin="20dp">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_centerInParent="true"
-                android:gravity="center_horizontal"
+                android:gravity="center"
                 >
                 <ImageView
                     android:id="@+id/img_addpark"
@@ -65,7 +65,6 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/disuo"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
                     />
                 <TextView
                     android:layout_width="wrap_content"

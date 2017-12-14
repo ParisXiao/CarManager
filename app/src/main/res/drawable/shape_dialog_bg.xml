@@ -12,7 +12,7 @@
       android:bottomRightRadius 整型 右下角半径
      -->
     <corners
-        android:radius="10dp"
+        android:radius="20dp"
         />
     <!--
        渐变色
