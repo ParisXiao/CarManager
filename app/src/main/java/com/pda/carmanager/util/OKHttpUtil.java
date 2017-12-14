@@ -3,7 +3,6 @@ package com.pda.carmanager.util;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Base64;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -47,56 +46,59 @@ public class OKHttpUtil {
      * @param key     参数 key集合
      * @param vally   参数key对应数据
      */
-//    public static void GetMessage(Context context,String Url, String[] key, Map<String, String> vally) {
-//        try {
-//            JSONObject mJsonData = new JSONObject();
-//            String json = "{";
-//            for (String s : key) {
-//                mJsonData.put(s, vally.get(s));
-//            }
+    public static String GetMessage(Context context,String Url, String[] key, Map<String, String> vally) {
+        try {
+            JSONObject mJsonData = new JSONObject();
+            String json = "{";
+            for (String s : key) {
+                mJsonData.put(s, vally.get(s));
+            }
+
+            String Data = mJsonData.toString();
+            Log.d(TAG, "Data : " + Data);
+            JSONObject mJson = new JSONObject();
+            mJson.put("userid", PreferenceUtils.getInstance(context).getString(AccountConfig.UserId));
+            mJson.put("token", PreferenceUtils.getInstance(context).getString(AccountConfig.Token));
+            mJson.put("platform", PreferenceUtils.getInstance(context).getString(AccountConfig.Platform));
+            mJson.put("data", mJsonData);
+
+            OkHttpClient client = new OkHttpClient();
+            client.setConnectTimeout(10, TimeUnit.SECONDS);
+            client.setWriteTimeout(10, TimeUnit.SECONDS);
+            client.setReadTimeout(30, TimeUnit.SECONDS);
+            try {
+//                RequestBody body = new FormEncodingBuilder()
+////                        .add("useid", " ")
+////                        .add("token", " ")
+////                        .add("platform", "pda")
+//                        .add("data","{'id':123,'name':'zhq'}"
 //
-//            String Data = mJsonData.toString();
-//            Log.d(TAG, "Data : " + Data);
-//            JSONObject mJson = new JSONObject();
-//            mJson.put("useid", PreferenceUtils.getInstance(context).getString(AccountConfig.AccountId));
-//            mJson.put("token", PreferenceUtils.getInstance(context).getString(AccountConfig.Token));
-//            mJson.put("platform", PreferenceUtils.getInstance(context).getString(AccountConfig.Platform));
-//            mJson.put("data", mJsonData);
-//
-//            OkHttpClient client = new OkHttpClient();
-//            client.setConnectTimeout(10, TimeUnit.SECONDS);
-//            client.setWriteTimeout(10, TimeUnit.SECONDS);
-//            client.setReadTimeout(30, TimeUnit.SECONDS);
-//            try {
-////                RequestBody body = new FormEncodingBuilder()
-//////                        .add("useid", " ")
-//////                        .add("token", " ")
-//////                        .add("platform", "pda")
-////                        .add("data","{'id':123,'name':'zhq'}"
-////
-////                        )
-////                        .build();
-//                RequestBody body = RequestBody.create(JSON, new String("{'data':'"+ Base64.encodeToString(mJson.toString().getBytes(), Base64.NO_WRAP) + "'}"));
-//                Request request = new Request.Builder()
-//
-//                        .url(Url)
-//                        .post(body)
+//                        )
 //                        .build();
-//                Response response = client.newCall(request).execute();
-//                Log.d(TAG, "body:" + body.toString());
-//                Log.d(TAG, "response:" + response);
-//
-//                if (response.isSuccessful()) {
-//                    Log.d(TAG, response.body().string());
-//                }
-//            } catch (Exception e) {
-//                Log.d(TAG, e.toString());
-//            }
-//        } catch (Exception e) {
-//
-//        }
-//    }
-    public static void GetLoginMessage(Context context,String Url, String[] key, Map<String, String> vally) {
+                RequestBody body = RequestBody.create(JSON, new String("{'data':'" + Base64Utils.getBase64(mJson.toString())+ "'}"));
+                Request request = new Request.Builder()
+
+                        .url(Url)
+                        .post(body)
+                        .build();
+                Response response = client.newCall(request).execute();
+                Log.d(TAG, "body:" + new String("{'data':'" + Base64Utils.getBase64(mJson.toString())+ "'}"));
+                Log.d(TAG, "response:" + response);
+
+                if (response.isSuccessful()) {
+                    String result=Base64Utils.getFromBase64( response.body().string());
+                    Log.d(TAG, "result:" + result);
+                    return  result;
+                }
+            } catch (Exception e) {
+                Log.d(TAG, e.toString());
+            }
+        } catch (Exception e) {
+
+        }
+        return null;
+    }
+    public static String GetLoginMessage(Context context,String Url, String[] key, Map<String, String> vally) {
         try {
             JSONObject mJsonData = new JSONObject();
             String json = "{";
@@ -121,19 +123,21 @@ public class OKHttpUtil {
 //
 //                        )
 //                        .build();
-                RequestBody body = RequestBody.create(JSON, new String("{'data':'" + Base64.encode(mJson.toString().getBytes(), Base64.NO_WRAP) + "'}"));
-                Log.d(TAG, "Base64:" + Base64.encode(mJson.toString().getBytes(), Base64.NO_WRAP));
+                RequestBody body = RequestBody.create(JSON, new String("{'data':'" + Base64Utils.getBase64(mJsonData.toString()) + "'}"));
+                Log.d(TAG, "body:" + Base64Utils.getBase64(mJsonData.toString()));
                 Request request = new Request.Builder()
 
                         .url(Url)
                         .post(body)
                         .build();
                 Response response = client.newCall(request).execute();
-                Log.d(TAG, "body:" + body.toString());
+
                 Log.d(TAG, "response:" + response);
 
                 if (response.isSuccessful()) {
-                    Log.d(TAG, response.body().string());
+                    String result=Base64Utils.getFromBase64( response.body().string());
+                    Log.d(TAG, "result:" + result);
+                    return  result;
                 }
             } catch (Exception e) {
                 Log.d(TAG, e.toString());
@@ -141,6 +145,7 @@ public class OKHttpUtil {
         } catch (Exception e) {
 
         }
+        return null;
     }
 
     /**
@@ -289,23 +294,23 @@ public class OKHttpUtil {
             mJson.put("data", mJsonData);
 
             OkHttpClient client = new OkHttpClient();
-//            try {
-//                RequestBody body = RequestBody.create(JSON, new String("{'data':'" + Base64.encodeToString(mJson.toString().getBytes(), Base64.NO_WRAP) + "'}"));
-//                Request request = new Request.Builder()
-//                        .url(Url)
-//                        .post(body)
-//                        .build();
-//
-//                Response response = client.newCall(request).execute();
-//                if (response.isSuccessful()) {
-//                    String string = response.body().string();
-//                    Log.d(TAG, string);
-//                    T requset = (T) new Gson().fromJson(string, clase);
-//                    return requset;
-//                }
-//            } catch (Exception e) {
-//                Log.d(TAG, e.toString());
-//            }
+            try {
+                RequestBody body = RequestBody.create(JSON, new String("{'data':'" + Base64Utils.getBase64(mJsonData.toString()) + "'}"));
+                Request request = new Request.Builder()
+                        .url(Url)
+                        .post(body)
+                        .build();
+
+                Response response = client.newCall(request).execute();
+                if (response.isSuccessful()) {
+                    String string = response.body().string();
+                    Log.d(TAG, string);
+                    T requset = (T) new Gson().fromJson(string, clase);
+                    return requset;
+                }
+            } catch (Exception e) {
+                Log.d(TAG, e.toString());
+            }
         } catch (Exception e) {
             Log.d(TAG, e.toString());
         }
@@ -334,23 +339,25 @@ public class OKHttpUtil {
             JSONObject mJson = new JSONObject();
 
             OkHttpClient client = new OkHttpClient();
-//            try {
-//                RequestBody body = RequestBody.create(JSON, new String("{'data':'" + Base64.encodeToString(mJson.toString().getBytes(), Base64.NO_WRAP) + "'}"));
-//                Request request = new Request.Builder()
-//                        .url(Url)
-//                        .post(body)
-//                        .build();
-//
-//                Response response = client.newCall(request).execute();
-//                if (response.isSuccessful()) {
-//                    String string = response.body().string();
-//                    Log.d(TAG, string);
-//                    T requset = (T) new Gson().fromJson(string, clase);
-//                    return requset;
-//                }
-//            } catch (Exception e) {
-//                Log.d(TAG, e.toString());
-//            }
+            try {
+                RequestBody body = RequestBody.create(JSON, new String("{'data':'" + Base64Utils.getBase64(mJsonData.toString()) + "'}"));
+                Request request = new Request.Builder()
+                        .url(Url)
+                        .post(body)
+                        .build();
+
+                Response response = client.newCall(request).execute();
+                if (response.isSuccessful()) {
+
+                    String string = Base64Utils.getFromBase64( response.body().string());
+                    Log.d(TAG, string);
+                    T requset = (T) new Gson().fromJson(string, clase);
+                    return requset;
+
+                }
+            } catch (Exception e) {
+                Log.d(TAG, e.toString());
+            }
         } catch (Exception e) {
             Log.d(TAG, e.toString());
         }

@@ -33,15 +33,17 @@ public class DialogUtil {
 
     /**
      * 获取当前网络类型
+     *
      * @return 0：没有网络   1：WIFI网络   2：WAP网络    3：NET网络
      */
 
     public static final int NETTYPE_WIFI = 0x01;
     public static final int NETTYPE_CMWAP = 0x02;
     public static final int NETTYPE_CMNET = 0x03;
+
     public static int GetNetworkType(Context context) {
         int netType = 0;
-        ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo == null) {
             return netType;
@@ -49,7 +51,7 @@ public class DialogUtil {
         int nType = networkInfo.getType();
         if (nType == ConnectivityManager.TYPE_MOBILE) {
             String extraInfo = networkInfo.getExtraInfo();
-            if(extraInfo!=null&&!extraInfo.trim().equals("")){
+            if (extraInfo != null && !extraInfo.trim().equals("")) {
                 if (extraInfo.toLowerCase().equals("cmnet")) {
                     netType = NETTYPE_CMNET;
                 } else {
@@ -61,7 +63,9 @@ public class DialogUtil {
         }
         return netType;
     }
+
     private static AlertDialog.Builder alertDialog;
+
     public static void showMessageAndEventDialog(Context context, String message, DialogInterface.OnClickListener surerListener, DialogInterface.OnClickListener flaseListener) {
         alertDialog = new AlertDialog.Builder(context);
         alertDialog.setTitle("提示");
@@ -92,7 +96,7 @@ public class DialogUtil {
                 fos.write(buffer, 0, len);
                 total += len;
                 //获取当前下载量
-                apkInterface.getCurrentProcestion((int)(total / contentLength*100));
+                apkInterface.getCurrentProcestion((int) (total / contentLength * 100));
 //                activity.runOnUiThread(new Runnable() {
 //                    @Override
 //                    public void run() {
@@ -130,7 +134,9 @@ public class DialogUtil {
         }
 
     }
+
     private static AlertDialog progressDialog;
+
     public static void dismise() {
         try {
             progressDialog.dismiss();
@@ -164,10 +170,12 @@ public class DialogUtil {
 
 
     }
-    public static void showErrorMessage(Context context, String text) {
+
+
+    private void showChooseMessage(Context context, String text, String textContent) {
+        AlertDialog progressDialog = new AlertDialog.Builder(context).create();
         if (!(progressDialog != null && progressDialog.isShowing())) {
             try {
-                progressDialog = new AlertDialog.Builder(context).create();
                 progressDialog.show();
 //            WindowManager.LayoutParams params =
 //                    dialog.getWindow().getAttributes();
@@ -179,17 +187,34 @@ public class DialogUtil {
                 window.setGravity(Gravity.CENTER);
                 lp.alpha = 1f;
                 window.setAttributes(lp);
-                window.setContentView(R.layout.alert_dialog_layout);
-                ProgressWheel progress_wheel = (ProgressWheel) window.findViewById(R.id.progress_wheel);
-                TextView progress_wheel_text = (TextView) window.findViewById(R.id.progress_wheel_text);
-                progress_wheel_text.setText(text);
+                window.setContentView(R.layout.layout_choose_dialog);
+                TextView text1 = (TextView) window.findViewById(R.id.note_text);
+                TextView text2 = (TextView) window.findViewById(R.id.note_text_content);
+                Button button1 = (Button) window.findViewById(R.id.note_exit);
+                Button button2 = (Button) window.findViewById(R.id.note_sure);
+                text1.setText(text);
+                text2.setText(textContent);
+                button1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DialogUtil.dismise();
+                    }
+                });
+                button2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+                        DialogUtil.dismise();
+                    }
+                });
             } catch (Exception e) {
 
             }
         }
-
-
     }
+
+
     public static void showBoXunVIP(Context context, String text) {
         if (!(progressDialog != null && progressDialog.isShowing())) {
             try {

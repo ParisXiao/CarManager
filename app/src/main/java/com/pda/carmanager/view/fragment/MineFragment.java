@@ -1,23 +1,32 @@
 package com.pda.carmanager.view.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pda.carmanager.R;
+import com.pda.carmanager.presenter.LogoutPresenter;
 import com.pda.carmanager.util.AMUtil;
+import com.pda.carmanager.util.DialogUtil;
+import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.view.activity.ChargeRecordActivity;
 import com.pda.carmanager.view.activity.DakaActivity;
 import com.pda.carmanager.view.activity.ErrorNoteActivity;
 import com.pda.carmanager.view.activity.LoginActivity;
+import com.pda.carmanager.view.inter.ILogoutViewInter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +39,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
  * Created by Admin on 2017/11/29.
  */
 
-public class MineFragment extends Fragment implements View.OnClickListener {
+public class MineFragment extends Fragment implements View.OnClickListener,ILogoutViewInter {
     private TextView text_usrName;
     private TextView text_todayMoney;
     private RelativeLayout rel_sbdk;
@@ -39,6 +48,9 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     private RelativeLayout rel_ycss;
     private Button button_logout;
     private Activity context;
+    private LogoutPresenter logoutPresenter;
+    private boolean flag=false;
+    private boolean flag1=false;
 
     @Nullable
     @Override
@@ -62,6 +74,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         rel_sfjl.setOnClickListener(this);
         rel_ycss.setOnClickListener(this);
         button_logout.setOnClickListener(this);
+        logoutPresenter=new LogoutPresenter(context,this);
     }
 
     @Override
@@ -84,8 +97,68 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 AMUtil.actionStart(context, ErrorNoteActivity.class);
                 break;
             case R.id.button_logout:
-                AMUtil.actionStart(context, LoginActivity.class);
+                if (!flag1)
+                    flag1=true;
+                showChooseMessage(context,"注销确认","是否确认注销并清空个人信息？");
                 break;
         }
+    }
+    private void showChooseMessage(final Context context, String text, String textContent) {
+        final AlertDialog progressDialog = new AlertDialog.Builder(context).create();
+        if (!(progressDialog != null && progressDialog.isShowing())) {
+            try {
+                progressDialog.show();
+//            WindowManager.LayoutParams params =
+//                    dialog.getWindow().getAttributes();
+//            params.width = 250;
+//            params.height = 250;
+//            dialog.getWindow().setAttributes(params);
+                Window window = progressDialog.getWindow();
+                WindowManager.LayoutParams lp = window.getAttributes();
+                window.setGravity(Gravity.CENTER);
+                lp.alpha = 1f;
+                window.setAttributes(lp);
+                window.setContentView(R.layout.layout_choose_dialog);
+                TextView text1 = (TextView) window.findViewById(R.id.note_text);
+                TextView text2 = (TextView) window.findViewById(R.id.note_text_content);
+                Button button1 = (Button) window.findViewById(R.id.note_exit);
+                Button button2 = (Button) window.findViewById(R.id.note_sure);
+                text1.setText(text);
+                text2.setText(textContent);
+                button1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        progressDialog.dismiss();
+                    }
+                });
+                button2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!flag)
+                            flag=true;
+                        if (OKHttpUtil.isConllection(context))
+                        logoutPresenter.logout();
+                        progressDialog.dismiss();
+
+                    }
+                });
+            } catch (Exception e) {
+
+            }
+        }
+    }
+
+    @Override
+    public void logoutSuccess() {
+        flag=false;
+        flag1=false;
+        AMUtil.actionStart(context, LoginActivity.class);
+    }
+
+    @Override
+    public void logoutFail(String Msg) {
+        flag=false;
+        flag1=false;
+
     }
 }

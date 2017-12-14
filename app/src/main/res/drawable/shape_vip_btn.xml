@@ -38,10 +38,10 @@
           android:bottom 整型 下内边距
       -->
     <padding
-        android:left="10dp"
-        android:top="10dp"
-        android:right="10dp"
-        android:bottom="10dp"
+        android:left="5dp"
+        android:top="5dp"
+        android:right="5dp"
+        android:bottom="5dp"
         />
 
     <!--

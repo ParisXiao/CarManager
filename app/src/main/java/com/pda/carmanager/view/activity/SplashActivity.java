@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.config.AccountConfig;
+import com.pda.carmanager.util.PreferenceUtils;
 
 /**
  * Created by Admin on 2017/12/7.
@@ -29,7 +30,7 @@ public class SplashActivity extends BaseActivity {
             public void run() {
                 Intent intent = null;
                 //判断是否登录
-                if (AccountConfig.IsLogin) {
+                if (PreferenceUtils.getInstance(SplashActivity.this).getBoolean(AccountConfig.IsLogin)) {
                     intent = new Intent(SplashActivity.this,
                             MainActivity.class);
                     startActivity(intent);

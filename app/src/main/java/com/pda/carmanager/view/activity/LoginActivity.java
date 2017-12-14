@@ -15,11 +15,13 @@ import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
+import com.pda.carmanager.bean.Test;
 import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.presenter.LoginPresenter;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.HideSoftKeyboardUtil;
+import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.view.inter.LoginViewInter;
 
@@ -39,6 +41,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private String usrid;
     private String password;
     private String commenyCode;
+    private boolean flag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +79,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_login:
+                if (OKHttpUtil.isConllection(this)) {
+                    if (!flag) {
+                        flag = true;
+                        submit();
+                    }
+                } else {
 
-                submit();
+                }
+
 
                 break;
             case R.id.name_edit:
@@ -132,7 +142,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             Toast.makeText(this, "机构代码不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        loginPresenter.login(usrid,password,commenyCode);
+        loginPresenter.login(usrid, password, commenyCode);
         DialogUtil.showMessage(LoginActivity.this, "登录中...");
         // TODO validate success, do something
 
@@ -141,18 +151,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void loginSuccess() {
+        flag=false;
         AMUtil.actionStart(LoginActivity.this, MainActivity.class);
-        DialogUtil.dismise();
         finish();
     }
 
     @Override
     public void loginFail(String failMsg) {
-
+        flag=false;
     }
 
     @Override
     public void loginError(String errorMsgs) {
+        flag=false;
 
     }
 }
