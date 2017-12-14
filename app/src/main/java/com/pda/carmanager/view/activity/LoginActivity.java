@@ -1,5 +1,6 @@
 package com.pda.carmanager.view.activity;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -14,15 +15,19 @@ import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
+import com.pda.carmanager.config.AccountConfig;
+import com.pda.carmanager.presenter.LoginPresenter;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.HideSoftKeyboardUtil;
+import com.pda.carmanager.util.PreferenceUtils;
+import com.pda.carmanager.view.inter.LoginViewInter;
 
 /**
  * Created by Admin on 2017/12/7.
  */
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener, LoginViewInter {
     private TextView toolbar_mid;
     private Toolbar toolbar;
     private EditText name_edit;
@@ -30,6 +35,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private EditText encode_edit;
     private Button button;
     private RelativeLayout layout_login;
+    private LoginPresenter loginPresenter;
+    private String usrid;
+    private String password;
+    private String commenyCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,20 +63,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         layout_login = (RelativeLayout) findViewById(R.id.layout_login);
 
     }
-    private void initData(){
+
+    private void initData() {
         toolbar_mid.setText("泊讯停车|云视临街收费终端");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         UpdateUI(layout_login);
+        loginPresenter = new LoginPresenter(this, this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_login:
-//                DialogUtil.showMessage(LoginActivity.this,"登录中...");
-                AMUtil.actionStart(LoginActivity.this,MainActivity.class);
-                finish();
+
+                submit();
+
                 break;
             case R.id.name_edit:
                 name_edit.setCursorVisible(true);
@@ -104,26 +115,44 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private void submit() {
         // validate
-        String edit = name_edit.getText().toString().trim();
-        if (TextUtils.isEmpty(edit)) {
-            Toast.makeText(this, "edit不能为空", Toast.LENGTH_SHORT).show();
+        usrid = name_edit.getText().toString().trim();
+        if (TextUtils.isEmpty(usrid)) {
+            Toast.makeText(this, "用户名不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String edit1 = password_edit.getText().toString().trim();
-        if (TextUtils.isEmpty(edit)) {
-            Toast.makeText(this, "edit不能为空", Toast.LENGTH_SHORT).show();
+        password = password_edit.getText().toString().trim();
+        if (TextUtils.isEmpty(password)) {
+            Toast.makeText(this, "密码不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String edit2 = encode_edit.getText().toString().trim();
-        if (TextUtils.isEmpty(edit)) {
-            Toast.makeText(this, "edit不能为空", Toast.LENGTH_SHORT).show();
+        commenyCode = encode_edit.getText().toString().trim();
+        if (TextUtils.isEmpty(commenyCode)) {
+            Toast.makeText(this, "机构代码不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        loginPresenter.login(usrid,password,commenyCode);
+        DialogUtil.showMessage(LoginActivity.this, "登录中...");
         // TODO validate success, do something
 
+
+    }
+
+    @Override
+    public void loginSuccess() {
+        AMUtil.actionStart(LoginActivity.this, MainActivity.class);
+        DialogUtil.dismise();
+        finish();
+    }
+
+    @Override
+    public void loginFail(String failMsg) {
+
+    }
+
+    @Override
+    public void loginError(String errorMsgs) {
 
     }
 }

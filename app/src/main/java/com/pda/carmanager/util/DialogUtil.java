@@ -164,6 +164,32 @@ public class DialogUtil {
 
 
     }
+    public static void showErrorMessage(Context context, String text) {
+        if (!(progressDialog != null && progressDialog.isShowing())) {
+            try {
+                progressDialog = new AlertDialog.Builder(context).create();
+                progressDialog.show();
+//            WindowManager.LayoutParams params =
+//                    dialog.getWindow().getAttributes();
+//            params.width = 250;
+//            params.height = 250;
+//            dialog.getWindow().setAttributes(params);
+                Window window = progressDialog.getWindow();
+                WindowManager.LayoutParams lp = window.getAttributes();
+                window.setGravity(Gravity.CENTER);
+                lp.alpha = 1f;
+                window.setAttributes(lp);
+                window.setContentView(R.layout.alert_dialog_layout);
+                ProgressWheel progress_wheel = (ProgressWheel) window.findViewById(R.id.progress_wheel);
+                TextView progress_wheel_text = (TextView) window.findViewById(R.id.progress_wheel_text);
+                progress_wheel_text.setText(text);
+            } catch (Exception e) {
+
+            }
+        }
+
+
+    }
     public static void showBoXunVIP(Context context, String text) {
         if (!(progressDialog != null && progressDialog.isShowing())) {
             try {

@@ -5,10 +5,10 @@ package com.pda.carmanager.presenter.inter;
  */
 
 public interface LoginPreInter {
-    void login();
+    void login(final String username,final String password,final String companycode);
     void loginSuccess();
 
-    void loginFail();
+    void loginFail(String loginMsg);
 
-    void loginError();
+    void loginError(String errorMsg);
 }

@@ -6,6 +6,6 @@ package com.pda.carmanager.view.inter;
 
 public interface LoginViewInter  {
     void loginSuccess();
-    void loginFail();
-    void loginError();
+    void loginFail(String failMsg);
+    void loginError(String errorMsgs);
 }

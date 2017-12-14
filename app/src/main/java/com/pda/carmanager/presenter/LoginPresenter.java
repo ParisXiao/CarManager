@@ -16,29 +16,29 @@ public class LoginPresenter implements LoginPreInter {
     private LoginViewInter loginViewInter;
     private LoginModelInter loginModelInter;
 
-    public LoginPresenter(Context context, LoginViewInter loginViewInter, LoginModelInter loginModelInter) {
+    public LoginPresenter(Context context, LoginViewInter loginViewInter) {
         this.context = context;
         this.loginViewInter = loginViewInter;
-        this.loginModelInter = new LoginModel(context,this);
+        loginModelInter = new LoginModel(context,this);
     }
 
     @Override
-    public void login() {
-
+    public void login(String username, String password, String companycode) {
+        loginModelInter.getLoginInfo(username,password,companycode);
     }
 
     @Override
     public void loginSuccess() {
-
+        loginViewInter.loginSuccess();
     }
 
     @Override
-    public void loginFail() {
-
+    public void loginFail(String loginMsg) {
+        loginViewInter.loginFail(loginMsg);
     }
 
     @Override
-    public void loginError() {
-
+    public void loginError(String errorMsg) {
+        loginViewInter.loginError(errorMsg);
     }
 }

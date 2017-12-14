@@ -3,6 +3,7 @@ package com.pda.carmanager.util;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Base64;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -28,7 +29,6 @@ import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import it.sauronsoftware.base64.Base64;
 
 
 /**
@@ -47,7 +47,56 @@ public class OKHttpUtil {
      * @param key     参数 key集合
      * @param vally   参数key对应数据
      */
-    public static void GetMessage(Context context,boolean b, String Url, String[] key, Map<String, String> vally) {
+//    public static void GetMessage(Context context,String Url, String[] key, Map<String, String> vally) {
+//        try {
+//            JSONObject mJsonData = new JSONObject();
+//            String json = "{";
+//            for (String s : key) {
+//                mJsonData.put(s, vally.get(s));
+//            }
+//
+//            String Data = mJsonData.toString();
+//            Log.d(TAG, "Data : " + Data);
+//            JSONObject mJson = new JSONObject();
+//            mJson.put("useid", PreferenceUtils.getInstance(context).getString(AccountConfig.AccountId));
+//            mJson.put("token", PreferenceUtils.getInstance(context).getString(AccountConfig.Token));
+//            mJson.put("platform", PreferenceUtils.getInstance(context).getString(AccountConfig.Platform));
+//            mJson.put("data", mJsonData);
+//
+//            OkHttpClient client = new OkHttpClient();
+//            client.setConnectTimeout(10, TimeUnit.SECONDS);
+//            client.setWriteTimeout(10, TimeUnit.SECONDS);
+//            client.setReadTimeout(30, TimeUnit.SECONDS);
+//            try {
+////                RequestBody body = new FormEncodingBuilder()
+//////                        .add("useid", " ")
+//////                        .add("token", " ")
+//////                        .add("platform", "pda")
+////                        .add("data","{'id':123,'name':'zhq'}"
+////
+////                        )
+////                        .build();
+//                RequestBody body = RequestBody.create(JSON, new String("{'data':'"+ Base64.encodeToString(mJson.toString().getBytes(), Base64.NO_WRAP) + "'}"));
+//                Request request = new Request.Builder()
+//
+//                        .url(Url)
+//                        .post(body)
+//                        .build();
+//                Response response = client.newCall(request).execute();
+//                Log.d(TAG, "body:" + body.toString());
+//                Log.d(TAG, "response:" + response);
+//
+//                if (response.isSuccessful()) {
+//                    Log.d(TAG, response.body().string());
+//                }
+//            } catch (Exception e) {
+//                Log.d(TAG, e.toString());
+//            }
+//        } catch (Exception e) {
+//
+//        }
+//    }
+    public static void GetLoginMessage(Context context,String Url, String[] key, Map<String, String> vally) {
         try {
             JSONObject mJsonData = new JSONObject();
             String json = "{";
@@ -58,18 +107,7 @@ public class OKHttpUtil {
             String Data = mJsonData.toString();
             Log.d(TAG, "Data : " + Data);
             JSONObject mJson = new JSONObject();
-            if (b) {
-                mJson.put("useid", PreferenceUtils.getInstance(context).getString(AccountConfig.AccountId));
-                mJson.put("token", PreferenceUtils.getInstance(context).getString(AccountConfig.Token));
-                mJson.put("platform", PreferenceUtils.getInstance(context).getString(AccountConfig.Platform));
-                mJson.put("data", mJsonData);
 
-            } else {
-                mJson.put("useid","");
-                mJson.put("token", "");
-                mJson.put("platform", "");
-                mJson.put("data", mJsonData);
-            }
             OkHttpClient client = new OkHttpClient();
             client.setConnectTimeout(10, TimeUnit.SECONDS);
             client.setWriteTimeout(10, TimeUnit.SECONDS);
@@ -83,7 +121,8 @@ public class OKHttpUtil {
 //
 //                        )
 //                        .build();
-                RequestBody body = RequestBody.create(JSON, new String("{'data':'" + Base64.encode(mJson.toString(), "UTF-8") + "'}"));
+                RequestBody body = RequestBody.create(JSON, new String("{'data':'" + Base64.encode(mJson.toString().getBytes(), Base64.NO_WRAP) + "'}"));
+                Log.d(TAG, "Base64:" + Base64.encode(mJson.toString().getBytes(), Base64.NO_WRAP));
                 Request request = new Request.Builder()
 
                         .url(Url)
@@ -228,7 +267,6 @@ public class OKHttpUtil {
      * 解析数据返回实体类
      *
      * @param context
-     * @param b
      * @param Url
      * @param key
      * @param vally
@@ -236,7 +274,7 @@ public class OKHttpUtil {
      * @param <T>
      * @return
      */
-    public static <T> T HttpPostEntity(Context context, boolean b, String Url, String[] key, Map<String, String> vally, Class clase) {
+    public static <T> T HttpPostEntity(Context context, String Url, String[] key, Map<String, String> vally, Class clase) {
         try {
             JSONObject mJsonData = new JSONObject();
             for (String s : key) {
@@ -245,43 +283,80 @@ public class OKHttpUtil {
             String Data = mJsonData.toString();
             Log.i(TAG, "Data : " + Data);
             JSONObject mJson = new JSONObject();
-            if (b) {
-                mJson.put("useid", PreferenceUtils.getInstance(context).getString(AccountConfig.AccountId));
-                mJson.put("token", PreferenceUtils.getInstance(context).getString(AccountConfig.Token));
-                mJson.put("platform", PreferenceUtils.getInstance(context).getString(AccountConfig.Platform));
-                mJson.put("data", mJsonData);
+            mJson.put("useid", PreferenceUtils.getInstance(context).getString(AccountConfig.AccountId));
+            mJson.put("token", PreferenceUtils.getInstance(context).getString(AccountConfig.Token));
+            mJson.put("platform", PreferenceUtils.getInstance(context).getString(AccountConfig.Platform));
+            mJson.put("data", mJsonData);
 
-            } else {
-                mJson.put("useid","");
-                mJson.put("token", "");
-                mJson.put("platform", "");
-                mJson.put("data", mJsonData);
-            }
             OkHttpClient client = new OkHttpClient();
-            try {
-                RequestBody body = RequestBody.create(JSON, new String("{'data':'" + Base64.encode(mJson.toString(), "UTF-8") + "'}"));
-                Request request = new Request.Builder()
-                        .url(Url)
-                        .post(body)
-                        .build();
-
-                Response response = client.newCall(request).execute();
-                if (response.isSuccessful()) {
-                    String string = response.body().string();
-                    Log.d(TAG, string);
-                    T requset = (T) new Gson().fromJson(string, clase);
-                    return requset;
-                }
-            } catch (Exception e) {
-                Log.d(TAG, e.toString());
-            }
+//            try {
+//                RequestBody body = RequestBody.create(JSON, new String("{'data':'" + Base64.encodeToString(mJson.toString().getBytes(), Base64.NO_WRAP) + "'}"));
+//                Request request = new Request.Builder()
+//                        .url(Url)
+//                        .post(body)
+//                        .build();
+//
+//                Response response = client.newCall(request).execute();
+//                if (response.isSuccessful()) {
+//                    String string = response.body().string();
+//                    Log.d(TAG, string);
+//                    T requset = (T) new Gson().fromJson(string, clase);
+//                    return requset;
+//                }
+//            } catch (Exception e) {
+//                Log.d(TAG, e.toString());
+//            }
         } catch (Exception e) {
             Log.d(TAG, e.toString());
         }
 
         return null;
     }
+    /**
+     * 解析数据返回实体类
+     *
+     * @param context
+     * @param Url
+     * @param key
+     * @param vally
+     * @param clase
+     * @param <T>
+     * @return
+     */
+    public static <T> T LoginPostEntity(Context context, String Url, String[] key, Map<String, String> vally, Class clase) {
+        try {
+            JSONObject mJsonData = new JSONObject();
+            for (String s : key) {
+                mJsonData.put(s, vally.get(s));
+            }
+            String Data = mJsonData.toString();
+            Log.i(TAG, "Data : " + Data);
+            JSONObject mJson = new JSONObject();
 
+            OkHttpClient client = new OkHttpClient();
+//            try {
+//                RequestBody body = RequestBody.create(JSON, new String("{'data':'" + Base64.encodeToString(mJson.toString().getBytes(), Base64.NO_WRAP) + "'}"));
+//                Request request = new Request.Builder()
+//                        .url(Url)
+//                        .post(body)
+//                        .build();
+//
+//                Response response = client.newCall(request).execute();
+//                if (response.isSuccessful()) {
+//                    String string = response.body().string();
+//                    Log.d(TAG, string);
+//                    T requset = (T) new Gson().fromJson(string, clase);
+//                    return requset;
+//                }
+//            } catch (Exception e) {
+//                Log.d(TAG, e.toString());
+//            }
+        } catch (Exception e) {
+            Log.d(TAG, e.toString());
+        }
+
+        return null;
+    }
     /**
      * 判断网络状态
      *

@@ -5,5 +5,5 @@ package com.pda.carmanager.model.inter;
  */
 
 public interface LoginModelInter {
-    void getLoginInfo();
+    void getLoginInfo(final String username,final String password,final String companycode);
 }
