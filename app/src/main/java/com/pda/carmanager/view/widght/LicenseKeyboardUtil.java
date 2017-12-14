@@ -30,7 +30,7 @@ public class LicenseKeyboardUtil {
         k1 = new Keyboard(ctx, R.xml.province_short_keyboard);
         k2 = new Keyboard(ctx, R.xml.lettersanddigit_keyboard);
         currentEditText = position;
-        edits[currentEditText].setBackground(ctx.getResources().getDrawable(R.drawable.car_license_inputbox_check));
+//        edits[currentEditText].setBackground(ctx.getResources().getDrawable(R.drawable.car_license_inputbox_check));
         keyboardView = (KeyboardView) ((Activity)ctx).findViewById(R.id.keyboard_view);
         if(currentEditText == 0){
             keyboardView.setKeyboard(k1);

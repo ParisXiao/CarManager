@@ -98,7 +98,6 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
         chooseBig.setOnClickListener(this);
         chooseNew.setOnClickListener(this);
         chooseStu.setOnClickListener(this);
-        AreaBtn.setOnClickListener(this);
         pop1_exit.setOnClickListener(this);
         pop1_next.setOnClickListener(this);
         pop_choose_small = (Button) findViewById(R.id.pop_choose_small);
