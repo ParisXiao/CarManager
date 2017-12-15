@@ -46,13 +46,15 @@ public class ParkModel implements IParkInter {
     }
 
     @Override
-    public void postParkList() {
+    public void postParkList(final String pageIndex, String pagesortfield) {
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
-                String[] key = new String[]{"parkingstatus", "departmentid"};
+                String[] key = new String[]{"parkingstatus", "departmentid","pageindex","pagerows"};
                 Map map = new HashMap();
                 map.put("parkingstatus", "1");
+                map.put("pageindex", pageIndex);
+                map.put("pagerows", "10");
 //                map.put("departmentid", PreferenceUtils.getInstance(context).getString(AccountConfig.Departmentid));
                 map.put("departmentid", "acc5cdb3-e298-4941-9749-e251db8e94fa");
                 String Http = OKHttpUtil.GetMessage(context, UrlConfig.ParkPost, key, map);

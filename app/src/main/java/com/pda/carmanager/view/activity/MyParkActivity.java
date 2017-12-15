@@ -103,7 +103,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
         toolbar_mid.setText(R.string.myPark);
         DialogUtil.showMessage(this,getResources().getString(R.string.text_loading));
         parkPresenter=new ParkPresenter(this,this);
-        parkPresenter.postParkList();
+        parkPresenter.postParkList("0","");
         parkBeanList = new ArrayList<>();
         parkBeanList.add(new MyParkBean("货车", "1", "贵A132198", "No.24418"));
         parkBeanList.add(new MyParkBean("小车", "2", "贵A132198", "No.24418"));

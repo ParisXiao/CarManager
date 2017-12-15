@@ -24,8 +24,8 @@ public class ParkPresenter implements IParkPreInter {
     }
 
     @Override
-    public void postParkList() {
-        iParkInter.postParkList();
+    public void postParkList(String pageIndex,String pagesortfield) {
+        iParkInter.postParkList(pageIndex,pagesortfield);
 
     }
 

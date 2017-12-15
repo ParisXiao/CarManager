@@ -7,5 +7,5 @@ import com.pda.carmanager.bean.MyParkBean;
  */
 
 public interface IParkInter {
-    void postParkList();
+    void postParkList(String pageIndex,String pagesortfield);
 }
