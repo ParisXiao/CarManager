@@ -22,9 +22,11 @@ import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.bean.ChargeBean;
 import com.pda.carmanager.bean.MyParkBean;
 import com.pda.carmanager.inter.ParkItemOnInter;
+import com.pda.carmanager.presenter.ParkPresenter;
 import com.pda.carmanager.pullrefresh.GridSpacingItemDecoration;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
+import com.pda.carmanager.view.inter.IParkViewInter;
 import com.pda.carmanager.view.widght.CustomerCarDialog;
 import com.pda.carmanager.view.widght.IdentifyingCodeView;
 import com.suke.widget.SwitchButton;
@@ -36,7 +38,7 @@ import java.util.List;
  * Created by Administrator on 2017/12/9 0009.
  */
 
-public class MyParkActivity extends BaseActivity implements View.OnClickListener, ParkItemOnInter, PullToRefreshListener {
+public class MyParkActivity extends BaseActivity implements View.OnClickListener, ParkItemOnInter, PullToRefreshListener ,IParkViewInter{
     private TextView toolbar_mid;
     private ImageButton toolbar_left_btn;
     private Toolbar toolbar;
@@ -44,6 +46,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     private MyParkAdapter myParkAdapter;
     private List<MyParkBean> parkBeanList = null;
     private PopupWindow popupWindow1;
+    private ParkPresenter parkPresenter;
 
     /**
      * popupWindow1
@@ -56,6 +59,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     private ImageView camera1, camera2;
     private TextView text_stucar;
     private CustomerCarDialog areaDialog;
+    private MyParkBean parkBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +101,9 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
 
     private void initData() {
         toolbar_mid.setText(R.string.myPark);
+        DialogUtil.showMessage(this,getResources().getString(R.string.text_loading));
+        parkPresenter=new ParkPresenter(this,this);
+        parkPresenter.postParkList();
         parkBeanList = new ArrayList<>();
         parkBeanList.add(new MyParkBean("货车", "1", "贵A132198", "No.24418"));
         parkBeanList.add(new MyParkBean("小车", "2", "贵A132198", "No.24418"));
@@ -158,5 +165,18 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
                 myParkAdapter.notifyDataSetChanged();
             }
         }, 2000);
+    }
+
+    @Override
+    public void parkSuccess(MyParkBean parkBean) {
+
+    }
+
+    @Override
+    public void parkFail(String msg) {
+        if (msg.equals(getResources().getString(R.string.httpOut))){
+            AMUtil.actionStart(MyParkActivity.this, LoginActivity.class);
+            finish();
+        }
     }
 }

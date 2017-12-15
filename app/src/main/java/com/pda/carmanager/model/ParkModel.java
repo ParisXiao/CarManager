@@ -1,17 +1,19 @@
 package com.pda.carmanager.model;
 
 import android.content.Context;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import com.pda.carmanager.R;
+import com.pda.carmanager.bean.MyParkBean;
 import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.config.UrlConfig;
-import com.pda.carmanager.model.inter.ILogoutInter;
-import com.pda.carmanager.presenter.inter.ILogoutPreInter;
+import com.pda.carmanager.model.inter.IParkInter;
+import com.pda.carmanager.presenter.inter.IParkPreInter;
+import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
+import com.pda.carmanager.view.activity.LoginActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,53 +25,45 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by Administrator on 2017/12/15 0015.
+ * Created by Admin on 2017/12/15.
  */
 
-public class LogoutModel implements ILogoutInter {
+public class ParkModel implements IParkInter {
     private Context context;
-    private ILogoutPreInter iLogoutPreInter;
+    private IParkPreInter iParkPreInter;
     private String desc;
+    private MyParkBean parkBean;
 
-    public LogoutModel(Context context, ILogoutPreInter iLogoutPreInter) {
+    public ParkModel(Context context, IParkPreInter iParkPreInter) {
         this.context = context;
-        this.iLogoutPreInter = iLogoutPreInter;
+        this.iParkPreInter = iParkPreInter;
     }
 
     @Override
-    public void logout() {
+    public void postParkList() {
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
-                String[] key = new String[]{};
+                String[] key = new String[]{"parkingstatus", "departmentid"};
                 Map map = new HashMap();
-                String Http = OKHttpUtil.GetMessage(context, UrlConfig.LogoutPost, key, map);
+                map.put("parkingstatus", "1");
+//                map.put("departmentid", PreferenceUtils.getInstance(context).getString(AccountConfig.Departmentid));
+                map.put("departmentid", "acc5cdb3-e298-4941-9749-e251db8e94fa");
+                String Http = OKHttpUtil.GetMessage(context, UrlConfig.ParkPost, key, map);
                 if (Http != null) {
                     JSONObject jsonObject;
                     try {
                         jsonObject = new JSONObject(Http);
+
                         String code = jsonObject.getString("code");
                         desc = jsonObject.getString("desc");
                         if (code.equals("0")) {
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.UserId, "");
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.AccountId, "");
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.AccountPassword, "");
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.Platform, "PDA");
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.Token, "");
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.Realname, "");
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.CommenyCode, "");
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.Organizeid, "");
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.Organizename, "");
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.Departmentid, "");
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.Departmentname, "");
-                            PreferenceUtils.getInstance(context).saveBoolean(AccountConfig.IsLogin, false);
                             e.onNext(0);
                         } else if (code.equals("1")) {
                             e.onNext(1);
@@ -95,19 +89,22 @@ public class LogoutModel implements ILogoutInter {
                 switch (integer) {
                     case 0:
                         DialogUtil.dismise();
-                        iLogoutPreInter.logoutSuccess();
-                        Toast.makeText(context, R.string.success_logout, Toast.LENGTH_SHORT).show();
+                        iParkPreInter.parkSuccess(parkBean);
                         break;
                     case 1:
+                        DialogUtil.dismise();
+                        iParkPreInter.parkFail(context.getResources().getString(R.string.httpOut));
+                        Toast.makeText(context, context.getResources().getString(R.string.httpOut), Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
                         DialogUtil.dismise();
-                        iLogoutPreInter.logoutFails(desc);
+                        iParkPreInter.parkFail(desc);
+
                         Toast.makeText(context, desc, Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
                         DialogUtil.dismise();
-                        iLogoutPreInter.logoutFails(context.getResources().getString(R.string.httpError));
+                        iParkPreInter.parkFail(context.getResources().getString(R.string.httpError));
                         Toast.makeText(context, context.getResources().getString(R.string.httpError), Toast.LENGTH_SHORT).show();
                         break;
                 }

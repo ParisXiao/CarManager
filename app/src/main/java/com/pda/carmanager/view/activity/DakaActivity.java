@@ -21,6 +21,10 @@ import com.pda.carmanager.R;
 import com.pda.carmanager.adapter.DakaListAdapter;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.bean.DakaBean;
+import com.pda.carmanager.presenter.DakaPresenter;
+import com.pda.carmanager.util.AMUtil;
+import com.pda.carmanager.util.DialogUtil;
+import com.pda.carmanager.view.inter.IDakaViewInter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,7 +35,7 @@ import java.util.List;
  * Created by Administrator on 2017/12/8 0008.
  */
 
-public class DakaActivity extends BaseActivity implements View.OnClickListener {
+public class DakaActivity extends BaseActivity implements View.OnClickListener,IDakaViewInter {
     private TextView text_sbdk_time;
     private LinearLayout linear_sbdk_btn;
     private RecyclerView rvTrace;
@@ -49,6 +53,8 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener {
     private String district = "";    //获取区县
     private String street = "";   //获取街道信息
     private String address = "";   //获取详细信息
+    private DakaPresenter dakaPresenter;
+    private boolean flag=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +64,18 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener {
         initData();
     }
 
+    @Override
+    public void dakaSuccess() {
+        mLocationClient.stop();
+    }
+
+    @Override
+    public void dakaFail(String msg) {
+        if (msg.equals(getResources().getString(R.string.httpOut))){
+            AMUtil.actionStart(DakaActivity.this, LoginActivity.class);
+            finish();
+        }
+    }
     public class TimeThread extends Thread {
         @Override
         public void run() {
@@ -95,10 +113,11 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener {
 
     private void initData() {
         DakaType = getIntent().getStringExtra("DakaType");
-        if (DakaType.equals("XB")) {
+        dakaPresenter=new DakaPresenter(this,this);
+        if (DakaType.equals("2")) {
             toolbar_mid.setText(R.string.text_xbdk);
             daka_text.setText(R.string.text_xbdk);
-        } else {
+        } else if (DakaType.equals("1")) {
             toolbar_mid.setText(R.string.text_sbdk);
             daka_text.setText(R.string.text_sbdk);
         }
@@ -150,16 +169,9 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.linear_sbdk_btn:
+                DialogUtil.showMessage(DakaActivity.this,getResources().getString(R.string.text_uping));
                 mLocationClient.start();
 
-                Toast.makeText(DakaActivity.this,"打卡成功,地点："+city+district+street,Toast.LENGTH_LONG).show();
-//                Toast.makeText(DakaActivity.this,"打卡成功,地点："+address,Toast.LENGTH_LONG).show();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mLocationClient.stop();
-                    }
-                },5000);
                 break;
 
             case R.id.toolbar_left_btn:
@@ -176,8 +188,9 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener {
             city = bdLocation.getCity();
             district = bdLocation.getDistrict();
             street = bdLocation.getStreet();
-
+            String address=city+district+street;
             address=bdLocation.getAddrStr();
+            dakaPresenter.postDaka(address,DakaType);
         }
     }
 }

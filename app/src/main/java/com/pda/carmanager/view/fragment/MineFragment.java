@@ -83,11 +83,11 @@ public class MineFragment extends Fragment implements View.OnClickListener,ILogo
         dakaType.addFlags(FLAG_ACTIVITY_NEW_TASK);
         switch (v.getId()) {
             case R.id.rel_sbdk:
-                dakaType.putExtra("DakaType","SB");
+                dakaType.putExtra("DakaType","1");
                 startActivity(dakaType);
                 break;
             case R.id.rel_xbdk:
-                dakaType.putExtra("DakaType","XB");
+                dakaType.putExtra("DakaType","2");
                 startActivity(dakaType);
                 break;
             case R.id.rel_sfjl:

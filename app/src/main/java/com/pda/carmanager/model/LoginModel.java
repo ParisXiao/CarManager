@@ -100,12 +100,15 @@ public class LoginModel implements LoginModelInter {
                             e.onNext(2);
 
                         }
-                        e.onComplete();
+
                     } catch (JSONException e1) {
                         // TODO Auto-generated catch block
                         e1.printStackTrace();
                     }
+                }else {
+                    e.onNext(3);
                 }
+                e.onComplete();
 
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Integer>() {
@@ -132,6 +135,11 @@ public class LoginModel implements LoginModelInter {
                         DialogUtil.dismise();
                         loginPreInter.loginFail(desc);
                         Toast.makeText(context,desc,Toast.LENGTH_SHORT).show();
+                        break;
+                    case 3:
+                        DialogUtil.dismise();
+                        loginPreInter.loginFail(context.getResources().getString(R.string.httpError));
+                        Toast.makeText(context,context.getResources().getString(R.string.httpError),Toast.LENGTH_SHORT).show();
                         break;
                 }
             }

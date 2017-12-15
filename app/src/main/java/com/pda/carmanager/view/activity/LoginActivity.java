@@ -142,8 +142,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             Toast.makeText(this, "机构代码不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        loginPresenter.login(usrid, password, commenyCode);
+
         DialogUtil.showMessage(LoginActivity.this, "登录中...");
+        loginPresenter.login(usrid, password, commenyCode);
         // TODO validate success, do something
 
 

@@ -15,7 +15,8 @@
     <string name="text_ycss">异常申诉</string>
     <string name="text_time">时间:</string>
     <string name="text_chargerPrice">消费金额:</string>
-    <string name="text_loading">加载中...</string>
+    <string name="text_loading">加载中,请稍后...</string>
+    <string name="text_uping">数据提交中,请稍后...</string>
     <string name="text_updataing">更新中...</string>
     <string name="text_refresh_down">下拉刷新</string>
     <string name="text_refresh_up">加载更多</string>
@@ -65,6 +66,9 @@
     <string name="text_dialog_vip_com">完成</string>
 
     <string name="input_car">输入车牌号码</string>
+
+    <string name="httpError">服务器出错！</string>
+    <string name="httpOut">您已离线，请重新登录！</string>
 
 
 
