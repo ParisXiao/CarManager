@@ -9,6 +9,6 @@ import java.util.List;
  */
 
 public interface IParkViewInter  {
-    void parkSuccess(List<MyParkBean> parkBeans);
+    void parkSuccess(String pages);
     void parkFail(String msg);
 }

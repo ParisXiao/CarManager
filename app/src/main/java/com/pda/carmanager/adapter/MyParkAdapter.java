@@ -65,15 +65,7 @@ public class MyParkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         ((MyViewHolder) holder).text_carType.setText(parkBeanList.get(position).getCarType());
-        if (parkBeanList.get(position).getCarType().equals("货车")) {
-            Resources resources = context.getResources();
-            Drawable drawable1 = resources.getDrawable(R.drawable.shape_login_bigcar);
-            ((MyViewHolder) holder).text_carType.setBackground(drawable1);
-        } else {
-            Resources resources = context.getResources();
-            Drawable drawable2 = resources.getDrawable(R.drawable.shape_login_smallcar);
-            ((MyViewHolder) holder).text_carType.setBackground(drawable2);
-        }
+
         if (parkBeanList.get(position).getParkType().equals("1")) {
             ((MyViewHolder) holder).img_parkType.setImageDrawable(context.getResources().getDrawable(R.drawable.kongxinchewei));
         } else if (parkBeanList.get(position).getParkType().equals("2")) {
@@ -81,25 +73,47 @@ public class MyParkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         } else if (parkBeanList.get(position).getParkType().equals("3")) {
             ((MyViewHolder) holder).img_parkType.setImageDrawable(context.getResources().getDrawable(R.drawable.qianfei));
-
+            ((MyViewHolder) holder).text_carNum.setText(parkBeanList.get(position).getCarNum());
+            ((MyViewHolder) holder).text_carType.setVisibility(View.VISIBLE);
+            ((MyViewHolder) holder).text_carNum.setVisibility(View.VISIBLE);
+            if (parkBeanList.get(position).getCarType().equals("货车")) {
+                Resources resources = context.getResources();
+                Drawable drawable1 = resources.getDrawable(R.drawable.shape_login_bigcar);
+                ((MyViewHolder) holder).text_carType.setBackground(drawable1);
+            } else {
+                Resources resources = context.getResources();
+                Drawable drawable2 = resources.getDrawable(R.drawable.shape_login_smallcar);
+                ((MyViewHolder) holder).text_carType.setBackground(drawable2);
+            }
         } else if (parkBeanList.get(position).getParkType().equals("4")) {
             ((MyViewHolder) holder).img_parkType.setImageDrawable(context.getResources().getDrawable(R.drawable.boxunpark));
-
+            ((MyViewHolder) holder).text_carNum.setText(parkBeanList.get(position).getCarNum());
+            ((MyViewHolder) holder).text_carType.setVisibility(View.VISIBLE);
+            ((MyViewHolder) holder).text_carNum.setVisibility(View.VISIBLE);
+            if (parkBeanList.get(position).getCarType().equals("货车")) {
+                Resources resources = context.getResources();
+                Drawable drawable1 = resources.getDrawable(R.drawable.shape_login_bigcar);
+                ((MyViewHolder) holder).text_carType.setBackground(drawable1);
+            } else {
+                Resources resources = context.getResources();
+                Drawable drawable2 = resources.getDrawable(R.drawable.shape_login_smallcar);
+                ((MyViewHolder) holder).text_carType.setBackground(drawable2);
+            }
         }
-        ((MyViewHolder) holder).text_carNum.setText(parkBeanList.get(position).getCarNum());
+
         ((MyViewHolder) holder).text_parkNum.setText(parkBeanList.get(position).getParkNum());
         ((MyViewHolder) holder).item_mypark_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (parkBeanList.get(position).getParkType()){
                     case "2":
-                        parkItemOnInter.writeCarNum();
+                        parkItemOnInter.writeCarNum(parkBeanList.get(position).getParkingrecordid());
                         break;
                     case "3":
-                        parkItemOnInter.payCar();
+                        parkItemOnInter.payCar(parkBeanList.get(position).getParkingrecordid());
                         break;
                     case "4":
-                        parkItemOnInter.AutoPayCar(parkBeanList.get(position).getCarNum());
+                        parkItemOnInter.AutoPayCar(parkBeanList.get(position).getCarNum(),parkBeanList.get(position).getParkingrecordid());
                         break;
                 }
             }

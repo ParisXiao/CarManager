@@ -26,6 +26,7 @@ public class BaseApplication extends Application {
     static BaseApplication instance = null;
     //PosSDK mSDK = null;
     PosApi mPosApi = null;
+    public boolean isPos=true;
     public BaseApplication(){
         super.onCreate();
         instance = this;
@@ -40,18 +41,25 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         initImagloader(getApplicationContext());
-        mPosApi = PosApi.getInstance(this);
-
-        if (Build.MODEL.equalsIgnoreCase("3508")||Build.MODEL.equalsIgnoreCase("403")) {
-            mPosApi.initPosDev("ima35s09");
-            setCurDevice("ima35s09");
-        } else if(Build.MODEL.equalsIgnoreCase("5501")){
-            mPosApi.initPosDev("ima35s12");
-            setCurDevice("ima35s12");
-        }else{
-            mPosApi.initPosDev(PosApi.PRODUCT_MODEL_IMA80M01);
-            setCurDevice(PosApi.PRODUCT_MODEL_IMA80M01);
+        try {
+            mPosApi = PosApi.getInstance(this);
+            if (Build.MODEL.equalsIgnoreCase("3508")||Build.MODEL.equalsIgnoreCase("403")) {
+                mPosApi.initPosDev("ima35s09");
+                setCurDevice("ima35s09");
+            } else if(Build.MODEL.equalsIgnoreCase("5501")){
+                mPosApi.initPosDev("ima35s12");
+                setCurDevice("ima35s12");
+            }else{
+                mPosApi.initPosDev(PosApi.PRODUCT_MODEL_IMA80M01);
+                setCurDevice(PosApi.PRODUCT_MODEL_IMA80M01);
+            }
+        }catch (UnsatisfiedLinkError e){
+            e.printStackTrace();
+            isPos=false;
         }
+
+
+
     }
 
     private void initImagloader(Context context) {
@@ -84,6 +92,9 @@ public class BaseApplication extends Application {
 
     public PosApi getPosApi(){
         return mPosApi;
+    }
+    public boolean isPosApi(){
+        return isPos;
     }
 
 }

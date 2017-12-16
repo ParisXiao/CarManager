@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 public interface IParkPreInter {
-    void postParkList(String pageIndex,String pagesortfield);
-    void parkSuccess(List<MyParkBean> parkBeans);
+    void postParkList(final String pageIndex, String pagesortfield,final List<MyParkBean> parkBeans);
+    void parkSuccess(String pages);
     void parkFail(String msg);
 }

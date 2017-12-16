@@ -27,10 +27,16 @@ import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.config.CommonlConfig;
 import com.pda.carmanager.inter.PhotoInter;
+import com.pda.carmanager.presenter.PostParkPresenter;
 import com.pda.carmanager.service.ScanService;
+import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.BarcodeCreater;
 import com.pda.carmanager.util.BitmapTools;
+import com.pda.carmanager.util.DialogUtil;
+import com.pda.carmanager.util.GZIPutil;
 import com.pda.carmanager.util.PhotoUtils;
+import com.pda.carmanager.util.UserInfoClearUtil;
+import com.pda.carmanager.view.inter.IPostParkViewInter;
 import com.pda.carmanager.view.test.PDAPrintActivity;
 import com.pda.carmanager.view.widght.CustomerCarDialog;
 import com.pda.carmanager.view.widght.IdentifyingCodeView;
@@ -47,7 +53,7 @@ import java.util.List;
  * Created by Administrator on 2017/12/10 0010.
  */
 
-public class DialogCarWriteActivity extends BaseActivity implements View.OnClickListener, PhotoInter {
+public class DialogCarWriteActivity extends BaseActivity implements View.OnClickListener, PhotoInter,IPostParkViewInter {
     private Button chooseSmall;
     private Button chooseBig;
     private TextView text_carType_new;
@@ -93,6 +99,9 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
     private String key4;
     private String key5;
     private String key6;
+    private boolean flag=false;
+    private PostParkPresenter postParkPresenter;
+    private String ParkId;
 
 
     @Override
@@ -156,6 +165,8 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
     }
 
     private void initData() {
+        postParkPresenter=new PostParkPresenter(this,this);
+        ParkId=getIntent().getStringExtra("ParkId");
         IMG_PATH = PhotoUtils.getSDPath(this);
         areaDialog = new CustomerCarDialog(this, "贵", "A");
         chooseNew.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
@@ -235,6 +246,8 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
                 return true;
             }
         });
+
+
     }
 
     @Override
@@ -298,14 +311,12 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
                     Toast.makeText(this,"请拍两张照片",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Intent intent = new Intent(DialogCarWriteActivity.this, MyParkActivity.class);
-                intent.putExtra("carType",carType );
-                intent.putExtra("carNumType",inputType );
-                intent.putExtra("carNum",carNum.trim() );
-                intent.putExtra("camera1",PhotoUtils.SendBitmap(maps.get(0)) );
-                intent.putExtra("camera2",PhotoUtils.SendBitmap(maps.get(1)) );
-                setResult(RESULT_OK,intent);
-                finish();
+                if (!flag){
+                    flag=true;
+                    DialogUtil.showMessage(DialogCarWriteActivity.this,getResources().getString(R.string.text_uping));
+                    postParkPresenter.postPark(ParkId,carNum.trim(),carType, GZIPutil.compressForGzip(PhotoUtils.SendBitmap(maps.get(0))), GZIPutil.compressForGzip(PhotoUtils.SendBitmap(maps.get(1))));
+                }
+
 
                 break;
             case R.id.linear_input:
@@ -425,4 +436,21 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
 
     }
 
+    @Override
+    public void postSuccess() {
+        Intent intent = new Intent(DialogCarWriteActivity.this, MyParkActivity.class);
+
+        setResult(RESULT_OK,intent);
+        finish();
+    }
+
+    @Override
+    public void postFail(String msg) {
+        if (msg.equals(getResources().getString(R.string.httpOut))) {
+            UserInfoClearUtil.ClearUserInfo(DialogCarWriteActivity.this);
+            AMUtil.actionStart(DialogCarWriteActivity.this, LoginActivity.class);
+            finish();
+        }
+
+    }
 }

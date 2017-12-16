@@ -13,8 +13,6 @@ import android.widget.TextView;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.bean.ErrorBean;
-import com.pda.carmanager.bean.MyParkBean;
-import com.pda.carmanager.inter.ParkItemOnInter;
 
 import java.util.ArrayList;
 import java.util.List;

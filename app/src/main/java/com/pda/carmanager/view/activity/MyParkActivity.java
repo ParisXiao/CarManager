@@ -38,6 +38,7 @@ import com.pda.carmanager.adapter.MyParkAdapter;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.bean.ChargeBean;
 import com.pda.carmanager.bean.MyParkBean;
+import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.inter.ParkItemOnInter;
 import com.pda.carmanager.presenter.ParkPresenter;
 import com.pda.carmanager.pullrefresh.GridSpacingItemDecoration;
@@ -48,6 +49,7 @@ import com.pda.carmanager.util.BitmapTools;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PhotoUtils;
+import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.util.UserInfoClearUtil;
 import com.pda.carmanager.view.inter.IParkViewInter;
 import com.pda.carmanager.view.test.PDAPrintActivity;
@@ -57,7 +59,9 @@ import com.suke.widget.SwitchButton;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -75,6 +79,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     private PopupWindow popupWindow1;
     private ParkPresenter parkPresenter;
     private int page = 0;
+    private int Pages=0;
     private boolean reFreshNext;
     private boolean hasNext;
     private boolean isRefreah;
@@ -92,6 +97,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     private Bitmap mBitmap = null;
 
     private String CarNum;
+    private int load=0;
 
     private Handler handler = new Handler() {
         @Override
@@ -115,13 +121,19 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
                     }
                     isRefreah = false;
                     reFreshNext = false;
-                    pullRefresh_myPark.setLoadMoreComplete();
+                    if (load==1){
+                        pullRefresh_myPark.setRefreshComplete();
+                    }else if (load==2){
+                        pullRefresh_myPark.setLoadMoreComplete();
+                    }
+
                     break;
                 case 1:
-                    pullRefresh_myPark.setLoadMoreComplete();
-                    break;
-                case 2:
-//                    getList();
+                    if (load==1){
+                        pullRefresh_myPark.setRefreshComplete();
+                    }else if (load==2){
+                        pullRefresh_myPark.setLoadMoreComplete();
+                    }
                     break;
             }
         }
@@ -168,13 +180,13 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void initData() {
-        toolbar_mid.setText(R.string.myPark);
+        toolbar_mid.setText(PreferenceUtils.getInstance(this).getString(AccountConfig.Departmentname));
         DialogUtil.showMessage(this, getResources().getString(R.string.text_loading));
         parkPresenter = new ParkPresenter(this, this);
         parkBeanList = new ArrayList<>();
         myParkAdapter = new MyParkAdapter(this, parkBeanListshow, this);
         pullRefresh_myPark.setAdapter(myParkAdapter);
-        parkPresenter.postParkList("0", "");
+        parkPresenter.postParkList("0", "",parkBeanList);
 
     }
 
@@ -194,18 +206,19 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    public void writeCarNum() {
+    public void writeCarNum(String id) {
         Intent intent=new Intent(MyParkActivity.this,DialogCarWriteActivity.class);
+        intent.putExtra("ParkId",id);
         startActivityForResult(intent, RequsetPark);
     }
 
     @Override
-    public void payCar() {
+    public void payCar(String id) {
         AMUtil.actionStart(MyParkActivity.this, PayMessageActivity.class);
     }
 
     @Override
-    public void AutoPayCar(String carNum) {
+    public void AutoPayCar(String carNum,String id) {
         DialogUtil.showBoXunVIP(MyParkActivity.this, carNum);
     }
     @Override
@@ -227,26 +240,28 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     }
     @Override
     public void onRefresh() {
+        load=1;
         if (!isRefreah) {
             isRefreah = true;
             if (!reFreshNext) {
-                page = 1;
+                page = 0;
             }
-            parkPresenter.postParkList(page+"","");
+            parkPresenter.postParkList(page+"","",parkBeanList);
         }
     }
 
     @Override
     public void onLoadMore() {
+        load=2;
         if (hasNext) {
             page += 1;
             reFreshNext = true;
             if (!isRefreah) {
                 isRefreah = true;
                 if (!reFreshNext) {
-                    page = 1;
+                    page = 0;
                 }
-                parkPresenter.postParkList(page+"","");
+                parkPresenter.postParkList(page+"","",parkBeanList);
             }
         } else {
             handler.sendEmptyMessageDelayed(1, 1000);
@@ -254,20 +269,25 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    public void parkSuccess(List<MyParkBean> parkBeans) {
-        parkBeans=parkBeanList;
+    public void parkSuccess(String pages) {
+        this.Pages=Integer.valueOf(pages);
+        if (Pages<=page +1) {
+            hasNext = false;
+        } else {
+            hasNext = true;
+        }
         handler.sendEmptyMessage(0);
     }
 
     @Override
     public void parkFail(String msg) {
-
+        handler.sendEmptyMessage(1);
         if (msg.equals(getResources().getString(R.string.httpOut))) {
             UserInfoClearUtil.ClearUserInfo(MyParkActivity.this);
             AMUtil.actionStart(MyParkActivity.this, LoginActivity.class);
             finish();
         }else {
-            handler.sendEmptyMessage(0);
+            finish();
         }
     }
     private void initPrint() {
@@ -353,94 +373,91 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     private void printMix() {
 
         try {
-
-            int concentration = 25;
-
+            int concentration = 35;
             StringBuilder sb = new StringBuilder();
-            sb.append("        收 银 凭 据                 ");
-            sb.append("\n");
-            sb.append("时间   : ");
-            sb.append("2016-11-15     16:00");
-            sb.append("\n");
-            sb.append("操作员:admin");
-            sb.append("\n");
-            sb.append("收据单号：1234567890");
-            sb.append("\n");
-            sb.append("编号  数量  单价  折扣  小计");
-            sb.append("\n");
-            sb.append("-----------------------------");
-            sb.append("\n");
-            sb.append("AM126   1  1200  0   1200");
-            sb.append("\n");
-            sb.append("AM127   1  1300  0   1300");
-            sb.append("\n");
-            sb.append("AM128   1  1400  0   1400");
-            sb.append("\n");
-            sb.append("-----------------------------");
-            sb.append("\n");
-            sb.append("共销售数量: 3 ");
-            sb.append("\n");
-            sb.append("售价合计(RMB): 3900");
-            sb.append("\n");
-            sb.append("实收金额(RMB): 3900");
-            sb.append("\n");
-            sb.append("找零金额(RMB): 0");
-            sb.append("\n");
-            sb.append("-----------------------------");
-            sb.append("\n");
-            sb.append("支付方式: 微信支付 ");
-            sb.append("\n");
-            sb.append("欢迎下次光临    请保留好小票！");
-            sb.append("\n");
-
-            sb.append("-----------------------------");
-            sb.append("\n");
             byte[] text = null;
-            text = sb.toString().getBytes("GBK");
-
-            addPrintTextWithSize(1, concentration, text);
-
-            sb = new StringBuilder();
-            sb.append("   谢谢惠顾");
+            sb.append("  泊讯停车|临街");
+            sb.append("   车位缴费小票");
             sb.append("\n");
 
             text = sb.toString().getBytes("GBK");
             addPrintTextWithSize(2, concentration, text);
-
             sb = new StringBuilder();
+            sb.append("            本次停车信息");
+            sb.append("\n");
+            sb.append("停车街道：");
+            sb.append("   重庆市冉家坝a街道");
+            sb.append("\n");
+            sb.append("车位编号：");
+            sb.append("   231841284");
+            sb.append("\n");
+            sb.append("车牌号  ：");
+            sb.append("   渝A23214");
+            sb.append("\n");
+            sb.append("停车时刻： ");
+            long time = System.currentTimeMillis();
+            Date date = new Date(time);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            sb.append(format.format(date));
+            sb.append("\n");
+            sb.append("==============================");
+            sb.append("\n");
+            sb.append("             欠费信息             ");
+            sb.append("\n");
+            sb.append("停车街道：");
+            sb.append("   重庆市冉家坝a街道");
+            sb.append("\n");
+            sb.append("车位编号：");
+            sb.append("   231841284");
+            sb.append("\n");
+            sb.append("停车时刻： ");
+            long time1 = System.currentTimeMillis();
+            Date date1 = new Date(time1);
+            SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            sb.append(format.format(date1));
+
+            sb.append("\n");
+            sb.append("         至"+format.format(date1));
+            sb.append("\n");
+            sb.append("欠费金额：");
+            sb.append("         10元");
+            sb.append("\n");
+            sb.append("==============================");
+            sb.append("\n");
+            sb.append("\n");
+            sb.append("     您离开时可用支付宝或微信");
+            sb.append("\n");
+            sb.append("     扫描下方二维码自主缴费");
+            sb.append("\n");
             sb.append("\n");
             text = sb.toString().getBytes("GBK");
             addPrintTextWithSize(1, concentration, text);
+
+
+
+
 
             int mWidth = 300;
             int mHeight = 60;
-            mBitmap = BarcodeCreater.creatBarcode(getApplicationContext(),
-                    "1234567890", mWidth, mHeight, true, 1);
-            byte[] printData = BitmapTools.bitmap2PrinterBytes(mBitmap);
+//            mBitmap = BarcodeCreater.creatBarcode(getApplicationContext(),
+//                    "1234567890", mWidth, mHeight, true, 1);
+//            byte[] printData = BitmapTools.bitmap2PrinterBytes(mBitmap);
+
+//
+//            mPrintQueue.addBmp(concentration, 30, mBitmap.getWidth(),
+//                    mBitmap.getHeight(), printData);
 
 
-            mPrintQueue.addBmp(concentration, 30, mBitmap.getWidth(),
-                    mBitmap.getHeight(), printData);
-
-            sb = new StringBuilder();
-            sb.append("\n");
-            sb.append("     扫一扫下载APP更多优惠");
-            sb.append("\n");
-            sb.append("\n");
-            text = sb.toString().getBytes("GBK");
-            addPrintTextWithSize(1, concentration, text);
-
-            mWidth = 150;
-            mHeight = 150;
+            mWidth = 400;
+            mHeight = 400;
 
             mBitmap = BarcodeCreater.encode2dAsBitmap("1234567890", mWidth,
                     mHeight, 2);
-            printData = BitmapTools.bitmap2PrinterBytes(mBitmap);
-            mPrintQueue.addBmp(concentration, 100, mBitmap.getWidth(),
+            byte[]  printData = BitmapTools.bitmap2PrinterBytes(mBitmap);
+            mPrintQueue.addBmp(concentration, 10, mBitmap.getWidth(),
                     mBitmap.getHeight(), printData);
 
             sb = new StringBuilder();
-            sb.append("1个月之内可凭票至服务台开具发票!");
             sb.append("\n");
             sb.append("\n");
             sb.append("\n");

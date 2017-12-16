@@ -26,14 +26,14 @@ public class ParkPresenter implements IParkPreInter {
     }
 
     @Override
-    public void postParkList(String pageIndex,String pagesortfield) {
-        iParkInter.postParkList(pageIndex,pagesortfield);
+    public void postParkList(final String pageIndex, String pagesortfield,final List<MyParkBean> parkBeans) {
+        iParkInter.postParkList(pageIndex,pagesortfield,parkBeans);
 
     }
 
     @Override
-    public void parkSuccess(List<MyParkBean> parkBeans) {
-        iParkViewInter.parkSuccess(parkBeans);
+    public void parkSuccess(String pages) {
+        iParkViewInter.parkSuccess(pages);
     }
 
     @Override

@@ -9,6 +9,8 @@ public class MyParkBean {
     private String ParkType;
     private String CarNum;
     private String ParkNum;
+    private String parkingrecordid;
+    private String startTime;
 
     public MyParkBean() {
     }
@@ -18,6 +20,14 @@ public class MyParkBean {
         this.ParkType=ParkType;
         this.CarNum=CarNum;
         this.ParkNum=ParkNum;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
 
     public String getCarType() {
@@ -50,5 +60,13 @@ public class MyParkBean {
 
     public void setParkNum(String parkNum) {
         ParkNum = parkNum;
+    }
+
+    public String getParkingrecordid() {
+        return parkingrecordid;
+    }
+
+    public void setParkingrecordid(String parkingrecordid) {
+        this.parkingrecordid = parkingrecordid;
     }
 }

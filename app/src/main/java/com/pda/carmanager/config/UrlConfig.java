@@ -16,6 +16,7 @@ public class UrlConfig {
     public static String SweetPost=HttpIpPost+"api/CarManage/SelJDByCompany";//街道
     public static String SweetDuanPost=HttpIpPost+"api/CarManage/SelJDDByJD";//街道段
     public static String AddParkPost=HttpIpPost+"api/CarManage/AddParkingLot";//添加车位
+    public static String PostParkPost=HttpIpPost+"api/CarManage/EnregisterCarNum";//登记车位信息
 
     public static String SMSUrl="http://api.boxunpark.com/SMS/sendMsg";//短信验证接口
 }
