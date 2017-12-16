@@ -16,6 +16,9 @@ public class AccountConfig {
     public final static String Departmentname = "departmentname";//部门名称
     public final static String Organizeid = "organizeid";//公司ID
     public final static String Organizename = "organizename";//公司名称
+    public final static String Jdid = "jdid";//街道Id
+    public final static String Jdname = "jdname";//街道名
+
     public final static String IsLogin = "IsLogin";//是否登录
 
 }

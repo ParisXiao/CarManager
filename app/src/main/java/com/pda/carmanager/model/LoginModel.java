@@ -74,6 +74,8 @@ public class LoginModel implements LoginModelInter {
                             String departmentname = jsonObject2.getString("departmentname");
                             String organizeid = jsonObject2.getString("organizeid");
                             String organizename = jsonObject2.getString("organizename");
+                            String jdid = jsonObject2.getString("jdid");
+                            String jdname = jsonObject2.getString("jdname");
                             Log.d("LoginJson", "userid:" + userid);
                             Log.d("LoginJson", "account:" + account);
                             Log.d("LoginJson", "realname:" + realname);
@@ -92,6 +94,8 @@ public class LoginModel implements LoginModelInter {
                             PreferenceUtils.getInstance(context).saveString(AccountConfig.Organizename, organizename);
                             PreferenceUtils.getInstance(context).saveString(AccountConfig.Departmentid, departmentid);
                             PreferenceUtils.getInstance(context).saveString(AccountConfig.Departmentname, departmentname);
+                            PreferenceUtils.getInstance(context).saveString(AccountConfig.Jdid, jdid);
+                            PreferenceUtils.getInstance(context).saveString(AccountConfig.Jdname, jdname);
                             PreferenceUtils.getInstance(context).saveBoolean(AccountConfig.IsLogin, true);
                             e.onNext(0);
                         } else if (code.equals("1")) {

@@ -15,10 +15,13 @@ import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.view.activity.LoginActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
@@ -38,7 +41,7 @@ public class ParkModel implements IParkInter {
     private Context context;
     private IParkPreInter iParkPreInter;
     private String desc;
-    private MyParkBean parkBean;
+    private List<MyParkBean> parkBeans;
 
     public ParkModel(Context context, IParkPreInter iParkPreInter) {
         this.context = context;
@@ -50,7 +53,7 @@ public class ParkModel implements IParkInter {
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
-                String[] key = new String[]{"parkingstatus", "departmentid","pageindex","pagerows"};
+                String[] key = new String[]{"parkingstatus", "departmentid", "pageindex", "pagerows"};
                 Map map = new HashMap();
                 map.put("parkingstatus", "1");
                 map.put("pageindex", pageIndex);
@@ -66,61 +69,79 @@ public class ParkModel implements IParkInter {
                         String code = jsonObject.getString("code");
                         desc = jsonObject.getString("desc");
                         if (code.equals("0")) {
-                            e.onNext(0);
-                        } else if (code.equals("1")) {
-                            e.onNext(1);
-                        } else {
-                            e.onNext(2);
-                        }
-                    } catch (JSONException e1) {
-                        e1.printStackTrace();
-                    }
+                            JSONArray arr = new JSONArray(jsonObject.getString("items"));
+                            parkBeans = new ArrayList<MyParkBean>();
+                            for (int i = 0; i < arr.length(); i++) {
+                                MyParkBean myParkBean = new MyParkBean();
+
+                            }
+
+                    e.onNext(0);
+                } else if (code.equals("1")) {
+                    e.onNext(1);
                 } else {
-                    e.onNext(3);
+                    e.onNext(2);
                 }
-                e.onComplete();
+            } catch(
+            JSONException e1)
+
+            {
+                e1.printStackTrace();
             }
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Integer>() {
-            @Override
-            public void onSubscribe(@NonNull Disposable d) {
+        } else
 
-            }
-
-            @Override
-            public void onNext(@NonNull Integer integer) {
-                switch (integer) {
-                    case 0:
-                        DialogUtil.dismise();
-                        iParkPreInter.parkSuccess(parkBean);
-                        break;
-                    case 1:
-                        DialogUtil.dismise();
-                        iParkPreInter.parkFail(context.getResources().getString(R.string.httpOut));
-                        Toast.makeText(context, context.getResources().getString(R.string.httpOut), Toast.LENGTH_SHORT).show();
-                        break;
-                    case 2:
-                        DialogUtil.dismise();
-                        iParkPreInter.parkFail(desc);
-
-                        Toast.makeText(context, desc, Toast.LENGTH_SHORT).show();
-                        break;
-                    case 3:
-                        DialogUtil.dismise();
-                        iParkPreInter.parkFail(context.getResources().getString(R.string.httpError));
-                        Toast.makeText(context, context.getResources().getString(R.string.httpError), Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
+        {
+            e.onNext(3);
+        }
+        e.onComplete();
     }
-}
+}).
+
+        subscribeOn(Schedulers.io()).
+
+        observeOn(AndroidSchedulers.mainThread()).
+
+        subscribe(new Observer<Integer>(){
+@Override
+public void onSubscribe(@NonNull Disposable d){
+
+        }
+
+@Override
+public void onNext(@NonNull Integer integer){
+        switch(integer){
+        case 0:
+        DialogUtil.dismise();
+        iParkPreInter.parkSuccess(parkBeans);
+        break;
+        case 1:
+        DialogUtil.dismise();
+        iParkPreInter.parkFail(context.getResources().getString(R.string.httpOut));
+        Toast.makeText(context,context.getResources().getString(R.string.httpOut),Toast.LENGTH_SHORT).show();
+        break;
+        case 2:
+        DialogUtil.dismise();
+        iParkPreInter.parkFail(desc);
+
+        Toast.makeText(context,desc,Toast.LENGTH_SHORT).show();
+        break;
+        case 3:
+        DialogUtil.dismise();
+        iParkPreInter.parkFail(context.getResources().getString(R.string.httpError));
+        Toast.makeText(context,context.getResources().getString(R.string.httpError),Toast.LENGTH_SHORT).show();
+        break;
+        }
+        }
+
+@Override
+public void onError(@NonNull Throwable e){
+
+        }
+
+@Override
+public void onComplete(){
+
+        }
+        });
+        }
+        }

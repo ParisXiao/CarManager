@@ -8,6 +8,8 @@ import com.pda.carmanager.model.inter.IParkInter;
 import com.pda.carmanager.presenter.inter.IParkPreInter;
 import com.pda.carmanager.view.inter.IParkViewInter;
 
+import java.util.List;
+
 /**
  * Created by Admin on 2017/12/15.
  */
@@ -30,8 +32,8 @@ public class ParkPresenter implements IParkPreInter {
     }
 
     @Override
-    public void parkSuccess(MyParkBean parkBean) {
-        iParkViewInter.parkSuccess(parkBean);
+    public void parkSuccess(List<MyParkBean> parkBeans) {
+        iParkViewInter.parkSuccess(parkBeans);
     }
 
     @Override

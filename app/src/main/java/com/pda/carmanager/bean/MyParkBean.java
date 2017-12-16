@@ -9,7 +9,11 @@ public class MyParkBean {
     private String ParkType;
     private String CarNum;
     private String ParkNum;
-    public MyParkBean( String CarType,String ParkType,String CarNum,String ParkNum){
+
+    public MyParkBean() {
+    }
+
+    public MyParkBean(String CarType, String ParkType, String CarNum, String ParkNum){
         this.CarType=CarType;
         this.ParkType=ParkType;
         this.CarNum=CarNum;

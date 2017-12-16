@@ -24,6 +24,7 @@ import com.pda.carmanager.bean.DakaBean;
 import com.pda.carmanager.presenter.DakaPresenter;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
+import com.pda.carmanager.util.UserInfoClearUtil;
 import com.pda.carmanager.view.inter.IDakaViewInter;
 
 import java.text.SimpleDateFormat;
@@ -72,6 +73,7 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener,I
     @Override
     public void dakaFail(String msg) {
         if (msg.equals(getResources().getString(R.string.httpOut))){
+            UserInfoClearUtil.ClearUserInfo(DakaActivity.this);
             AMUtil.actionStart(DakaActivity.this, LoginActivity.class);
             finish();
         }

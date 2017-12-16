@@ -3,8 +3,10 @@ package com.pda.carmanager.view.activity;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ import com.pda.carmanager.presenter.ParkPresenter;
 import com.pda.carmanager.pullrefresh.GridSpacingItemDecoration;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
+import com.pda.carmanager.util.UserInfoClearUtil;
 import com.pda.carmanager.view.inter.IParkViewInter;
 import com.pda.carmanager.view.widght.CustomerCarDialog;
 import com.pda.carmanager.view.widght.IdentifyingCodeView;
@@ -38,28 +41,55 @@ import java.util.List;
  * Created by Administrator on 2017/12/9 0009.
  */
 
-public class MyParkActivity extends BaseActivity implements View.OnClickListener, ParkItemOnInter, PullToRefreshListener ,IParkViewInter{
+public class MyParkActivity extends BaseActivity implements View.OnClickListener, ParkItemOnInter, PullToRefreshListener, IParkViewInter {
     private TextView toolbar_mid;
     private ImageButton toolbar_left_btn;
     private Toolbar toolbar;
     private PullToRefreshRecyclerView pullRefresh_myPark;
     private MyParkAdapter myParkAdapter;
     private List<MyParkBean> parkBeanList = null;
+    private List<MyParkBean> parkBeanListshow = new ArrayList<>();
     private PopupWindow popupWindow1;
     private ParkPresenter parkPresenter;
+    private int page = 0;
+    private boolean reFreshNext;
+    private boolean hasNext;
+    private boolean isRefreah;
+    private int list = 10;
 
-    /**
-     * popupWindow1
-     *
-     * @param savedInstanceState
-     */
-    private Button chooseSmall, chooseBig, AreaBtn, Next, Exit;
-    private SwitchButton chooseNew, chooseStu;
-    private IdentifyingCodeView identifyingCodeView;
-    private ImageView camera1, camera2;
-    private TextView text_stucar;
-    private CustomerCarDialog areaDialog;
-    private MyParkBean parkBean;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0:
+                    if (!reFreshNext) {
+                        parkBeanListshow.clear();
+                    }
+                    if (parkBeanList != null && parkBeanList.size() > 0) {
+                        Log.e("list", list + "");
+                        int s = parkBeanList.size() < list ? parkBeanList.size() : list;
+                        for (int i = 0; i < s; i++) {
+                            parkBeanListshow.add(parkBeanList.get(i));
+                        }
+                        myParkAdapter.notifyDataSetChanged();
+                    } else {
+                        parkBeanListshow.clear();
+                        myParkAdapter.notifyDataSetChanged();
+                    }
+                    isRefreah = false;
+                    reFreshNext = false;
+                    pullRefresh_myPark.setLoadMoreComplete();
+                    break;
+                case 1:
+                    pullRefresh_myPark.setLoadMoreComplete();
+                    break;
+                case 2:
+//                    getList();
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,25 +127,25 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
         pullRefresh_myPark.setPullToRefreshListener(this);
         //主动触发下拉刷新操作
         //pullRefresh_msg.onRefresh();
+
     }
 
     private void initData() {
         toolbar_mid.setText(R.string.myPark);
-        DialogUtil.showMessage(this,getResources().getString(R.string.text_loading));
-        parkPresenter=new ParkPresenter(this,this);
-        parkPresenter.postParkList("0","");
+        DialogUtil.showMessage(this, getResources().getString(R.string.text_loading));
+        parkPresenter = new ParkPresenter(this, this);
         parkBeanList = new ArrayList<>();
-        parkBeanList.add(new MyParkBean("货车", "1", "贵A132198", "No.24418"));
-        parkBeanList.add(new MyParkBean("小车", "2", "贵A132198", "No.24418"));
-        parkBeanList.add(new MyParkBean("小车", "3", "贵A132198", "No.24418"));
-        parkBeanList.add(new MyParkBean("货车", "4", "贵A132198", "No.24418"));
-        parkBeanList.add(new MyParkBean("货车", "2", "贵A132198", "No.24418"));
-        myParkAdapter = new MyParkAdapter(this, parkBeanList, this);
+        myParkAdapter = new MyParkAdapter(this, parkBeanListshow, this);
         pullRefresh_myPark.setAdapter(myParkAdapter);
-
+        parkPresenter.postParkList("0", "");
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
 
     @Override
     public void onClick(View v) {
@@ -138,45 +168,52 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void AutoPayCar(String carNum) {
-        DialogUtil.showBoXunVIP(MyParkActivity.this,carNum);
+        DialogUtil.showBoXunVIP(MyParkActivity.this, carNum);
     }
 
     @Override
     public void onRefresh() {
-        pullRefresh_myPark.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                pullRefresh_myPark.setRefreshComplete();
-                myParkAdapter.notifyDataSetChanged();
+        if (!isRefreah) {
+            isRefreah = true;
+            if (!reFreshNext) {
+                page = 1;
             }
-        }, 2000);
+            parkPresenter.postParkList(page+"","");
+        }
     }
 
     @Override
     public void onLoadMore() {
-        pullRefresh_myPark.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                pullRefresh_myPark.setLoadMoreComplete(); //加载数据完成
-                //模拟加载数据的情况
-                for (int i = 0; i < 10; i++) {
-                    parkBeanList.add(new MyParkBean("小车", "3", "贵A132198", "No.24418"));
+        if (hasNext) {
+            page += 1;
+            reFreshNext = true;
+            if (!isRefreah) {
+                isRefreah = true;
+                if (!reFreshNext) {
+                    page = 1;
                 }
-                myParkAdapter.notifyDataSetChanged();
+                parkPresenter.postParkList(page+"","");
             }
-        }, 2000);
+        } else {
+            handler.sendEmptyMessageDelayed(1, 1000);
+        }
     }
 
     @Override
-    public void parkSuccess(MyParkBean parkBean) {
-
+    public void parkSuccess(List<MyParkBean> parkBeans) {
+        parkBeans=parkBeanList;
+        handler.sendEmptyMessage(0);
     }
 
     @Override
     public void parkFail(String msg) {
-        if (msg.equals(getResources().getString(R.string.httpOut))){
+
+        if (msg.equals(getResources().getString(R.string.httpOut))) {
+            UserInfoClearUtil.ClearUserInfo(MyParkActivity.this);
             AMUtil.actionStart(MyParkActivity.this, LoginActivity.class);
             finish();
+        }else {
+            handler.sendEmptyMessage(0);
         }
     }
 }

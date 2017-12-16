@@ -12,6 +12,7 @@ import com.pda.carmanager.presenter.inter.ILogoutPreInter;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
+import com.pda.carmanager.util.UserInfoClearUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,18 +59,7 @@ public class LogoutModel implements ILogoutInter {
                         String code = jsonObject.getString("code");
                         desc = jsonObject.getString("desc");
                         if (code.equals("0")) {
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.UserId, "");
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.AccountId, "");
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.AccountPassword, "");
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.Platform, "PDA");
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.Token, "");
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.Realname, "");
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.CommenyCode, "");
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.Organizeid, "");
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.Organizename, "");
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.Departmentid, "");
-                            PreferenceUtils.getInstance(context).saveString(AccountConfig.Departmentname, "");
-                            PreferenceUtils.getInstance(context).saveBoolean(AccountConfig.IsLogin, false);
+                            UserInfoClearUtil.ClearUserInfo(context);
                             e.onNext(0);
                         } else if (code.equals("1")) {
                             e.onNext(1);

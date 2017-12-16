@@ -2,6 +2,8 @@ package com.pda.carmanager.base;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Build;
+import android.posapi.PosApi;
 
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -19,11 +21,37 @@ import java.io.File;
  */
 
 public class BaseApplication extends Application {
+    private String mCurDev = "";
 
+    static BaseApplication instance = null;
+    //PosSDK mSDK = null;
+    PosApi mPosApi = null;
+    public BaseApplication(){
+        super.onCreate();
+        instance = this;
+    }
+    public static  BaseApplication getInstance(){
+        if(instance==null){
+            instance =new BaseApplication();
+        }
+        return instance;
+    }
     @Override
     public void onCreate() {
         super.onCreate();
         initImagloader(getApplicationContext());
+        mPosApi = PosApi.getInstance(this);
+
+        if (Build.MODEL.equalsIgnoreCase("3508")||Build.MODEL.equalsIgnoreCase("403")) {
+            mPosApi.initPosDev("ima35s09");
+            setCurDevice("ima35s09");
+        } else if(Build.MODEL.equalsIgnoreCase("5501")){
+            mPosApi.initPosDev("ima35s12");
+            setCurDevice("ima35s12");
+        }else{
+            mPosApi.initPosDev(PosApi.PRODUCT_MODEL_IMA80M01);
+            setCurDevice(PosApi.PRODUCT_MODEL_IMA80M01);
+        }
     }
 
     private void initImagloader(Context context) {
@@ -46,4 +74,16 @@ public class BaseApplication extends Application {
         // Initialize ImageLoader with configuration.
         ImageLoader.getInstance().init(config);// 全局初始化此配置
     }
+    public String getCurDevice() {
+        return mCurDev;
+    }
+
+    public void setCurDevice(String mCurDev) {
+        this.mCurDev = mCurDev;
+    }
+
+    public PosApi getPosApi(){
+        return mPosApi;
+    }
+
 }
