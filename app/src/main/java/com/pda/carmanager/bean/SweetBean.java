@@ -1,18 +1,15 @@
 package com.pda.carmanager.bean;
 
-import java.io.Serializable;
+import java.util.List;
 
 /**
- * Created by Administrator on 2017/12/12 0012.
+ * Created by Administrator on 2017/12/16 0016.
  */
 
-public class Test implements Serializable{
+public class SweetBean {
     private String id;
     private String name;
-    public Test(String id,String name){
-        this.id=id;
-        this.name=name;
-    }
+    private List<SweetDuanBean> sweetDuanBean;
 
     public String getId() {
         return id;
@@ -30,11 +27,20 @@ public class Test implements Serializable{
         this.name = name;
     }
 
+    public List<SweetDuanBean> getSweetDuanBean() {
+        return sweetDuanBean;
+    }
+
+    public void setSweetDuanBean(List<SweetDuanBean> sweetDuanBean) {
+        this.sweetDuanBean = sweetDuanBean;
+    }
+
     @Override
     public String toString() {
-        return "Test{" +
+        return "SweetBean{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
+                ", sweetDuanBean=" + sweetDuanBean +
                 '}';
     }
 }

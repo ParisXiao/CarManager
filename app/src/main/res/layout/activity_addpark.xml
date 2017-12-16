@@ -1,181 +1,221 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/bg_color"
-    android:layout_height="match_parent">
-<include
-    layout="@layout/layout_toolbar_common"/>
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_toolbar_common" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="horizontal"
+        android:layout_weight="1"
         android:gravity="center_vertical"
-        android:layout_weight="1">
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
-            android:gravity="right"
-            android:textColor="#000000"
-            android:textSize="@dimen/text_size"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
+            android:gravity="right"
             android:paddingRight="10dp"
             android:text="街        道:"
-            android:layout_height="wrap_content" />
+            android:textColor="#000000"
+            android:textSize="@dimen/text_size" />
 
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_weight="3"
-            android:background="@color/white"
+            android:layout_height="wrap_content"
             android:layout_marginRight="30dp"
-            android:layout_height="wrap_content">
+            android:layout_weight="3"
+            android:background="@color/white">
 
-            <EditText
-                android:id="@+id/jiedaoNum_edit"
-                android:layout_width="match_parent"
-                android:singleLine="true"
-                android:background="@null"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:textSize="@dimen/text_size"
-                android:layout_marginLeft="20dp"
-                android:hint="请输入街道"
-                android:layout_height="42dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true" />
+        <AutoCompleteTextView
+            android:id="@+id/jiedaoNum_edit"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="5.23"
+            android:background="@null"
+            android:completionThreshold="1"
+            android:dropDownHeight="200dp"
+            android:dropDownWidth="180dp"
+            android:hint="请输入街道"
+            android:imeOptions="actionSearch"
+            android:maxLength="12"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@color/text_msgtime"
+            android:textSize="@dimen/text_size" />
+        <!--<EditText-->
+        <!--android:id="@+id/jiedaoNum_edit"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:singleLine="true"-->
+        <!--android:background="@null"-->
+        <!--android:paddingBottom="5dp"-->
+        <!--android:paddingTop="5dp"-->
+        <!--android:textSize="@dimen/text_size"-->
+        <!--android:layout_marginLeft="20dp"-->
+        <!--android:hint="请输入街道"-->
+        <!--android:layout_height="42dp"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_alignParentStart="true" />-->
         </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="horizontal"
+        android:layout_weight="1"
         android:gravity="center_vertical"
-        android:layout_weight="1">
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
-            android:gravity="right"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
+            android:gravity="right"
             android:paddingRight="10dp"
             android:text="街  道  段:"
-            android:layout_height="wrap_content" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size" />
+
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_weight="3"
-            android:background="@color/white"
+            android:layout_height="wrap_content"
             android:layout_marginRight="30dp"
-            android:layout_height="wrap_content">
+            android:layout_weight="3"
+            android:background="@color/white">
 
             <org.angmarch.views.NiceSpinner
                 android:id="@+id/niceSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="请选择街道段"
                 android:singleLine="true"
-                android:textSize="@dimen/text_size"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:textColor="@color/black"
+                android:textColorHint="@color/text_msgtime"
+                android:textSize="@dimen/text_size" />
 
         </RelativeLayout>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="horizontal"
+        android:layout_weight="1"
         android:gravity="center_vertical"
-        android:layout_weight="1">
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
-            android:gravity="right"
-            android:textColor="#000000"
-            android:textSize="@dimen/text_size"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
+            android:gravity="right"
             android:paddingRight="10dp"
             android:text="地磁编号:"
-            android:layout_height="wrap_content" />
+            android:textColor="#000000"
+            android:textSize="@dimen/text_size" />
+
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_weight="3"
-            android:background="#ffffff"
+            android:layout_height="wrap_content"
             android:layout_marginRight="30dp"
-            android:layout_height="wrap_content">
+            android:layout_weight="3"
+            android:background="#ffffff">
 
             <EditText
                 android:id="@+id/dici_edit"
                 android:layout_width="match_parent"
-                android:singleLine="true"
-                android:background="@null"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:textSize="@dimen/text_size"
-                android:hint="请输入地磁编号"
                 android:layout_height="42dp"
-                android:layout_marginLeft="20dp"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true" />
-        </RelativeLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_weight="1">
-        <TextView
-            android:layout_width="wrap_content"
-            android:gravity="right"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:layout_marginLeft="30dp"
-            android:paddingRight="10dp"
-            android:text="车位编号:"
-            android:layout_height="wrap_content" />
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_weight="3"
-            android:background="#ffffff"
-            android:layout_marginRight="30dp"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/carnum_edit"
-                android:layout_width="match_parent"
-                android:singleLine="true"
+                android:layout_marginLeft="20dp"
                 android:background="@null"
+                android:hint="请输入地磁编号"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
-                android:layout_marginLeft="20dp"
-                android:hint="请输入车位编号"
-                android:textSize="@dimen/text_size"
-                android:layout_height="42dp" />
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/text_msgtime"
+                android:textSize="@dimen/text_size" />
         </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:gravity="right"
+            android:paddingRight="10dp"
+            android:text="车位编号:"
+            android:textColor="#000000"
+            android:textSize="@dimen/text_size" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:layout_weight="3"
+            android:background="#ffffff">
+
+            <EditText
+                android:id="@+id/carnum_edit"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginLeft="20dp"
+                android:background="@null"
+                android:hint="请输入车位编号"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/text_msgtime"
+                android:singleLine="true"
+                android:textSize="@dimen/text_size" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
         android:gravity="center_horizontal"
-        android:layout_weight="5">
+        android:orientation="vertical">
+
         <Button
             android:id="@+id/add_park_sure"
             android:layout_width="match_parent"
-            android:layout_marginTop="40dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:textSize="@dimen/texttitle_size"
+            android:layout_marginTop="40dp"
             android:background="@drawable/theme_button_login"
             android:text="确定"
-            android:layout_height="wrap_content" />
+            android:textSize="@dimen/texttitle_size" />
 
         <Button
             android:id="@+id/add_park_exit"
             android:layout_width="match_parent"
-            android:layout_marginTop="20dp"
-            android:text="取消"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:textSize="@dimen/texttitle_size"
+            android:layout_marginTop="20dp"
             android:background="@drawable/theme_button_login2"
-            android:layout_height="wrap_content" />
+            android:text="取消"
+            android:textSize="@dimen/texttitle_size" />
 
     </LinearLayout>
 

@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
-import com.pda.carmanager.bean.Test;
 import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.presenter.LoginPresenter;
 import com.pda.carmanager.util.AMUtil;

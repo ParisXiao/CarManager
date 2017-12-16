@@ -7,6 +7,8 @@ package com.pda.carmanager.view.inter;
 public interface IAddParkViewInter {
     void getSuccesss();
     void getFail(String msg);
+    void getDuanSuccesss();
+    void getDuanFail(String msg);
     void addSuccess();
     void addFail(String msg);
 }

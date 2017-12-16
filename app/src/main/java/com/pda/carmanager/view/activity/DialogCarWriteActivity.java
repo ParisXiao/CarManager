@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.posapi.PosApi;
+import android.posapi.PrintQueue;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -25,7 +27,11 @@ import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.config.CommonlConfig;
 import com.pda.carmanager.inter.PhotoInter;
+import com.pda.carmanager.service.ScanService;
+import com.pda.carmanager.util.BarcodeCreater;
+import com.pda.carmanager.util.BitmapTools;
 import com.pda.carmanager.util.PhotoUtils;
+import com.pda.carmanager.view.test.PDAPrintActivity;
 import com.pda.carmanager.view.widght.CustomerCarDialog;
 import com.pda.carmanager.view.widght.IdentifyingCodeView;
 import com.pda.carmanager.view.widght.LicenseKeyboardUtil;
@@ -33,6 +39,7 @@ import com.pda.carmanager.view.widght.PhotoShowDialog;
 import com.suke.widget.SwitchButton;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,6 +82,8 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
     private TextView text_key6;
     private LinearLayout linear_input;
     private int inputType = 0;
+    private String carType = "";
+    private String carNum = "";
     private static final int RequsetInput = 110;
     private String area1;
     private String area2;
@@ -85,6 +94,7 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
     private String key5;
     private String key6;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +104,7 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
 
         initView();
         initData();
+
     }
 
 
@@ -155,8 +166,7 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
                     chooseNew.setChecked(true);
 
 
-
-                    if (chooseStu.isChecked()){
+                    if (chooseStu.isChecked()) {
                         chooseStu.setChecked(false);
                     }
                     new Handler().postDelayed(new Runnable() {
@@ -167,7 +177,7 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
                             text_key5.setVisibility(View.VISIBLE);
                             inputType = 1;
                         }
-                    },500);
+                    }, 500);
 
                 } else {
                     text_stucar.setVisibility(View.GONE);
@@ -184,7 +194,7 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
                 if (isChecked) {
                     chooseStu.setChecked(true);
 
-                    if (chooseNew.isChecked()){
+                    if (chooseNew.isChecked()) {
                         chooseNew.setChecked(false);
                     }
                     new Handler().postDelayed(new Runnable() {
@@ -196,7 +206,7 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
                             text_stucar.setVisibility(View.VISIBLE);
                             inputType = 2;
                         }
-                    },500);
+                    }, 500);
                 } else {
                     text_stucar.setVisibility(View.GONE);
                     text_key6.setVisibility(View.GONE);
@@ -233,11 +243,12 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
             case R.id.pop_choose_small:
                 chooseSmall.setBackground(getResources().getDrawable(R.drawable.shape_choose_on));
                 chooseBig.setBackground(getResources().getDrawable(R.drawable.shape_choose));
+                carType = "samll";
                 break;
             case R.id.pop_choose_big:
                 chooseBig.setBackground(getResources().getDrawable(R.drawable.shape_choose_on));
                 chooseSmall.setBackground(getResources().getDrawable(R.drawable.shape_choose));
-
+                carType = "big";
                 break;
 //            case R.id.btn_area:
 //                areaDialog.show();
@@ -267,12 +278,40 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
                 finish();
                 break;
             case R.id.pop1_next:
+                if (inputType==0){
+                    if (area1.equals("")||area2.equals("")||key1.equals("")||key2.equals("")||key3.equals("")||key4.equals("")||key5.equals("")){
+                        Toast.makeText(this,"请输入完整车牌号",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }else if (inputType==1){
+                    if (area1.equals("")||area2.equals("")||key1.equals("")||key2.equals("")||key3.equals("")||key4.equals("")||key5.equals("")||key6.equals("")){
+                        Toast.makeText(this,"请输入完整车牌号",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }else if (inputType==2){
+                    if (area1.equals("")||area2.equals("")||key1.equals("")||key2.equals("")||key3.equals("")||key4.equals("")){
+                        Toast.makeText(this,"请输入完整车牌号",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+                if (maps.size()!=2){
+                    Toast.makeText(this,"请拍两张照片",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent intent = new Intent(DialogCarWriteActivity.this, MyParkActivity.class);
+                intent.putExtra("carType",carType );
+                intent.putExtra("carNumType",inputType );
+                intent.putExtra("carNum",carNum.trim() );
+                intent.putExtra("camera1",PhotoUtils.SendBitmap(maps.get(0)) );
+                intent.putExtra("camera2",PhotoUtils.SendBitmap(maps.get(1)) );
+                setResult(RESULT_OK,intent);
+                finish();
 
                 break;
             case R.id.linear_input:
-                Intent intent = new Intent(DialogCarWriteActivity.this, KeyInputActivity.class);
-                intent.putExtra("inputType", inputType);
-                startActivityForResult(intent, RequsetInput);
+                Intent intent1 = new Intent(DialogCarWriteActivity.this, KeyInputActivity.class);
+                intent1.putExtra("inputType", inputType);
+                startActivityForResult(intent1, RequsetInput);
                 break;
         }
     }
@@ -317,15 +356,15 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
                     key5 = bundle.getString("key5");
                     key6 = bundle.getString("key6");
                     Log.d("InputString", key4);
-                            text_key1.setText(key1);
-                            text_key2.setText(key2);
-                            text_key3.setText(key3);
-                            text_key4.setText(key4);
-                            text_key5.setText(key5);
-                            text_key6.setText(key6);
-                            text_area1.setText(area1);
-                            text_area2.setText(area2);
-
+                    text_key1.setText(key1);
+                    text_key2.setText(key2);
+                    text_key3.setText(key3);
+                    text_key4.setText(key4);
+                    text_key5.setText(key5);
+                    text_key6.setText(key6);
+                    text_area1.setText(area1);
+                    text_area2.setText(area2);
+                    carNum=area1+area2+key1+key2+key3+key4+key5+key6;
                     break;
             }
         }

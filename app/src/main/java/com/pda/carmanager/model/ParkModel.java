@@ -53,9 +53,8 @@ public class ParkModel implements IParkInter {
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
-                String[] key = new String[]{"parkingstatus", "departmentid", "pageindex", "pagerows"};
+                String[] key = new String[]{"departmentid", "pageindex", "pagerows"};
                 Map map = new HashMap();
-                map.put("parkingstatus", "1");
                 map.put("pageindex", pageIndex);
                 map.put("pagerows", "10");
 //                map.put("departmentid", PreferenceUtils.getInstance(context).getString(AccountConfig.Departmentid));

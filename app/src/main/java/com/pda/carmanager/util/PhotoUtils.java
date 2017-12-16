@@ -29,6 +29,22 @@ public class PhotoUtils {
     public static int ResultCode = 100;
 
     /**
+     * activity发bitmap
+     */
+    public static byte[] SendBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] bitmapByte = baos.toByteArray();
+        return bitmapByte;
+    }
+    /**
+     * activity收Bitmap
+     */
+    public static Bitmap recverBitmap(byte []  bytes) {
+        Bitmap bitmap=BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        return bitmap;
+    }
+    /**
      * 获取sd卡的路径
      *
      * @return 路径的字符串
