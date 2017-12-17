@@ -49,28 +49,32 @@ public class LogoutModel implements ILogoutInter {
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
-                String[] key = new String[]{};
-                Map map = new HashMap();
-                String Http = OKHttpUtil.GetMessage(context, UrlConfig.LogoutPost, key, map);
-                if (Http != null) {
-                    JSONObject jsonObject;
-                    try {
-                        jsonObject = new JSONObject(Http);
-                        String code = jsonObject.getString("code");
-                        desc = jsonObject.getString("desc");
-                        if (code.equals("0")) {
-                            UserInfoClearUtil.ClearUserInfo(context);
-                            e.onNext(0);
-                        } else if (code.equals("1")) {
-                            e.onNext(1);
-                        } else {
-                            e.onNext(2);
+                if (OKHttpUtil.isConllection(context)) {
+                    String[] key = new String[]{};
+                    Map map = new HashMap();
+                    String Http = OKHttpUtil.GetMessage(context, UrlConfig.LogoutPost, key, map);
+                    if (Http != null) {
+                        JSONObject jsonObject;
+                        try {
+                            jsonObject = new JSONObject(Http);
+                            String code = jsonObject.getString("code");
+                            desc = jsonObject.getString("desc");
+                            if (code.equals("0")) {
+                                UserInfoClearUtil.ClearUserInfo(context);
+                                e.onNext(0);
+                            } else if (code.equals("1")) {
+                                e.onNext(1);
+                            } else {
+                                e.onNext(2);
+                            }
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
                         }
-                    } catch (JSONException e1) {
-                        e1.printStackTrace();
+                    } else {
+                        e.onNext(3);
                     }
-                } else {
-                    e.onNext(3);
+                }else {
+                    e.onNext(4);
                 }
                 e.onComplete();
             }
@@ -99,6 +103,10 @@ public class LogoutModel implements ILogoutInter {
                         DialogUtil.dismise();
                         iLogoutPreInter.logoutFails(context.getResources().getString(R.string.httpError));
                         Toast.makeText(context, context.getResources().getString(R.string.httpError), Toast.LENGTH_SHORT).show();
+                        break;
+                    case 4:
+                        DialogUtil.dismise();
+                        DialogUtil.showSetMessage(context);
                         break;
                 }
             }

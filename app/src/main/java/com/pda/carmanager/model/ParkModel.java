@@ -49,76 +49,81 @@ public class ParkModel implements IParkInter {
     }
 
     @Override
-    public void postParkList(final String pageIndex, String pagesortfield,final List<MyParkBean> parkBeans) {
-        parkBeans.clear();
+    public void postParkList(final String pageIndex, String pagesortfield, final List<MyParkBean> parkBeans) {
+
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
-                String[] key = new String[]{"departmentid", "pageindex", "pagerows"};
-                Map map = new HashMap();
-                map.put("pageindex", pageIndex);
-                map.put("pagerows", "10");
-                map.put("departmentid", PreferenceUtils.getInstance(context).getString(AccountConfig.Departmentid));
-                String Http = OKHttpUtil.GetMessage(context, UrlConfig.ParkPost, key, map);
-                if (Http != null) {
-                    JSONObject jsonObject;
-                    try {
-                        jsonObject = new JSONObject(Http);
+                if (OKHttpUtil.isConllection(context)) {
+                    parkBeans.clear();
+                    String[] key = new String[]{"departmentid", "pageindex", "pagerows"};
+                    Map map = new HashMap();
+                    map.put("pageindex", pageIndex);
+                    map.put("pagerows", "10");
+                    map.put("departmentid", PreferenceUtils.getInstance(context).getString(AccountConfig.Departmentid));
+                    String Http = OKHttpUtil.GetMessage(context, UrlConfig.ParkPost, key, map);
+                    if (Http != null) {
+                        JSONObject jsonObject;
+                        try {
+                            jsonObject = new JSONObject(Http);
 
-                        String code = jsonObject.getString("code");
-                        desc = jsonObject.getString("desc");
-                        if (code.equals("0")) {
-                            JSONObject jsonObject1 = new JSONObject(jsonObject.getString("result"));
-                            pages=jsonObject1.getString("pages");
-                            JSONArray jsonArray=new JSONArray(jsonObject1.getString("items"));
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                MyParkBean myParkBean = new MyParkBean();
-                                JSONObject temp= (JSONObject) jsonArray.get(i);
-                                myParkBean.setParkNum(temp.getString("cwbh"));
-                                if (!temp.getString("starttime").equals("null")){
-                                    myParkBean.setStartTime(temp.getString("starttime"));
-                                    if (!temp.getString("parkingrecordid").equals("null")){
-                                        myParkBean.setParkingrecordid(temp.getString("parkingrecordid"));
-                                    }
-                                    if (!temp.getString("carnum").equals("null")){
-                                        myParkBean.setCarNum(temp.getString("carnum"));
-                                        if (!temp.getString("memberno").equals("null")){
-                                            myParkBean.setParkType("4");
-                                        }else {
-                                            myParkBean.setParkType("3");
+                            String code = jsonObject.getString("code");
+                            desc = jsonObject.getString("desc");
+                            if (code.equals("0")) {
+                                JSONObject jsonObject1 = new JSONObject(jsonObject.getString("result"));
+                                pages = jsonObject1.getString("pages");
+                                JSONArray jsonArray = new JSONArray(jsonObject1.getString("items"));
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    MyParkBean myParkBean = new MyParkBean();
+                                    JSONObject temp = (JSONObject) jsonArray.get(i);
+                                    myParkBean.setParkNum(temp.getString("cwbh"));
+                                    if (!temp.getString("starttime").equals("null")) {
+                                        myParkBean.setStartTime(temp.getString("starttime"));
+                                        if (!temp.getString("parkingrecordid").equals("null")) {
+                                            myParkBean.setParkingrecordid(temp.getString("parkingrecordid"));
                                         }
-                                        if (!temp.getString("cartype").equals("null")){
-                                            if (temp.getString("cartype").equals("1")){
-                                                myParkBean.setCarType("小车");
-                                            } else if (temp.getString("cartype").equals("2")) {
-                                                myParkBean.setCarType("货车");
+                                        if (!temp.getString("carnum").equals("null")) {
+                                            myParkBean.setCarNum(temp.getString("carnum"));
+                                            if (!temp.getString("memberno").equals("null")) {
+                                                myParkBean.setParkType("4");
+                                            } else {
+                                                myParkBean.setParkType("3");
                                             }
+                                            if (!temp.getString("cartype").equals("null")) {
+                                                if (temp.getString("cartype").equals("1")) {
+                                                    myParkBean.setCarType("小车");
+                                                } else if (temp.getString("cartype").equals("2")) {
+                                                    myParkBean.setCarType("货车");
+                                                }
+                                            }
+                                        } else {
+                                            myParkBean.setParkType("2");
                                         }
-                                    }else {
-                                        myParkBean.setParkType("2");
+                                    } else {
+                                        myParkBean.setParkType("1");
                                     }
-                                }else {
-                                    myParkBean.setParkType("1");
-                                }
-                                parkBeans.add(myParkBean);
+                                    parkBeans.add(myParkBean);
 
+                                }
+                                e.onNext(0);
+                            } else if (code.equals("1")) {
+                                e.onNext(1);
+                            } else {
+                                e.onNext(2);
                             }
-                            e.onNext(0);
-                        } else if (code.equals("1")) {
-                            e.onNext(1);
-                        } else {
-                            e.onNext(2);
+                        } catch (
+                                JSONException e1)
+
+                        {
+                            e1.printStackTrace();
                         }
-                    } catch (
-                            JSONException e1)
+                    } else
 
                     {
-                        e1.printStackTrace();
+                        e.onNext(3);
                     }
-                } else
-
-                {
-                    e.onNext(3);
+                }else {
+                    e.onNext(4);
                 }
                 e.onComplete();
             }
@@ -155,6 +160,10 @@ public class ParkModel implements IParkInter {
                                 DialogUtil.dismise();
                                 iParkPreInter.parkFail(context.getResources().getString(R.string.httpError));
                                 Toast.makeText(context, context.getResources().getString(R.string.httpError), Toast.LENGTH_SHORT).show();
+                                break;
+                            case 4:
+                                DialogUtil.dismise();
+                                DialogUtil.showSetMessage(context);
                                 break;
                         }
                     }

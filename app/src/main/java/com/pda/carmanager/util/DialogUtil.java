@@ -3,9 +3,11 @@ package com.pda.carmanager.util;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
+import android.provider.Settings;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -171,8 +173,11 @@ public class DialogUtil {
 
     }
 
-
-    private void showChooseMessage(Context context, String text, String textContent) {
+    /**
+     * 网络设置
+     * @param context
+     */
+    public static void showSetMessage(final Context context) {
         AlertDialog progressDialog = new AlertDialog.Builder(context).create();
         if (!(progressDialog != null && progressDialog.isShowing())) {
             try {
@@ -192,8 +197,10 @@ public class DialogUtil {
                 TextView text2 = (TextView) window.findViewById(R.id.note_text_content);
                 Button button1 = (Button) window.findViewById(R.id.note_exit);
                 Button button2 = (Button) window.findViewById(R.id.note_sure);
-                text1.setText(text);
-                text2.setText(textContent);
+                text1.setText("网络异常");
+                text2.setText("是否检查网络设置");
+                button1.setText("否");
+                button2.setText("是");
                 button1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -203,9 +210,10 @@ public class DialogUtil {
                 button2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-
                         DialogUtil.dismise();
+                        Intent intent =  new Intent(Settings.ACTION_SETTINGS);
+                        context.startActivity(intent);
+
                     }
                 });
             } catch (Exception e) {
@@ -230,7 +238,7 @@ public class DialogUtil {
                 window.setGravity(Gravity.CENTER);
                 lp.alpha = 1f;
                 window.setAttributes(lp);
-                window.setContentView(R.layout.layout_vip_dialog);
+                window.setContentView(R.layout.layout_choose_dialog);
                 TextView vipNum = (TextView) window.findViewById(R.id.vip_text);
                 Button vipCom = (Button) window.findViewById(R.id.vip_btn);
                 vipNum.setText(text);
@@ -247,4 +255,6 @@ public class DialogUtil {
 
 
     }
+
+
 }

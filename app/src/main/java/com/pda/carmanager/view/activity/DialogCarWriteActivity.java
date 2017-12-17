@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
+import com.pda.carmanager.bean.PrintBean;
 import com.pda.carmanager.config.CommonlConfig;
 import com.pda.carmanager.inter.PhotoInter;
 import com.pda.carmanager.presenter.PostParkPresenter;
@@ -88,7 +89,7 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
     private TextView text_key6;
     private LinearLayout linear_input;
     private int inputType = 0;
-    private String carType = "";
+    private String carType = "1";
     private String carNum = "";
     private static final int RequsetInput = 110;
     private String area1;
@@ -256,12 +257,12 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
             case R.id.pop_choose_small:
                 chooseSmall.setBackground(getResources().getDrawable(R.drawable.shape_choose_on));
                 chooseBig.setBackground(getResources().getDrawable(R.drawable.shape_choose));
-                carType = "samll";
+                carType = "1";
                 break;
             case R.id.pop_choose_big:
                 chooseBig.setBackground(getResources().getDrawable(R.drawable.shape_choose_on));
                 chooseSmall.setBackground(getResources().getDrawable(R.drawable.shape_choose));
-                carType = "big";
+                carType = "2";
                 break;
 //            case R.id.btn_area:
 //                areaDialog.show();
@@ -315,6 +316,8 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
                     flag=true;
                     DialogUtil.showMessage(DialogCarWriteActivity.this,getResources().getString(R.string.text_uping));
                     postParkPresenter.postPark(ParkId,carNum.trim(),carType, GZIPutil.compressForGzip(PhotoUtils.SendBitmap(maps.get(0))), GZIPutil.compressForGzip(PhotoUtils.SendBitmap(maps.get(1))));
+                }else {
+                    Toast.makeText(DialogCarWriteActivity.this,"数据提交中，请勿重复操作",Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -437,15 +440,18 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
     }
 
     @Override
-    public void postSuccess() {
+    public void postSuccess(PrintBean printBean) {
+        flag=false;
         Intent intent = new Intent(DialogCarWriteActivity.this, MyParkActivity.class);
-
+        printBean.setCarNum(carNum);
+        intent.putExtra("Print",printBean);
         setResult(RESULT_OK,intent);
         finish();
     }
 
     @Override
     public void postFail(String msg) {
+        flag=false;
         if (msg.equals(getResources().getString(R.string.httpOut))) {
             UserInfoClearUtil.ClearUserInfo(DialogCarWriteActivity.this);
             AMUtil.actionStart(DialogCarWriteActivity.this, LoginActivity.class);

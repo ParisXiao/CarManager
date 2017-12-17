@@ -52,6 +52,7 @@ public class AddParkModel implements AddParkInter {
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
+                if (OKHttpUtil.isConllection(context)){
                 String[] key = new String[]{"companyid"};
                 Map map = new HashMap();
                 map.put("companyid", PreferenceUtils.getInstance(context).getString(AccountConfig.Organizeid));
@@ -95,6 +96,8 @@ public class AddParkModel implements AddParkInter {
                     }
                 } else {
                     e.onNext(3);
+                }}else {
+                    e.onNext(4);
                 }
                 e.onComplete();
             }
@@ -126,6 +129,10 @@ public class AddParkModel implements AddParkInter {
                         DialogUtil.dismise();
                         iAddParkPreInter.getFail(context.getResources().getString(R.string.httpError));
                         Toast.makeText(context, context.getResources().getString(R.string.httpError), Toast.LENGTH_SHORT).show();
+                        break;
+                    case 4:
+                        DialogUtil.dismise();
+                        DialogUtil.showSetMessage(context);
                         break;
                 }
             }

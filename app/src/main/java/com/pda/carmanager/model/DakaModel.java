@@ -44,6 +44,7 @@ public class DakaModel implements IDakaInter {
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
+                if (OKHttpUtil.isConllection(context)){
                 String[] key = new String[]{"addaddr", "kqtype"};
                 Map map = new HashMap();
                 map.put("addaddr", address);
@@ -69,6 +70,8 @@ public class DakaModel implements IDakaInter {
                     }
                 } else {
                     e.onNext(3);
+                }}else {
+                    e.onNext(4);
                 }
                 e.onComplete();
             }
@@ -100,6 +103,10 @@ public class DakaModel implements IDakaInter {
                         DialogUtil.dismise();
                         iDakaPreInter.dakaFail(context.getResources().getString(R.string.httpError));
                         Toast.makeText(context, context.getResources().getString(R.string.httpError), Toast.LENGTH_SHORT).show();
+                        break;
+                    case 4:
+                        DialogUtil.dismise();
+                        DialogUtil.showSetMessage(context);
                         break;
                 }
             }

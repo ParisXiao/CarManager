@@ -2,6 +2,7 @@ package com.pda.carmanager.presenter;
 
 import android.content.Context;
 
+import com.pda.carmanager.bean.PrintBean;
 import com.pda.carmanager.model.PostParkModel;
 import com.pda.carmanager.model.inter.IPostParkInter;
 import com.pda.carmanager.presenter.inter.IPostParkPreInter;
@@ -28,8 +29,8 @@ public class PostParkPresenter implements IPostParkPreInter {
     }
 
     @Override
-    public void postSuccess() {
-        iPostParkViewInter.postSuccess();
+    public void postSuccess(PrintBean printBean) {
+        iPostParkViewInter.postSuccess(printBean);
     }
 
     @Override

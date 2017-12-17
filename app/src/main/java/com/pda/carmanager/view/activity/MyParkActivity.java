@@ -38,6 +38,7 @@ import com.pda.carmanager.adapter.MyParkAdapter;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.bean.ChargeBean;
 import com.pda.carmanager.bean.MyParkBean;
+import com.pda.carmanager.bean.PrintBean;
 import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.inter.ParkItemOnInter;
 import com.pda.carmanager.presenter.ParkPresenter;
@@ -50,6 +51,7 @@ import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PhotoUtils;
 import com.pda.carmanager.util.PreferenceUtils;
+import com.pda.carmanager.util.StringEqualUtil;
 import com.pda.carmanager.util.UserInfoClearUtil;
 import com.pda.carmanager.view.inter.IParkViewInter;
 import com.pda.carmanager.view.test.PDAPrintActivity;
@@ -95,7 +97,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     private PrintQueue mPrintQueue = null;
     private boolean isCanPrint = true;
     private Bitmap mBitmap = null;
-
+    PrintBean printBean;
     private String CarNum;
     private int load=0;
 
@@ -230,9 +232,13 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case RequsetPark:
-                    Bundle bundle = data.getExtras();
-                    CarNum=bundle.getString("carNum");
-                    showChooseMessage(this,CarNum,"是否打印小票");
+                    printBean = (PrintBean) data.getSerializableExtra("Print");
+                    if (StringEqualUtil.stringNull(printBean.getMemberNo())){
+                        showChooseMessage(this,CarNum,"是否打印小票");
+                    }else {
+                        DialogUtil.showBoXunVIP(MyParkActivity.this, printBean.getCarNum());
+                    }
+
                     break;
             }
         }
@@ -386,43 +392,42 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
             sb.append("            本次停车信息");
             sb.append("\n");
             sb.append("停车街道：");
-            sb.append("   重庆市冉家坝a街道");
+            sb.append("   "+PreferenceUtils.getInstance(MyParkActivity.this).getString(AccountConfig.Departmentname));
             sb.append("\n");
             sb.append("车位编号：");
-            sb.append("   231841284");
+            sb.append("   "+printBean.getCarNo());
             sb.append("\n");
             sb.append("车牌号  ：");
-            sb.append("   渝A23214");
+            sb.append("   "+printBean.getCarNum());
             sb.append("\n");
             sb.append("停车时刻： ");
-            long time = System.currentTimeMillis();
-            Date date = new Date(time);
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            sb.append(format.format(date));
+            sb.append(printBean.getStartTime());
             sb.append("\n");
-            sb.append("==============================");
-            sb.append("\n");
-            sb.append("             欠费信息             ");
-            sb.append("\n");
-            sb.append("停车街道：");
-            sb.append("   重庆市冉家坝a街道");
-            sb.append("\n");
-            sb.append("车位编号：");
-            sb.append("   231841284");
-            sb.append("\n");
-            sb.append("停车时刻： ");
-            long time1 = System.currentTimeMillis();
-            Date date1 = new Date(time1);
-            SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            sb.append(format.format(date1));
+            if (printBean.getIsQFModels().size()>0){
+                for (int i = 0; i < printBean.getIsQFModels().size(); i++) {
+                    sb.append("==============================");
+                    sb.append("\n");
+                    sb.append("             欠费信息             ");
+                    sb.append("\n");
+                    sb.append("停车街道：");
+                    sb.append("   "+printBean.getIsQFModels().get(i).getJD());
+                    sb.append("\n");
+                    sb.append("车位编号：");
+                    sb.append("   "+printBean.getIsQFModels().get(i).getCarNO());
+                    sb.append("\n");
+                    sb.append("停车时刻： ");
+                    sb.append(printBean.getIsQFModels().get(i).getStartTime());
 
-            sb.append("\n");
-            sb.append("         至"+format.format(date1));
-            sb.append("\n");
-            sb.append("欠费金额：");
-            sb.append("         10元");
-            sb.append("\n");
-            sb.append("==============================");
+                    sb.append("\n");
+                    sb.append("         至"+printBean.getIsQFModels().get(i).getStopTime());
+                    sb.append("\n");
+                    sb.append("欠费金额：");
+                    sb.append("         "+printBean.getIsQFModels().get(i).getMoney());
+                    sb.append("\n");
+                    sb.append("==============================");
+                }
+            }
+
             sb.append("\n");
             sb.append("\n");
             sb.append("     您离开时可用支付宝或微信");
@@ -451,10 +456,10 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
             mWidth = 400;
             mHeight = 400;
 
-            mBitmap = BarcodeCreater.encode2dAsBitmap("1234567890", mWidth,
+            mBitmap = BarcodeCreater.encode2dAsBitmap(printBean.getUrl(), mWidth,
                     mHeight, 2);
             byte[]  printData = BitmapTools.bitmap2PrinterBytes(mBitmap);
-            mPrintQueue.addBmp(concentration, 10, mBitmap.getWidth(),
+            mPrintQueue.addBmp(concentration, 5, mBitmap.getWidth(),
                     mBitmap.getHeight(), printData);
 
             sb = new StringBuilder();

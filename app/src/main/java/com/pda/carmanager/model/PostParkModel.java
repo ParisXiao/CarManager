@@ -4,16 +4,21 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.pda.carmanager.R;
+import com.pda.carmanager.bean.PrintBean;
 import com.pda.carmanager.config.UrlConfig;
 import com.pda.carmanager.model.inter.IPostParkInter;
 import com.pda.carmanager.presenter.inter.IPostParkPreInter;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
+import com.pda.carmanager.util.StringEqualUtil;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
@@ -33,6 +38,7 @@ public class PostParkModel implements IPostParkInter {
     private Context context;
     private IPostParkPreInter iPostParkPreInter;
     String decs;
+    PrintBean printBean;
 
     public PostParkModel(Context context, IPostParkPreInter iPostParkPreInter) {
         this.context = context;
@@ -44,8 +50,8 @@ public class PostParkModel implements IPostParkInter {
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
+                if (OKHttpUtil.isConllection(context)){
                 String[] key = new String[]{"id", "carnum","cartype","img1","img2"};
-
                 Map map = new HashMap();
                 map.put("id",id);
                 map.put("carnum",carnum);
@@ -63,6 +69,29 @@ public class PostParkModel implements IPostParkInter {
                         decs = jsonObject.getString("desc");
 
                         if (code.equals("0")) {
+                            printBean=new PrintBean();
+                            JSONObject jsonObject1=new JSONObject(jsonObject.getString("result"));
+                            printBean.setCarNo(jsonObject1.getString("MyCarNo"));
+                            printBean.setStartTime(jsonObject1.getString("StartTime"));
+                            if (StringEqualUtil.stringNull(jsonObject1.getString("MemberNo"))){
+                                printBean.setMemberNo(jsonObject1.getString("MemberNo"));
+                            }
+                            printBean.setUrl(jsonObject1.getString("Url"));
+                            JSONArray jsonArray=new JSONArray(jsonObject1.getString("IsQFModel"));
+                            List<PrintBean.IsQFModel> isQFModels=new ArrayList<PrintBean.IsQFModel>();
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                PrintBean.IsQFModel isQFModel=new PrintBean.IsQFModel();
+                                JSONObject temp= (JSONObject) jsonArray.get(i);
+                                isQFModel.setJD(temp.getString("JD"));
+                                isQFModel.setStartTime(temp.getString("StartTime"));
+                                isQFModel.setStopTime(temp.getString("StopTime"));
+                                isQFModel.setCarNO(temp.getString("MyCarNo"));
+                                isQFModel.setMoney(temp.getString("TotalMoney"));
+                                isQFModels.add(isQFModel);
+                            }
+                            if (isQFModels.size()>0) {
+                                printBean.setIsQFModels(isQFModels);
+                            }
                             e.onNext(0);
                         } else if (code.equals("1")) {
                             e.onNext(1);
@@ -74,6 +103,8 @@ public class PostParkModel implements IPostParkInter {
                     }
                 } else {
                     e.onNext(3);
+                }}else {
+                    e.onNext(4);
                 }
                 e.onComplete();
             }
@@ -88,7 +119,7 @@ public class PostParkModel implements IPostParkInter {
                 switch (integer) {
                     case 0:
                         DialogUtil.dismise();
-                        iPostParkPreInter.postSuccess();
+                        iPostParkPreInter.postSuccess(printBean);
                         break;
                     case 1:
                         DialogUtil.dismise();
@@ -105,6 +136,10 @@ public class PostParkModel implements IPostParkInter {
                         DialogUtil.dismise();
                         iPostParkPreInter.postFail(context.getResources().getString(R.string.httpError));
                         Toast.makeText(context, context.getResources().getString(R.string.httpError), Toast.LENGTH_SHORT).show();
+                        break;
+                    case 4:
+                        DialogUtil.dismise();
+                        DialogUtil.showSetMessage(context);
                         break;
                 }
             }

@@ -67,10 +67,15 @@ public class MyParkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         ((MyViewHolder) holder).text_carType.setText(parkBeanList.get(position).getCarType());
 
         if (parkBeanList.get(position).getParkType().equals("1")) {
+            ((MyViewHolder) holder).text_carType.setVisibility(View.INVISIBLE);
             ((MyViewHolder) holder).img_parkType.setImageDrawable(context.getResources().getDrawable(R.drawable.kongxinchewei));
+            ((MyViewHolder) holder).text_carNum.setText("空");
+            ((MyViewHolder) holder).text_carNum.setTextColor(context.getResources().getColor(R.color.youche));
         } else if (parkBeanList.get(position).getParkType().equals("2")) {
+            ((MyViewHolder) holder).text_carNum.setText("有车");
+            ((MyViewHolder) holder).text_carNum.setTextColor(context.getResources().getColor(R.color.youche));
             ((MyViewHolder) holder).img_parkType.setImageDrawable(context.getResources().getDrawable(R.drawable.youcheliang));
-
+            ((MyViewHolder) holder).text_carType.setVisibility(View.INVISIBLE);
         } else if (parkBeanList.get(position).getParkType().equals("3")) {
             ((MyViewHolder) holder).img_parkType.setImageDrawable(context.getResources().getDrawable(R.drawable.qianfei));
             ((MyViewHolder) holder).text_carNum.setText(parkBeanList.get(position).getCarNum());
