@@ -4,9 +4,11 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.pda.carmanager.R;
+import com.pda.carmanager.bean.PayInfoBean;
 import com.pda.carmanager.bean.PrintBean;
 import com.pda.carmanager.config.UrlConfig;
-import com.pda.carmanager.model.inter.IPostParkInter;
+import com.pda.carmanager.model.inter.IPayInfoInter;
+import com.pda.carmanager.presenter.inter.IPayInfoPreInter;
 import com.pda.carmanager.presenter.inter.IPostParkPreInter;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
@@ -34,32 +36,27 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Administrator on 2017/12/17 0017.
  */
 
-public class PostParkModel implements IPostParkInter {
+public class PayInfoModel implements IPayInfoInter {
     private Context context;
-    private IPostParkPreInter iPostParkPreInter;
-    String decs;
-    PrintBean printBean;
+    private IPayInfoPreInter iPayInfoPreInter;
+    private String decs;
+    private PayInfoBean payInfoBean;
 
-    public PostParkModel(Context context, IPostParkPreInter iPostParkPreInter) {
+    public PayInfoModel(Context context, IPayInfoPreInter iPayInfoPreInter) {
         this.context = context;
-        this.iPostParkPreInter = iPostParkPreInter;
+        this.iPayInfoPreInter = iPayInfoPreInter;
     }
 
     @Override
-    public void postPark(final String id, final String carnum, final String carType, final String img1, final String img2) {
+    public void getPayInfo(final String id) {
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
                 if (OKHttpUtil.isConllection(context)) {
-                    String[] key = new String[]{"id", "carnum", "cartype", "img1", "img2"};
+                    String[] key = new String[]{"parkingrecordid"};
                     Map map = new HashMap();
-                    map.put("id", id);
-                    map.put("carnum", carnum);
-                    map.put("cartype", carType);
-                    map.put("img1", img1);
-                    map.put("img2", img2);
-
-                    String Http = OKHttpUtil.GetMessage(context, UrlConfig.PostParkPost, key, map);
+                    map.put("parkingrecordid", id);
+                    String Http = OKHttpUtil.GetMessage(context, UrlConfig.PayInfoPost, key, map);
                     if (Http != null) {
                         JSONObject jsonObject;
                         try {
@@ -69,31 +66,15 @@ public class PostParkModel implements IPostParkInter {
                             decs = jsonObject.getString("desc");
 
                             if (code.equals("0")) {
-                                printBean = new PrintBean();
+                                payInfoBean = new PayInfoBean();
                                 JSONObject jsonObject1 = new JSONObject(jsonObject.getString("result"));
-                                printBean.setCarNo(jsonObject1.getString("MyCarNo"));
-                                printBean.setStartTime(jsonObject1.getString("StartTime"));
-                                if (StringEqualUtil.stringNull(jsonObject1.getString("MemberNo"))) {
-                                    printBean.setMemberNo(jsonObject1.getString("MemberNo"));
-                                }
-                                printBean.setUrl(jsonObject1.getString("Url"));
-                                List<PrintBean.IsQFModel> isQFModels = new ArrayList<PrintBean.IsQFModel>();
-                                if (StringEqualUtil.stringNull(jsonObject1.getString("IsQFModel"))) {
-                                    JSONArray jsonArray = new JSONArray(jsonObject1.getString("IsQFModel"));
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        PrintBean.IsQFModel isQFModel = new PrintBean.IsQFModel();
-                                        JSONObject temp = (JSONObject) jsonArray.get(i);
-                                        isQFModel.setJD(temp.getString("JD"));
-                                        isQFModel.setStartTime(temp.getString("StartTime"));
-                                        isQFModel.setStopTime(temp.getString("StopTime"));
-                                        isQFModel.setCarNO(temp.getString("MyCarNo"));
-                                        isQFModel.setMoney(temp.getString("TotalMoney"));
-                                        isQFModels.add(isQFModel);
-                                    }
-                                }
-                                if (isQFModels.size() > 0) {
-                                    printBean.setIsQFModels(isQFModels);
-                                }
+                                payInfoBean.setTotalMoney(jsonObject1.getString("TotalMoney"));
+                                payInfoBean.setCurMoney(jsonObject1.getString("CurMoney"));
+                                payInfoBean.setQFMoney(jsonObject1.getString("QFMoney"));
+                                payInfoBean.setYHMoney(jsonObject1.getString("YHMoney"));
+                                payInfoBean.setCarNum(jsonObject1.getString("CarNum"));
+                                payInfoBean.setStartTime(jsonObject1.getString("StartTime"));
+                                payInfoBean.setStopTime(jsonObject1.getString("StopTime"));
                                 e.onNext(0);
                             } else if (code.equals("1")) {
                                 e.onNext(1);
@@ -122,27 +103,26 @@ public class PostParkModel implements IPostParkInter {
                 switch (integer) {
                     case 0:
                         DialogUtil.dismise();
-                        iPostParkPreInter.postSuccess(printBean);
+                        iPayInfoPreInter.getSuccess(payInfoBean);
                         break;
                     case 1:
                         DialogUtil.dismise();
-                        iPostParkPreInter.postFail(context.getResources().getString(R.string.httpOut));
+                        iPayInfoPreInter.getFail(context.getResources().getString(R.string.httpOut));
                         Toast.makeText(context, context.getResources().getString(R.string.httpOut), Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
                         DialogUtil.dismise();
-                        iPostParkPreInter.postFail(decs);
+                        iPayInfoPreInter.getFail(decs);
 
                         Toast.makeText(context, decs, Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
                         DialogUtil.dismise();
-                        iPostParkPreInter.postFail(context.getResources().getString(R.string.httpError));
+                        iPayInfoPreInter.getFail(context.getResources().getString(R.string.httpError));
                         Toast.makeText(context, context.getResources().getString(R.string.httpError), Toast.LENGTH_SHORT).show();
                         break;
                     case 4:
                         DialogUtil.dismise();
-                        iPostParkPreInter.postFail(context.getResources().getString(R.string.httpNo));
                         DialogUtil.showSetMessage(context);
                         break;
                 }

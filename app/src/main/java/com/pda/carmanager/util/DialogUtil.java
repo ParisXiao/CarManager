@@ -223,7 +223,7 @@ public class DialogUtil {
     }
 
 
-    public static void showBoXunVIP(Context context, String text) {
+    public static void showBoXunVIP(Context context, String text,int i) {
         if (!(progressDialog != null && progressDialog.isShowing())) {
             try {
                 progressDialog = new AlertDialog.Builder(context).create();
@@ -238,10 +238,17 @@ public class DialogUtil {
                 window.setGravity(Gravity.CENTER);
                 lp.alpha = 1f;
                 window.setAttributes(lp);
-                window.setContentView(R.layout.layout_choose_dialog);
+                window.setContentView(R.layout.layout_vip_dialog);
                 TextView vipNum = (TextView) window.findViewById(R.id.vip_text);
+                TextView t1 = (TextView) window.findViewById(R.id.text1);
                 Button vipCom = (Button) window.findViewById(R.id.vip_btn);
-                vipNum.setText(text);
+                if (i==0){
+                    vipNum.setText(text);
+                }else {
+                    vipNum.setVisibility(View.GONE);
+                    t1.setVisibility(View.GONE);
+                }
+
                 vipCom.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

@@ -85,6 +85,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     private boolean reFreshNext;
     private boolean hasNext;
     private boolean isRefreah;
+    private boolean isOnResume = false;
     private int list = 10;
     private static final int RequsetPark = 0x12;
     public int level_battry = 50;
@@ -188,13 +189,13 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
         parkBeanList = new ArrayList<>();
         myParkAdapter = new MyParkAdapter(this, parkBeanListshow, this);
         pullRefresh_myPark.setAdapter(myParkAdapter);
-        parkPresenter.postParkList(page + "", "", parkBeanList);
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        reFreshNext = true;
         parkPresenter.postParkList(page + "", "", parkBeanList);
     }
 
@@ -216,12 +217,14 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void payCar(String id) {
-        AMUtil.actionStart(MyParkActivity.this, PayMessageActivity.class);
+        Intent intent = new Intent(MyParkActivity.this, PayMessageActivity.class);
+        intent.putExtra("ID", id);
+        startActivity(intent);
     }
 
     @Override
     public void AutoPayCar(String carNum, String id) {
-        DialogUtil.showBoXunVIP(MyParkActivity.this, carNum);
+        DialogUtil.showBoXunVIP(MyParkActivity.this, "", 1);
     }
 
     @Override
@@ -237,7 +240,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
                     if (StringEqualUtil.stringNull(printBean.getMemberNo())) {
                         showChooseMessage(this, CarNum, "是否打印小票");
                     } else {
-                        DialogUtil.showBoXunVIP(MyParkActivity.this, printBean.getCarNum());
+                        DialogUtil.showBoXunVIP(MyParkActivity.this, printBean.getCarNum(), 0);
                     }
 
                     break;
@@ -279,6 +282,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void parkSuccess(String pages) {
         this.Pages = Integer.valueOf(pages);
+        isOnResume = true;
         if (Pages <= page) {
             hasNext = false;
         } else {

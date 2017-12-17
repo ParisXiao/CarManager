@@ -15,7 +15,12 @@ import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
+import com.pda.carmanager.bean.PayInfoBean;
+import com.pda.carmanager.presenter.PayInfoPresenter;
+import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
+import com.pda.carmanager.util.UserInfoClearUtil;
+import com.pda.carmanager.view.inter.IPayInfoViewInter;
 import com.xys.libzxing.zxing.activity.CaptureActivity;
 import com.xys.libzxing.zxing.encoding.EncodingUtils;
 
@@ -25,7 +30,7 @@ import java.io.ByteArrayOutputStream;
  * Created by Administrator on 2017/12/11 0011.
  */
 
-public class PayMessageActivity extends BaseActivity implements View.OnClickListener {
+public class PayMessageActivity extends BaseActivity implements View.OnClickListener,IPayInfoViewInter {
     private TextView toolbar_mid;
     private ImageButton toolbar_left_btn;
     private Toolbar toolbar;
@@ -46,6 +51,8 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
     private RelativeLayout weixin_user;
     private Button button_pay_sure;
     private String flag="";
+    private PayInfoPresenter payInfoPresenter;
+    private PayInfoBean payInfoBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +64,10 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
 
     private void initaData() {
         toolbar_mid.setText(R.string.title_pay);
+        DialogUtil.showMessage(this,getResources().getString(R.string.text_loading));
+        String Id=getIntent().getStringExtra("ID");
+        payInfoPresenter=new PayInfoPresenter(this,this);
+        payInfoPresenter.getPayInfo(Id);
     }
 
     private void initView() {
@@ -190,5 +201,34 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
         if (resultCode == RESULT_OK) {
             String result = data.getExtras().getString("result");
         }
+    }
+
+    @Override
+    public void getSuccess(final PayInfoBean payInfoBean) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (payInfoBean!=null)
+                pay_money.setText(payInfoBean.getCurMoney());
+                allpay_money.setText(payInfoBean.getTotalMoney());
+                discount.setText("优惠："+payInfoBean.getYHMoney());
+                arrears_money.setText("欠费："+payInfoBean.getQFMoney());
+                pay_carnum.setText(payInfoBean.getCarNum());
+                pay_start_time.setText(payInfoBean.getStartTime()+"至");
+                pay_end_time.setText(payInfoBean.getStopTime());
+            }
+        });
+    }
+
+    @Override
+    public void getFail(String msg) {
+        if (msg.equals(getResources().getString(R.string.httpOut))) {
+            UserInfoClearUtil.ClearUserInfo(PayMessageActivity.this);
+            AMUtil.actionStart(PayMessageActivity.this, LoginActivity.class);
+            finish();
+        } else {
+            finish();
+        }
+
     }
 }
