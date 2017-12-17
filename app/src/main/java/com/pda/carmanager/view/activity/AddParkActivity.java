@@ -1,5 +1,6 @@
 package com.pda.carmanager.view.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -7,6 +8,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -197,6 +199,7 @@ public class AddParkActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void getSuccesss() {
+
         List<String> str = new ArrayList<>();
         if (sweetBeens.size() > 0) {
             for (int i = 0; i < sweetBeens.size(); i++) {
@@ -235,7 +238,12 @@ public class AddParkActivity extends BaseActivity implements View.OnClickListene
     }
 
     @Override
-    public void addSuccess() {
+    public void addSuccess()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+        }
         finish();
     }
 

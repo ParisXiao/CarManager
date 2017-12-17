@@ -175,9 +175,9 @@ public class ScanService extends Service {
 		// TODO Auto-generated method stub
 
 //		openDevice();
-
-		Toast.makeText(getApplicationContext(), "扫描服务初始化", Toast.LENGTH_SHORT)
-				.show();
+//
+//		Toast.makeText(getApplicationContext(), "打印服务初始化", Toast.LENGTH_SHORT)
+//				.show();
 
 		if (mComFd > 0) {
 			isOpen = true;

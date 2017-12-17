@@ -80,14 +80,14 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     private List<MyParkBean> parkBeanListshow = new ArrayList<>();
     private PopupWindow popupWindow1;
     private ParkPresenter parkPresenter;
-    private int page = 0;
-    private int Pages=0;
+    private int page = 1;
+    private int Pages = 0;
     private boolean reFreshNext;
     private boolean hasNext;
     private boolean isRefreah;
     private int list = 10;
-    private static final int RequsetPark=0x12;
-    public int level_battry=50;
+    private static final int RequsetPark = 0x12;
+    public int level_battry = 50;
 
     /**
      * 打印小票
@@ -99,7 +99,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     private Bitmap mBitmap = null;
     PrintBean printBean;
     private String CarNum;
-    private int load=0;
+    private int load = 0;
 
     private Handler handler = new Handler() {
         @Override
@@ -123,17 +123,17 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
                     }
                     isRefreah = false;
                     reFreshNext = false;
-                    if (load==1){
+                    if (load == 1) {
                         pullRefresh_myPark.setRefreshComplete();
-                    }else if (load==2){
+                    } else if (load == 2) {
                         pullRefresh_myPark.setLoadMoreComplete();
                     }
 
                     break;
                 case 1:
-                    if (load==1){
+                    if (load == 1) {
                         pullRefresh_myPark.setRefreshComplete();
-                    }else if (load==2){
+                    } else if (load == 2) {
                         pullRefresh_myPark.setLoadMoreComplete();
                     }
                     break;
@@ -188,14 +188,14 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
         parkBeanList = new ArrayList<>();
         myParkAdapter = new MyParkAdapter(this, parkBeanListshow, this);
         pullRefresh_myPark.setAdapter(myParkAdapter);
-        parkPresenter.postParkList("0", "",parkBeanList);
+        parkPresenter.postParkList(page + "", "", parkBeanList);
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
+        parkPresenter.postParkList(page + "", "", parkBeanList);
     }
 
     @Override
@@ -209,8 +209,8 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void writeCarNum(String id) {
-        Intent intent=new Intent(MyParkActivity.this,DialogCarWriteActivity.class);
-        intent.putExtra("ParkId",id);
+        Intent intent = new Intent(MyParkActivity.this, DialogCarWriteActivity.class);
+        intent.putExtra("ParkId", id);
         startActivityForResult(intent, RequsetPark);
     }
 
@@ -220,9 +220,10 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    public void AutoPayCar(String carNum,String id) {
+    public void AutoPayCar(String carNum, String id) {
         DialogUtil.showBoXunVIP(MyParkActivity.this, carNum);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -233,9 +234,9 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
             switch (requestCode) {
                 case RequsetPark:
                     printBean = (PrintBean) data.getSerializableExtra("Print");
-                    if (StringEqualUtil.stringNull(printBean.getMemberNo())){
-                        showChooseMessage(this,CarNum,"是否打印小票");
-                    }else {
+                    if (StringEqualUtil.stringNull(printBean.getMemberNo())) {
+                        showChooseMessage(this, CarNum, "是否打印小票");
+                    } else {
                         DialogUtil.showBoXunVIP(MyParkActivity.this, printBean.getCarNum());
                     }
 
@@ -244,30 +245,31 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
         }
 
     }
+
     @Override
     public void onRefresh() {
-        load=1;
+        load = 1;
         if (!isRefreah) {
             isRefreah = true;
             if (!reFreshNext) {
-                page = 0;
+                page = 1;
             }
-            parkPresenter.postParkList(page+"","",parkBeanList);
+            parkPresenter.postParkList(page + "", "", parkBeanList);
         }
     }
 
     @Override
     public void onLoadMore() {
-        load=2;
+        load = 2;
         if (hasNext) {
             page += 1;
             reFreshNext = true;
             if (!isRefreah) {
                 isRefreah = true;
                 if (!reFreshNext) {
-                    page = 0;
+                    page = 1;
                 }
-                parkPresenter.postParkList(page+"","",parkBeanList);
+                parkPresenter.postParkList(page + "", "", parkBeanList);
             }
         } else {
             handler.sendEmptyMessageDelayed(1, 1000);
@@ -276,8 +278,8 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void parkSuccess(String pages) {
-        this.Pages=Integer.valueOf(pages);
-        if (Pages<=page +1) {
+        this.Pages = Integer.valueOf(pages);
+        if (Pages <= page) {
             hasNext = false;
         } else {
             hasNext = true;
@@ -292,10 +294,11 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
             UserInfoClearUtil.ClearUserInfo(MyParkActivity.this);
             AMUtil.actionStart(MyParkActivity.this, LoginActivity.class);
             finish();
-        }else {
+        } else {
             finish();
         }
     }
+
     private void initPrint() {
         getButerryNum();
         mPrintQueue = new PrintQueue(this, ScanService.mApi);
@@ -392,42 +395,44 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
             sb.append("            本次停车信息");
             sb.append("\n");
             sb.append("停车街道：");
-            sb.append("   "+PreferenceUtils.getInstance(MyParkActivity.this).getString(AccountConfig.Departmentname));
+            sb.append("   " + PreferenceUtils.getInstance(MyParkActivity.this).getString(AccountConfig.Departmentname));
             sb.append("\n");
             sb.append("车位编号：");
-            sb.append("   "+printBean.getCarNo());
+            sb.append("   " + printBean.getCarNo());
             sb.append("\n");
             sb.append("车牌号  ：");
-            sb.append("   "+printBean.getCarNum());
+            sb.append("   " + printBean.getCarNum());
             sb.append("\n");
             sb.append("停车时刻： ");
             sb.append(printBean.getStartTime());
             sb.append("\n");
-            if (printBean.getIsQFModels().size()>0){
-                for (int i = 0; i < printBean.getIsQFModels().size(); i++) {
-                    sb.append("==============================");
-                    sb.append("\n");
-                    sb.append("             欠费信息             ");
-                    sb.append("\n");
-                    sb.append("停车街道：");
-                    sb.append("   "+printBean.getIsQFModels().get(i).getJD());
-                    sb.append("\n");
-                    sb.append("车位编号：");
-                    sb.append("   "+printBean.getIsQFModels().get(i).getCarNO());
-                    sb.append("\n");
-                    sb.append("停车时刻： ");
-                    sb.append(printBean.getIsQFModels().get(i).getStartTime());
+            if (printBean.getIsQFModels() != null) {
+                if (printBean.getIsQFModels().size() > 0) {
+                    for (int i = 0; i < printBean.getIsQFModels().size(); i++) {
+                        sb.append("==============================");
+                        sb.append("\n");
+                        sb.append("             欠费信息");
+                        sb.append("\n");
+                        sb.append("停车街道：");
+                        sb.append("   " + printBean.getIsQFModels().get(i).getJD());
+                        sb.append("\n");
+                        sb.append("车位编号：");
+                        sb.append("   " + printBean.getIsQFModels().get(i).getCarNO());
+                        sb.append("\n");
+                        sb.append("停车时刻： ");
+                        sb.append(printBean.getIsQFModels().get(i).getStartTime());
 
-                    sb.append("\n");
-                    sb.append("         至"+printBean.getIsQFModels().get(i).getStopTime());
-                    sb.append("\n");
-                    sb.append("欠费金额：");
-                    sb.append("         "+printBean.getIsQFModels().get(i).getMoney());
-                    sb.append("\n");
-                    sb.append("==============================");
+                        sb.append("\n");
+                        sb.append("         至" + printBean.getIsQFModels().get(i).getStopTime());
+                        sb.append("\n");
+                        sb.append("欠费金额：");
+                        sb.append("         " + printBean.getIsQFModels().get(i).getMoney() + "元");
+                        sb.append("\n");
+
+                    }
                 }
             }
-
+            sb.append("==============================");
             sb.append("\n");
             sb.append("\n");
             sb.append("     您离开时可用支付宝或微信");
@@ -437,9 +442,6 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
             sb.append("\n");
             text = sb.toString().getBytes("GBK");
             addPrintTextWithSize(1, concentration, text);
-
-
-
 
 
             int mWidth = 300;
@@ -458,7 +460,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
 
             mBitmap = BarcodeCreater.encode2dAsBitmap(printBean.getUrl(), mWidth,
                     mHeight, 2);
-            byte[]  printData = BitmapTools.bitmap2PrinterBytes(mBitmap);
+            byte[] printData = BitmapTools.bitmap2PrinterBytes(mBitmap);
             mPrintQueue.addBmp(concentration, 5, mBitmap.getWidth(),
                     mBitmap.getHeight(), printData);
 
@@ -481,6 +483,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
             e.printStackTrace();
         }
     }
+
     /*
         * 打印文字 size 1 --倍大小 2--2倍大小
         */
@@ -488,9 +491,9 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
         if (data == null)
             return;
         // 2倍字体大小
-        byte[] _2x = new byte[] { 0x1b, 0x57, 0x02 };
+        byte[] _2x = new byte[]{0x1b, 0x57, 0x02};
         // 1倍字体大小
-        byte[] _1x = new byte[] { 0x1b, 0x57, 0x01 };
+        byte[] _1x = new byte[]{0x1b, 0x57, 0x01};
         byte[] mData = null;
         if (size == 1) {
             mData = new byte[3 + data.length];
@@ -511,10 +514,10 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
         }
 
     }
-    public void getButerryNum(){
+
+    public void getButerryNum() {
         registerReceiver(new BatteryReceiver(), new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
     }
-
 
 
     private void showChooseMessage(final Context context, String text, String textContent) {
@@ -551,15 +554,15 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public void onClick(View v) {
                         // TODO Auto-generated method stub
-                        if(!isCanPrint) return;
+                        if (!isCanPrint) return;
 
-                        if(level_battry<=12){
+                        if (level_battry <= 12) {
                             Toast.makeText(MyParkActivity.this, "低电量不能打印", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
-                        byte[] test = new byte[] { 0x33, 0x34, 0x31, 0x33, 0x34, 0x31,
-                                0x33, 0x34, 0x31, 0x33, 0x34, 0x31, 0x00 };
+                        byte[] test = new byte[]{0x33, 0x34, 0x31, 0x33, 0x34, 0x31,
+                                0x33, 0x34, 0x31, 0x33, 0x34, 0x31, 0x00};
                         String string = "微信支付 微信支付\n";
 
                         try {
@@ -580,13 +583,15 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    /**接受电量改变广播*/
+    /**
+     * 接受电量改变广播
+     */
     class BatteryReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            if(intent.getAction().equals(Intent.ACTION_BATTERY_CHANGED)){
+            if (intent.getAction().equals(Intent.ACTION_BATTERY_CHANGED)) {
 
                 level_battry = intent.getIntExtra("level", 0);
             }

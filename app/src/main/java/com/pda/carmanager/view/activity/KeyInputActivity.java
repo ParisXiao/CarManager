@@ -57,15 +57,21 @@ public class KeyInputActivity extends BaseActivity implements View.OnClickListen
             inputType=intent.getIntExtra("inputType",inputType);
             if (inputType==1){
                 edit_key6.setVisibility(View.VISIBLE);
+                editTexts=new TextView[]{edit_area1,edit_area2,edit_key1,edit_key2,edit_key3,edit_key4,edit_key5,edit_key6};
+                keyboardUtil=new LicenseKeyboardUtil(KeyInputActivity.this,editTexts,0);
             }
             else if (inputType==2){
                 edit_key5.setVisibility(View.GONE);
                 text_stucar.setVisibility(View.VISIBLE);
+                editTexts=new TextView[]{edit_area1,edit_area2,edit_key1,edit_key2,edit_key3,edit_key4};
+                keyboardUtil=new LicenseKeyboardUtil(KeyInputActivity.this,editTexts,0);
 
+            }else {
+                editTexts=new TextView[]{edit_area1,edit_area2,edit_key1,edit_key2,edit_key3,edit_key4,edit_key5};
+                keyboardUtil=new LicenseKeyboardUtil(KeyInputActivity.this,editTexts,0);
             }
         }
-        editTexts=new TextView[]{edit_area1,edit_area2,edit_key1,edit_key2,edit_key3,edit_key4,edit_key5,edit_key6};
-        keyboardUtil=new LicenseKeyboardUtil(KeyInputActivity.this,editTexts,0);
+
         keyboardUtil.showKeyboard();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);

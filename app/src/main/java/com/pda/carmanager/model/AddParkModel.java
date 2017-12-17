@@ -280,6 +280,7 @@ public class AddParkModel implements AddParkInter {
                     case 0:
                         DialogUtil.dismise();
                         iAddParkPreInter.addSuccess();
+                        Toast.makeText(context,"新增车位成功", Toast.LENGTH_SHORT).show();
                         break;
                     case 1:
                         DialogUtil.dismise();

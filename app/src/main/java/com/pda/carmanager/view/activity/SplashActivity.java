@@ -71,7 +71,7 @@ public class SplashActivity extends BaseActivity {
             switch (cmdFlag) {
                 case PosApi.POS_INIT:
                     if (state == PosApi.COMM_STATUS_SUCCESS) {
-                        Toast.makeText(getApplicationContext(), "设备初始化成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "打印设备初始化成功", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "设备初始化失败", Toast.LENGTH_SHORT).show();
                     }

@@ -137,8 +137,8 @@ public class LicenseKeyboardUtil {
                     }
                     edits[currentEditText].setText(letterAndDigit[primaryCode]);
                     currentEditText++;
-                    if (currentEditText > 6) {
-                        currentEditText = 6;
+                    if (currentEditText > edits.length-1) {
+                        currentEditText = edits.length-1;
                     }
                     edits[currentEditText-1].setBackground(ctx.getResources().getDrawable(R.drawable.car_license_inputbox));
                     edits[currentEditText].setBackground(ctx.getResources().getDrawable(R.drawable.car_license_inputbox_check));

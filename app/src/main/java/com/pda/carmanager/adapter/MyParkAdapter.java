@@ -81,6 +81,8 @@ public class MyParkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ((MyViewHolder) holder).text_carNum.setText(parkBeanList.get(position).getCarNum());
             ((MyViewHolder) holder).text_carType.setVisibility(View.VISIBLE);
             ((MyViewHolder) holder).text_carNum.setVisibility(View.VISIBLE);
+
+            ((MyViewHolder) holder).text_carNum.setTextColor(context.getResources().getColor(R.color.park_blue));
             if (parkBeanList.get(position).getCarType().equals("货车")) {
                 Resources resources = context.getResources();
                 Drawable drawable1 = resources.getDrawable(R.drawable.shape_login_bigcar);
@@ -95,6 +97,7 @@ public class MyParkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ((MyViewHolder) holder).text_carNum.setText(parkBeanList.get(position).getCarNum());
             ((MyViewHolder) holder).text_carType.setVisibility(View.VISIBLE);
             ((MyViewHolder) holder).text_carNum.setVisibility(View.VISIBLE);
+            ((MyViewHolder) holder).text_carNum.setTextColor(context.getResources().getColor(R.color.park_blue));
             if (parkBeanList.get(position).getCarType().equals("货车")) {
                 Resources resources = context.getResources();
                 Drawable drawable1 = resources.getDrawable(R.drawable.shape_login_bigcar);
