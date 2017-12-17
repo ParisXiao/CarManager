@@ -30,7 +30,7 @@ import java.io.ByteArrayOutputStream;
  * Created by Administrator on 2017/12/11 0011.
  */
 
-public class PayMessageActivity extends BaseActivity implements View.OnClickListener,IPayInfoViewInter {
+public class PayMessageActivity extends BaseActivity implements View.OnClickListener, IPayInfoViewInter {
     private TextView toolbar_mid;
     private ImageButton toolbar_left_btn;
     private Toolbar toolbar;
@@ -50,9 +50,11 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
     private ImageView img_w_user;
     private RelativeLayout weixin_user;
     private Button button_pay_sure;
-    private String flag="";
+    private String flag = "";
     private PayInfoPresenter payInfoPresenter;
-    private PayInfoBean payInfoBean;
+    private long firstTime = 0;
+    private String money = "";
+    private boolean flags = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +66,9 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
 
     private void initaData() {
         toolbar_mid.setText(R.string.title_pay);
-        DialogUtil.showMessage(this,getResources().getString(R.string.text_loading));
-        String Id=getIntent().getStringExtra("ID");
-        payInfoPresenter=new PayInfoPresenter(this,this);
+        DialogUtil.showMessage(this, getResources().getString(R.string.text_loading));
+        String Id = getIntent().getStringExtra("ID");
+        payInfoPresenter = new PayInfoPresenter(this, this);
         payInfoPresenter.getPayInfo(Id);
     }
 
@@ -109,55 +111,65 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.button_pay_sure:
-                if (flag.equals("")){
-                    Toast.makeText(PayMessageActivity.this,R.string.choose_paytype,Toast.LENGTH_SHORT).show();
-                }else if (flag.equals("asao")){
-                    startActivityForResult(new Intent(PayMessageActivity.this, CaptureActivity.class), 0);
-                    finish();
-                }else  if (flag.equals("aimg")) {
-                    // 位图
-                    try {
-                        /**
-                         * 参数：1.文本 2 3.二维码的宽高 4.二维码中间的那个logo
-                         */
-                        Intent intent=new Intent(PayMessageActivity.this,ZXingImageActivity.class);
-                        Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-                        Bitmap bitmap = EncodingUtils.createQRCode("测试", 600, 600, logoBitmap);
-                        ByteArrayOutputStream baos=new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                        byte [] bitmapByte =baos.toByteArray();
-                        intent.putExtra("zxingBitmap", bitmapByte);
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                if (System.currentTimeMillis() - firstTime < 1 * 60 * 1000) {
+                    if (!flags) {
+                        flags = true;
+                        if (flag.equals("")) {
+                            Toast.makeText(PayMessageActivity.this, R.string.choose_paytype, Toast.LENGTH_SHORT).show();
+                        } else if (flag.equals("asao")) {
+                            startActivityForResult(new Intent(PayMessageActivity.this, CaptureActivity.class), 0);
+                            finish();
+                        } else if (flag.equals("aimg")) {
+                            // 位图
+                            try {
+                                /**
+                                 * 参数：1.文本 2 3.二维码的宽高 4.二维码中间的那个logo
+                                 */
+                                Intent intent = new Intent(PayMessageActivity.this, ZXingImageActivity.class);
+                                Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+                                Bitmap bitmap = EncodingUtils.createQRCode("测试", 600, 600, logoBitmap);
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                                byte[] bitmapByte = baos.toByteArray();
+                                intent.putExtra("zxingBitmap", bitmapByte);
+                                startActivity(intent);
+                            } catch (Exception e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+
+
+                            finish();
+                        } else if (flag.equals("wsao")) {
+                            startActivityForResult(new Intent(PayMessageActivity.this, CaptureActivity.class), 0);
+                            finish();
+                        } else if (flag.equals("wimg")) {
+
+                            // 位图
+                            try {
+                                /**
+                                 * 参数：1.文本 2 3.二维码的宽高 4.二维码中间的那个logo
+                                 */
+                                Intent intent = new Intent(PayMessageActivity.this, ZXingImageActivity.class);
+                                Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+                                Bitmap bitmap = EncodingUtils.createQRCode("测试", 600, 600, logoBitmap);
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                                byte[] bitmapByte = baos.toByteArray();
+                                intent.putExtra("zxingBitmap", bitmapByte);
+                                startActivity(intent);
+                            } catch (Exception e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+                            finish();
+                        }
+                    } else {
+                        if (!flags) {
+                            flags = true;
+
+                        }
                     }
-
-
-                    finish();
-                }else if (flag.equals("wsao")){
-                    startActivityForResult(new Intent(PayMessageActivity.this, CaptureActivity.class), 0);
-                    finish();
-                }else if (flag.equals("wimg")){
-
-                    // 位图
-                    try {
-                        /**
-                         * 参数：1.文本 2 3.二维码的宽高 4.二维码中间的那个logo
-                         */
-                        Intent intent=new Intent(PayMessageActivity.this,ZXingImageActivity.class);
-                        Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-                        Bitmap bitmap = EncodingUtils.createQRCode("测试", 600, 600, logoBitmap);
-                        ByteArrayOutputStream baos=new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                        byte [] bitmapByte =baos.toByteArray();
-                        intent.putExtra("zxingBitmap", bitmapByte);
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    finish();
                 }
                 break;
             case R.id.aipay_manager:
@@ -166,7 +178,7 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
                 img_a_user.setImageDrawable(getResources().getDrawable(R.drawable.checkbox_moren));
                 img_w_manager.setImageDrawable(getResources().getDrawable(R.drawable.checkbox_moren));
                 img_w_user.setImageDrawable(getResources().getDrawable(R.drawable.checkbox_moren));
-                flag="asao";
+                flag = "asao";
 
                 break;
             case R.id.aipay_user:
@@ -175,14 +187,14 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
                 img_a_user.setImageDrawable(getResources().getDrawable(R.drawable.checkbox_xuanzhong));
                 img_w_manager.setImageDrawable(getResources().getDrawable(R.drawable.checkbox_moren));
                 img_w_user.setImageDrawable(getResources().getDrawable(R.drawable.checkbox_moren));
-                flag="aimg";
+                flag = "aimg";
                 break;
             case R.id.weixin_manager:
                 img_a_manager.setImageDrawable(getResources().getDrawable(R.drawable.checkbox_moren));
                 img_a_user.setImageDrawable(getResources().getDrawable(R.drawable.checkbox_moren));
                 img_w_manager.setImageDrawable(getResources().getDrawable(R.drawable.checkbox_xuanzhong));
                 img_w_user.setImageDrawable(getResources().getDrawable(R.drawable.checkbox_moren));
-                flag="wsao";
+                flag = "wsao";
                 break;
             case R.id.weixin_user:
 
@@ -190,10 +202,11 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
                 img_a_user.setImageDrawable(getResources().getDrawable(R.drawable.checkbox_moren));
                 img_w_manager.setImageDrawable(getResources().getDrawable(R.drawable.checkbox_moren));
                 img_w_user.setImageDrawable(getResources().getDrawable(R.drawable.checkbox_xuanzhong));
-                flag="wimg";
+                flag = "wimg";
                 break;
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
@@ -208,14 +221,16 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (payInfoBean!=null)
-                pay_money.setText(payInfoBean.getCurMoney());
+                if (payInfoBean != null)
+                    money = payInfoBean.getCurMoney();
+                pay_money.setText(money);
                 allpay_money.setText(payInfoBean.getTotalMoney());
-                discount.setText("优惠："+payInfoBean.getYHMoney());
-                arrears_money.setText("欠费："+payInfoBean.getQFMoney());
+                discount.setText("优惠：" + payInfoBean.getYHMoney());
+                arrears_money.setText("欠费：" + payInfoBean.getQFMoney());
                 pay_carnum.setText(payInfoBean.getCarNum());
-                pay_start_time.setText(payInfoBean.getStartTime()+"至");
+                pay_start_time.setText(payInfoBean.getStartTime() + "至");
                 pay_end_time.setText(payInfoBean.getStopTime());
+                firstTime = System.currentTimeMillis();
             }
         });
     }
