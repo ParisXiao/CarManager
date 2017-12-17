@@ -39,6 +39,7 @@ import com.pda.carmanager.util.BarcodeCreater;
 import com.pda.carmanager.util.BitmapTools;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.PreferenceUtils;
+import com.xys.libzxing.zxing.encoding.EncodingUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -83,6 +84,8 @@ public class PDAPrintActivity extends BaseActivity {
     MediaPlayer player;
 
     boolean isCanPrint=true;
+    private StringBuilder  stringBuilder;
+    private Bitmap printBitmap;
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -270,6 +273,7 @@ public class PDAPrintActivity extends BaseActivity {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 if(!isCanPrint) return;
+                printBitmap = EncodingUtils.createQRCode("http://baidu.com", 400, 400, null);
 
                 if(level_battry<=12){
                     Toast.makeText(PDAPrintActivity.this, "Low power,can't print!", Toast.LENGTH_SHORT).show();
@@ -286,8 +290,8 @@ public class PDAPrintActivity extends BaseActivity {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-
                 printMix();
+
 
             }
         });
@@ -605,62 +609,59 @@ public class PDAPrintActivity extends BaseActivity {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             sb.append(format.format(date));
             sb.append("\n");
-            sb.append("==============================");
-            sb.append("\n");
-            sb.append("             欠费信息             ");
-            sb.append("\n");
-            sb.append("停车街道：");
-            sb.append("   重庆市冉家坝a街道");
-            sb.append("\n");
-            sb.append("车位编号：");
-            sb.append("   231841284");
-            sb.append("\n");
-            sb.append("停车时刻： ");
-            long time1 = System.currentTimeMillis();
-            Date date1 = new Date(time1);
-            SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            sb.append(format.format(date1));
+            sb = new StringBuilder();
+            for (int i = 0; i < 3; i++) {
 
-            sb.append("\n");
-            sb.append("         至"+format.format(date1));
-            sb.append("\n");
-            sb.append("欠费金额：");
-            sb.append("         10元");
-            sb.append("\n");
+                sb.append("==============================");
+                sb.append("\n");
+                sb.append("             欠费信息");
+                sb.append("\n");
+                sb.append("停车街道：");
+                sb.append("   " + "SS");
+                sb.append("\n");
+                sb.append("车位编号：");
+                sb.append("\n");
+                sb.append("停车时刻： ");
+
+                sb.append("\n");
+                sb.append("\n");
+                sb.append("欠费金额：");
+                sb.append("\n");
+            }
             sb.append("==============================");
             sb.append("\n");
             sb.append("\n");
-                sb.append("     您离开时可用支付宝或微信");
+            sb.append("     您离开时可用支付宝或微信");
             sb.append("\n");
-                sb.append("     扫描下方二维码自主缴费");
+            sb.append("     扫描下方二维码自主缴费");
+            sb.append("\n");
+            sb.append("\n");
+            sb.append("\n");
             sb.append("\n");
             sb.append("\n");
             text = sb.toString().getBytes("GBK");
             addPrintTextWithSize(1, concentration, text);
 
 
-
-
-
             int mWidth = 300;
             int mHeight = 60;
-//            mBitmap = BarcodeCreater.creatBarcode(getApplicationContext(),
+//            printBitmap = BarcodeCreater.creatBarcode(getApplicationContext(),
 //                    "1234567890", mWidth, mHeight, true, 1);
-//            byte[] printData = BitmapTools.bitmap2PrinterBytes(mBitmap);
+//            byte[] printData = BitmapTools.bitmap2PrinterBytes(printBitmap);
 
 //
-//            mPrintQueue.addBmp(concentration, 30, mBitmap.getWidth(),
-//                    mBitmap.getHeight(), printData);
+//            mPrintQueue.addBmp(concentration, 30, printBitmap.getWidth(),
+//                    printBitmap.getHeight(), printData);
 
 
-            mWidth = 400;
-            mHeight = 400;
+            mWidth = 300;
+            mHeight = 300;
 
-            mBitmap = BarcodeCreater.encode2dAsBitmap("1234567890", mWidth,
-                    mHeight, 2);
-            byte[]  printData = BitmapTools.bitmap2PrinterBytes(mBitmap);
-            mPrintQueue.addBmp(concentration, 10, mBitmap.getWidth(),
-                    mBitmap.getHeight(), printData);
+//            printBitmap = BarcodeCreater.encode2dAsBitmap(printBean.getUrl(), mWidth,
+//                    mHeight, 2);
+            byte[] printData = BitmapTools.bitmap2PrinterBytes(printBitmap);
+            mPrintQueue.addBmp(concentration, 5, printBitmap.getWidth(),
+                    printBitmap.getHeight(), printData);
 
             sb = new StringBuilder();
             sb.append("\n");
@@ -670,7 +671,6 @@ public class PDAPrintActivity extends BaseActivity {
             sb.append("\n");
             sb.append("\n");
             text = sb.toString().getBytes("GBK");
-
             addPrintTextWithSize(1, concentration, text);
 
 

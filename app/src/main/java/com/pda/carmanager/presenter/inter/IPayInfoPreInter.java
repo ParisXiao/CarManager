@@ -8,6 +8,8 @@ import com.pda.carmanager.bean.PayInfoBean;
 
 public interface IPayInfoPreInter {
     void getPayInfo(String id);
+    void Pay(String id,String type,String auth_code);
     void getSuccess(PayInfoBean payInfoBean);
+    void paySuccess();
     void getFail(String msg);
 }

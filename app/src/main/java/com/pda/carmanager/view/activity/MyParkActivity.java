@@ -58,6 +58,7 @@ import com.pda.carmanager.view.test.PDAPrintActivity;
 import com.pda.carmanager.view.widght.CustomerCarDialog;
 import com.pda.carmanager.view.widght.IdentifyingCodeView;
 import com.suke.widget.SwitchButton;
+import com.xys.libzxing.zxing.encoding.EncodingUtils;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -89,6 +90,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     private int list = 10;
     private static final int RequsetPark = 0x12;
     public int level_battry = 50;
+    private View emptyView;
 
     /**
      * 打印小票
@@ -158,10 +160,10 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
         toolbar_left_btn = (ImageButton) findViewById(R.id.toolbar_left_btn);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         pullRefresh_myPark = (PullToRefreshRecyclerView) findViewById(R.id.pullRefresh_myPark);
-        View emptyView = View.inflate(this, R.layout.layout_empty_view, null);
+        emptyView = View.inflate(this, R.layout.layout_empty_view, null);
         emptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
-        pullRefresh_myPark.setEmptyView(emptyView);
+
         pullRefresh_myPark.setLayoutManager(new GridLayoutManager(this, 2));
         pullRefresh_myPark.addItemDecoration(new GridSpacingItemDecoration(getResources().getDimensionPixelSize(R.dimen.padding_middle), 2, true));
         pullRefresh_myPark.setHasFixedSize(true);
@@ -195,7 +197,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onResume() {
         super.onResume();
-        reFreshNext = true;
+        reFreshNext = false;
         parkPresenter.postParkList(page + "", "", parkBeanList);
     }
 
@@ -289,6 +291,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
             hasNext = true;
         }
         handler.sendEmptyMessage(0);
+        pullRefresh_myPark.setEmptyView(emptyView);
     }
 
     @Override
@@ -462,8 +465,10 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
             mWidth = 400;
             mHeight = 400;
 
-            mBitmap = BarcodeCreater.encode2dAsBitmap(printBean.getUrl(), mWidth,
-                    mHeight, 2);
+//            mBitmap = BarcodeCreater.encode2dAsBitmap(printBean.getUrl(), mWidth,
+//                    mHeight, 2);
+            mBitmap = EncodingUtils.createQRCode("http://baidu.com", 400, 400, null);
+
             byte[] printData = BitmapTools.bitmap2PrinterBytes(mBitmap);
             mPrintQueue.addBmp(concentration, 5, mBitmap.getWidth(),
                     mBitmap.getHeight(), printData);

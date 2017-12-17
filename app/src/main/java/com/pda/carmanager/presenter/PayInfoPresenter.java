@@ -30,8 +30,18 @@ public class PayInfoPresenter implements IPayInfoPreInter {
     }
 
     @Override
+    public void Pay(String id,String type,String auth_code) {
+        iPayInfoInter.Pay(id,type,auth_code);
+    }
+
+    @Override
     public void getSuccess(PayInfoBean payInfoBean) {
         iPayInfoViewInter.getSuccess(payInfoBean);
+    }
+
+    @Override
+    public void paySuccess() {
+        iPayInfoViewInter.paySuccess();
     }
 
     @Override

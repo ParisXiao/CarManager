@@ -6,4 +6,5 @@ package com.pda.carmanager.model.inter;
 
 public interface IPayInfoInter {
     void getPayInfo(String id);
+    void Pay(String id,String type,String auth_code);
 }

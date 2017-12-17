@@ -101,6 +101,12 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
         animation.setRepeatCount(-1);
         animation.setRepeatMode(Animation.RESTART);
         scanLine.startAnimation(animation);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        },3*60000);
     }
 
     @Override

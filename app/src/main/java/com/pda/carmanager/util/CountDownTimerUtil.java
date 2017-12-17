@@ -35,8 +35,8 @@ public class CountDownTimerUtil  extends CountDownTimer {
     public void onTick(long millisUntilFinished) {
 
         mTextView.setClickable(false); //设置不可点击
-        mTextView.setText(millisUntilFinished / 1000 + "秒后可重新发送");  //设置倒计时时间
-        mTextView.setBackgroundResource(R.drawable.bg_identify_code_press); //设置按钮为灰色，这时是不能点击的
+        mTextView.setText(millisUntilFinished / 1000 + "秒");  //设置倒计时时间
+//        mTextView.setBackgroundResource(R.drawable.bg_identify_code_press); //设置按钮为灰色，这时是不能点击的
 
         /**
          * 超链接 URLSpan
@@ -50,7 +50,7 @@ public class CountDownTimerUtil  extends CountDownTimer {
          * http://blog.csdn.net/ah200614435/article/details/7914459
          */
         SpannableString spannableString = new SpannableString(mTextView.getText().toString());  //获取按钮上的文字
-        ForegroundColorSpan span = new ForegroundColorSpan(Color.RED);
+        ForegroundColorSpan span = new ForegroundColorSpan(Color.BLUE);
         /**
          * public void setSpan(Object what, int start, int end, int flags) {
          * 主要是start跟end，start是起始位置,无论中英文，都算一个。
@@ -62,8 +62,8 @@ public class CountDownTimerUtil  extends CountDownTimer {
 
     @Override
     public void onFinish() {
-        mTextView.setText("重新获取验证码");
+        mTextView.setText("0秒");
         mTextView.setClickable(true);//重新获得点击
-        mTextView.setBackgroundResource(R.drawable.bg_identify_code_normal);  //还原背景色
+//        mTextView.setBackgroundResource(R.drawable.bg_identify_code_normal);  //还原背景色
     }
 }

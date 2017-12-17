@@ -1,11 +1,18 @@
 package com.pda.carmanager.view.activity;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -55,6 +62,8 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
     private long firstTime = 0;
     private String money = "";
     private boolean flags = false;
+    private boolean aorw = false;
+    private String Id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +76,7 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
     private void initaData() {
         toolbar_mid.setText(R.string.title_pay);
         DialogUtil.showMessage(this, getResources().getString(R.string.text_loading));
-        String Id = getIntent().getStringExtra("ID");
+        Id = getIntent().getStringExtra("ID");
         payInfoPresenter = new PayInfoPresenter(this, this);
         payInfoPresenter.getPayInfo(Id);
     }
@@ -116,59 +125,60 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
                         flags = true;
                         if (flag.equals("")) {
                             Toast.makeText(PayMessageActivity.this, R.string.choose_paytype, Toast.LENGTH_SHORT).show();
+                            flags = false;
                         } else if (flag.equals("asao")) {
+                            aorw=false;
                             startActivityForResult(new Intent(PayMessageActivity.this, CaptureActivity.class), 0);
-                            finish();
                         } else if (flag.equals("aimg")) {
-                            // 位图
-                            try {
-                                /**
-                                 * 参数：1.文本 2 3.二维码的宽高 4.二维码中间的那个logo
-                                 */
-                                Intent intent = new Intent(PayMessageActivity.this, ZXingImageActivity.class);
-                                Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-                                Bitmap bitmap = EncodingUtils.createQRCode("测试", 600, 600, logoBitmap);
-                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                                byte[] bitmapByte = baos.toByteArray();
-                                intent.putExtra("zxingBitmap", bitmapByte);
-                                startActivity(intent);
-                            } catch (Exception e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
-
-
-                            finish();
+                            payInfoPresenter.Pay(Id,"3","");
+//                            // 位图
+//                            try {
+//                                /**
+//                                 * 参数：1.文本 2 3.二维码的宽高 4.二维码中间的那个logo
+//                                 */
+//                                Intent intent = new Intent(PayMessageActivity.this, ZXingImageActivity.class);
+//                                Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
+//                                Bitmap bitmap = EncodingUtils.createQRCode("测试", 600, 600, logoBitmap);
+//                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+//                                byte[] bitmapByte = baos.toByteArray();
+//                                intent.putExtra("zxingBitmap", bitmapByte);
+//                                startActivity(intent);
+//                            } catch (Exception e) {
+//                                // TODO Auto-generated catch block
+//                                e.printStackTrace();
+//                            }
+//
+//
+//                            finish();
                         } else if (flag.equals("wsao")) {
+                            aorw=true;
                             startActivityForResult(new Intent(PayMessageActivity.this, CaptureActivity.class), 0);
-                            finish();
                         } else if (flag.equals("wimg")) {
-
-                            // 位图
-                            try {
-                                /**
-                                 * 参数：1.文本 2 3.二维码的宽高 4.二维码中间的那个logo
-                                 */
-                                Intent intent = new Intent(PayMessageActivity.this, ZXingImageActivity.class);
-                                Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-                                Bitmap bitmap = EncodingUtils.createQRCode("测试", 600, 600, logoBitmap);
-                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                                byte[] bitmapByte = baos.toByteArray();
-                                intent.putExtra("zxingBitmap", bitmapByte);
-                                startActivity(intent);
-                            } catch (Exception e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
-                            finish();
+                            payInfoPresenter.Pay(Id,"1","");
+//                            // 位图
+//                            try {
+//                                /**
+//                                 * 参数：1.文本 2 3.二维码的宽高 4.二维码中间的那个logo
+//                                 */
+//                                Intent intent = new Intent(PayMessageActivity.this, ZXingImageActivity.class);
+//                                Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+//                                Bitmap bitmap = EncodingUtils.createQRCode("测试", 400, 400, logoBitmap);
+//                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+//                                byte[] bitmapByte = baos.toByteArray();
+//                                intent.putExtra("zxingBitmap", bitmapByte);
+//                                startActivity(intent);
+//                            } catch (Exception e) {
+//                                // TODO Auto-generated catch block
+//                                e.printStackTrace();
+//                            }
+//                            finish();
                         }
                     } else {
-                        if (!flags) {
-                            flags = true;
 
-                        }
+                        showTimeOutMessage(PayMessageActivity.this);
+
                     }
                 }
                 break;
@@ -207,12 +217,58 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
         }
     }
 
+    /**
+     * 网络设置
+     *
+     * @param context
+     */
+    public void showTimeOutMessage(final Context context) {
+        AlertDialog progressDialog = new AlertDialog.Builder(context).create();
+        if (!(progressDialog != null && progressDialog.isShowing())) {
+            try {
+                progressDialog.show();
+//            WindowManager.LayoutParams params =
+//                    dialog.getWindow().getAttributes();
+//            params.width = 250;
+//            params.height = 250;
+//            dialog.getWindow().setAttributes(params);
+                Window window = progressDialog.getWindow();
+                WindowManager.LayoutParams lp = window.getAttributes();
+                window.setGravity(Gravity.CENTER);
+                lp.alpha = 1f;
+                window.setAttributes(lp);
+                window.setContentView(R.layout.layout_timeout_dialog);
+                TextView text1 = (TextView) window.findViewById(R.id.note_text);
+                Button button2 = (Button) window.findViewById(R.id.note_sure);
+                text1.setText("支付超时，请刷新支付信息");
+                button2.setText("确定");
+                button2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DialogUtil.dismise();
+                        payInfoPresenter.getPayInfo(Id);
+                        flags = false;
+
+                    }
+                });
+            } catch (Exception e) {
+
+            }
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             String result = data.getExtras().getString("result");
+            Log.d("zxing",result);
+            if (aorw){
+                payInfoPresenter.Pay(Id,"2",result);
+            }else {
+                payInfoPresenter.Pay(Id,"4",result);
+            }
         }
     }
 
@@ -233,6 +289,11 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
                 firstTime = System.currentTimeMillis();
             }
         });
+    }
+
+    @Override
+    public void paySuccess() {
+
     }
 
     @Override

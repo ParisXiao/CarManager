@@ -18,10 +18,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pda.carmanager.R;
+import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.presenter.LogoutPresenter;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
+import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.view.activity.ChargeRecordActivity;
 import com.pda.carmanager.view.activity.DakaActivity;
 import com.pda.carmanager.view.activity.ErrorNoteActivity;
@@ -57,6 +59,7 @@ public class MineFragment extends Fragment implements View.OnClickListener,ILogo
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_mine, null);
         initView(layout);
+
         return layout;
     }
 
@@ -75,6 +78,7 @@ public class MineFragment extends Fragment implements View.OnClickListener,ILogo
         rel_ycss.setOnClickListener(this);
         button_logout.setOnClickListener(this);
         logoutPresenter=new LogoutPresenter(context,this);
+        text_usrName.setText(PreferenceUtils.getInstance(context).getString(AccountConfig.Realname));
     }
 
     @Override

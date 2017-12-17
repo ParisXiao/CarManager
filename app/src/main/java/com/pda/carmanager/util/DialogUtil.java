@@ -178,7 +178,7 @@ public class DialogUtil {
      * @param context
      */
     public static void showSetMessage(final Context context) {
-        AlertDialog progressDialog = new AlertDialog.Builder(context).create();
+        final AlertDialog progressDialog = new AlertDialog.Builder(context).create();
         if (!(progressDialog != null && progressDialog.isShowing())) {
             try {
                 progressDialog.show();
@@ -204,13 +204,13 @@ public class DialogUtil {
                 button1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DialogUtil.dismise();
+                        progressDialog.dismiss();
                     }
                 });
                 button2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DialogUtil.dismise();
+                        progressDialog.dismiss();
                         Intent intent =  new Intent(Settings.ACTION_SETTINGS);
                         context.startActivity(intent);
 
@@ -241,12 +241,13 @@ public class DialogUtil {
                 window.setContentView(R.layout.layout_vip_dialog);
                 TextView vipNum = (TextView) window.findViewById(R.id.vip_text);
                 TextView t1 = (TextView) window.findViewById(R.id.text1);
+                TextView t2 = (TextView) window.findViewById(R.id.text2);
                 Button vipCom = (Button) window.findViewById(R.id.vip_btn);
                 if (i==0){
                     vipNum.setText(text);
                 }else {
                     vipNum.setVisibility(View.GONE);
-                    t1.setVisibility(View.GONE);
+                    t2.setVisibility(View.GONE);
                 }
 
                 vipCom.setOnClickListener(new View.OnClickListener() {
