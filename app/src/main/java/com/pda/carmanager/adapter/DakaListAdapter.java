@@ -78,8 +78,14 @@ public class DakaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         public void bindHolder(DakaBean dakaBean) {
-            dakaTime.setText(dakaBean.getDakaTime());
-            dakaAddress.setText(dakaBean.getDakaAddress());
+            if (dakaBean.getDakaType()==1){
+                dakaTime.setText("上班签到时间："+dakaBean.getDakaTime());
+                dakaAddress.setText(dakaBean.getDakaAddress());
+            }else if (dakaBean.getDakaType()==2){
+                dakaTime.setText("下班签到时间："+dakaBean.getDakaTime());
+                dakaAddress.setText(dakaBean.getDakaAddress());
+            }
+
         }
     }
 }

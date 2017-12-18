@@ -2,10 +2,13 @@ package com.pda.carmanager.presenter;
 
 import android.content.Context;
 
+import com.pda.carmanager.bean.DakaBean;
 import com.pda.carmanager.model.DakaModel;
 import com.pda.carmanager.model.inter.IDakaInter;
 import com.pda.carmanager.presenter.inter.IDakaPreInter;
 import com.pda.carmanager.view.inter.IDakaViewInter;
+
+import java.util.List;
 
 /**
  * Created by Admin on 2017/12/15.
@@ -28,8 +31,19 @@ public class DakaPresenter implements IDakaPreInter {
     }
 
     @Override
+    public void getDaka(String kqtime, String page,List<DakaBean> dakaBeanList) {
+        iDakaInter.getDaka(kqtime,page,dakaBeanList);
+    }
+
+    @Override
     public void dakaSuccess() {
         iDakaViewInter.dakaSuccess();
+    }
+
+    @Override
+    public void getdakaSuccess(String page) {
+        iDakaViewInter.getdakaSuccess(page);
+
     }
 
     @Override

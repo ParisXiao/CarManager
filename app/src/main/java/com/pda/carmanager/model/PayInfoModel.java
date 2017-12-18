@@ -42,6 +42,7 @@ public class PayInfoModel implements IPayInfoInter {
     private IPayInfoPreInter iPayInfoPreInter;
     private String decs;
     private PayInfoBean payInfoBean;
+    private String url;
 
     public PayInfoModel(Context context, IPayInfoPreInter iPayInfoPreInter) {
         this.context = context;
@@ -162,9 +163,9 @@ public class PayInfoModel implements IPayInfoInter {
 
                             String code = jsonObject.getString("code");
                             decs = jsonObject.getString("desc");
-
                             if (code.equals("0")) {
                                 JSONObject jsonObject1 = new JSONObject(jsonObject.getString("result"));
+                                url=jsonObject1.getString("Url");
                                 e.onNext(0);
                             } else if (code.equals("1")) {
                                 e.onNext(1);
@@ -193,7 +194,7 @@ public class PayInfoModel implements IPayInfoInter {
                 switch (integer) {
                     case 0:
                         DialogUtil.dismise();
-                        iPayInfoPreInter.getSuccess(payInfoBean);
+                        iPayInfoPreInter.paySuccess(url);
                         break;
                     case 1:
                         DialogUtil.dismise();

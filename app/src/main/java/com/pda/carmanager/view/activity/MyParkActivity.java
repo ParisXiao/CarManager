@@ -36,6 +36,7 @@ import com.androidkun.callback.PullToRefreshListener;
 import com.pda.carmanager.R;
 import com.pda.carmanager.adapter.MyParkAdapter;
 import com.pda.carmanager.base.BaseActivity;
+import com.pda.carmanager.base.BaseApplication;
 import com.pda.carmanager.bean.ChargeBean;
 import com.pda.carmanager.bean.MyParkBean;
 import com.pda.carmanager.bean.PrintBean;
@@ -86,7 +87,6 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     private boolean reFreshNext;
     private boolean hasNext;
     private boolean isRefreah;
-    private boolean isOnResume = false;
     private int list = 10;
     private static final int RequsetPark = 0x12;
     public int level_battry = 50;
@@ -198,6 +198,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     protected void onResume() {
         super.onResume();
         reFreshNext = false;
+        DialogUtil.showMessage(MyParkActivity.this,getResources().getString(R.string.text_loading));
         parkPresenter.postParkList(page + "", "", parkBeanList);
     }
 
@@ -226,7 +227,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void AutoPayCar(String carNum, String id) {
-        DialogUtil.showBoXunVIP(MyParkActivity.this, "", 1);
+        DialogUtil.showBoXunVIP(MyParkActivity.this, getResources().getString(R.string.text_dialog_vip1), 1);
     }
 
     @Override
@@ -240,7 +241,11 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
                 case RequsetPark:
                     printBean = (PrintBean) data.getSerializableExtra("Print");
                     if (StringEqualUtil.stringNull(printBean.getMemberNo())) {
-                        showChooseMessage(this, CarNum, "是否打印小票");
+                        if (BaseApplication.getInstance().isPosApi()) {
+                            showChooseMessage(this, CarNum, "是否打印小票");
+                        }else {
+                            DialogUtil.showBoXunVIP(MyParkActivity.this, "该终端无法进行打印", 1);
+                        }
                     } else {
                         DialogUtil.showBoXunVIP(MyParkActivity.this, printBean.getCarNum(), 0);
                     }
@@ -284,7 +289,6 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void parkSuccess(String pages) {
         this.Pages = Integer.valueOf(pages);
-        isOnResume = true;
         if (Pages <= page) {
             hasNext = false;
         } else {
@@ -562,6 +566,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
                 button2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         // TODO Auto-generated method stub
                         if (!isCanPrint) return;
 

@@ -40,8 +40,8 @@ public class PayInfoPresenter implements IPayInfoPreInter {
     }
 
     @Override
-    public void paySuccess() {
-        iPayInfoViewInter.paySuccess();
+    public void paySuccess(String url) {
+        iPayInfoViewInter.paySuccess(url);
     }
 
     @Override

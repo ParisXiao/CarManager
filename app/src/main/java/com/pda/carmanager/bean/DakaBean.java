@@ -5,9 +5,14 @@ package com.pda.carmanager.bean;
  */
 
 public class DakaBean {
+    private int dakaType;
     private String DakaTime;
     private String DakaAddress;
-    public DakaBean(String DakaTime,String DakaAddress){
+
+    public DakaBean() {
+    }
+
+    public DakaBean(String DakaTime, String DakaAddress){
         this.DakaTime=DakaTime;
         this.DakaAddress=DakaAddress;
     }
@@ -26,5 +31,13 @@ public class DakaBean {
 
     public void setDakaAddress(String dakaAddress) {
         DakaAddress = dakaAddress;
+    }
+
+    public int getDakaType() {
+        return dakaType;
+    }
+
+    public void setDakaType(int dakaType) {
+        this.dakaType = dakaType;
     }
 }

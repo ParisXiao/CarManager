@@ -127,18 +127,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         usrid = name_edit.getText().toString().trim();
         if (TextUtils.isEmpty(usrid)) {
             Toast.makeText(this, "用户名不能为空", Toast.LENGTH_SHORT).show();
+            flag = false;
             return;
         }
 
         password = password_edit.getText().toString().trim();
         if (TextUtils.isEmpty(password)) {
             Toast.makeText(this, "密码不能为空", Toast.LENGTH_SHORT).show();
+            flag = false;
             return;
         }
 
         commenyCode = encode_edit.getText().toString().trim();
         if (TextUtils.isEmpty(commenyCode)) {
             Toast.makeText(this, "机构代码不能为空", Toast.LENGTH_SHORT).show();
+            flag = false;
             return;
         }
 

@@ -248,6 +248,7 @@ public class DialogUtil {
                 }else {
                     vipNum.setVisibility(View.GONE);
                     t2.setVisibility(View.GONE);
+                    t1.setText(text);
                 }
 
                 vipCom.setOnClickListener(new View.OnClickListener() {
