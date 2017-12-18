@@ -9,5 +9,5 @@ import java.util.List;
  */
 
 public interface IChargeInter {
-    void getCharge(String jddid, List<ChargeBean> chargeBeanList);
+    void getCharge(String jddid,String page, List<ChargeBean> chargeBeanList);
 }

@@ -54,7 +54,7 @@
     <string name="choose_paytype">请选择收费方式</string>
     <string name="empty_view">亲，您还没有消息哦！！！</string>
     <string name="content_view">消息全文</string>
-    <string name="empty_charge_view">还没有收款记录哦！！！</string>
+    <string name="empty_charge_view">还没有收费记录哦！！！</string>
     <string name="empty_shensu_view">还没有申诉记录哦！！！</string>
 
     <string name="add_park">新增车位</string>

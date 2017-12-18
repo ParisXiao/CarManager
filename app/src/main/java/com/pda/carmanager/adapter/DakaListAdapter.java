@@ -38,16 +38,16 @@ public class DakaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ViewHolder itemHolder = (ViewHolder) holder;
         if (getItemViewType(position) == TYPE_TOP) {
             // 第一行头的竖线不显示
-            itemHolder.tvTopLine.setVisibility(View.INVISIBLE);
+//            itemHolder.tvTopLine.setVisibility(View.INVISIBLE);
             // 字体颜色加深
             itemHolder.dakaTime.setTextColor(0xff555555);
             itemHolder.dakaAddress.setTextColor(0xff555555);
-            itemHolder.tvDot.setBackgroundResource(R.drawable.shape_timelline_dot_first);
+//            itemHolder.tvDot.setBackgroundResource(R.drawable.shape_timelline_dot_first);
         } else if (getItemViewType(position) == TYPE_NORMAL) {
-            itemHolder.tvTopLine.setVisibility(View.VISIBLE);
+//            itemHolder.tvTopLine.setVisibility(View.VISIBLE);
             itemHolder.dakaTime.setTextColor(0xff999999);
             itemHolder.dakaAddress.setTextColor(0xff999999);
-            itemHolder.tvDot.setBackgroundResource(R.drawable.shape_timelline_dot_normal);
+//            itemHolder.tvDot.setBackgroundResource(R.drawable.shape_timelline_dot_normal);
         }
 
         itemHolder.bindHolder(dakaList.get(position));
@@ -68,13 +68,13 @@ public class DakaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public  class ViewHolder extends RecyclerView.ViewHolder {
         private TextView dakaTime, dakaAddress;
-        private TextView tvTopLine, tvDot;
+//        private TextView tvTopLine, tvDot;
         public ViewHolder(View itemView) {
             super(itemView);
             dakaTime = (TextView) itemView.findViewById(R.id.daka_Time);
             dakaAddress = (TextView) itemView.findViewById(R.id.daka_Address);
-            tvTopLine = (TextView) itemView.findViewById(R.id.tvTopLine);
-            tvDot = (TextView) itemView.findViewById(R.id.tvDot);
+//            tvTopLine = (TextView) itemView.findViewById(R.id.tvTopLine);
+//            tvDot = (TextView) itemView.findViewById(R.id.tvDot);
         }
 
         public void bindHolder(DakaBean dakaBean) {

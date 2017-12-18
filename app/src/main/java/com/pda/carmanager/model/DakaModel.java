@@ -138,9 +138,9 @@ public class DakaModel implements IDakaInter {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
                 if (OKHttpUtil.isConllection(context)) {
+                    dakaBeanList.clear();
                     String[] key = new String[]{"kqdate", "pageindex", "pagerows"};
                     Map map = new HashMap();
-
                     map.put("kqdate", kqdate);
                     map.put("pageindex", page);
                     map.put("pagerows", "10");

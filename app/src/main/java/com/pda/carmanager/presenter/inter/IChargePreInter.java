@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 public interface IChargePreInter {
-    void getCharge(String jddid, List<ChargeBean> chargeBeanList);
-    void getSuccess();
+    void getCharge(String jddid, String page,List<ChargeBean> chargeBeanList);
+    void getSuccess(String pages);
     void getFail(String msg);
 }

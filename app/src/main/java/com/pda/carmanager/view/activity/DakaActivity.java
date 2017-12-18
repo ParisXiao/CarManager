@@ -129,6 +129,8 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void dakaSuccess() {
         mLocationClient.stop();
+        reFreshNext=false;
+        dakaPresenter.getDaka("",page+"",dakaBeanList);
     }
 
     @Override
@@ -234,9 +236,9 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
         mLocationClient.setLocOption(option);
 //mLocationClient为第二步初始化过的LocationClient对象
         DialogUtil.showMessage(DakaActivity.this,getResources().getString(R.string.text_loading));
-        dakaPresenter.getDaka("",page+"",dakaBeanList);
         dakaBeanList=new ArrayList<>();
-        dakaListAdapter = new DakaListAdapter(this, dakaBeanList);
+        dakaPresenter.getDaka("",page+"",dakaBeanList);
+        dakaListAdapter = new DakaListAdapter(this, dakaBeanListShow);
         pullRefresh_Daka.setAdapter(dakaListAdapter);
     }
 

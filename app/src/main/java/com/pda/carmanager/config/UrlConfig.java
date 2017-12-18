@@ -8,8 +8,8 @@ public class UrlConfig {
     /**
      * 接口配置
      */
-//    public static String HttpIpPost="http://www.bianlile.cc:88/" ;
-    public static String HttpIpPost="http://192.168.1.238:8008/" ;
+    public static String HttpIpPost="http://www.bianlile.cc:89/" ;
+//    public static String HttpIpPost="http://192.168.43.249:8008/" ;
     public static String LoginPost=HttpIpPost+"api/Login/CheckLogin";//登录
     public static String LogoutPost=HttpIpPost+"api/Login/OutLogin";//登出
     public static String ParkPost=HttpIpPost+"api/CarManage/SelParkingLotByStatus";//车位列表
@@ -21,6 +21,7 @@ public class UrlConfig {
     public static String PayInfoPost=HttpIpPost+"api/CarManage/PreMoney";//缴费信息
     public static String PayPost=HttpIpPost+"api/CarManage/OKMoney";//支付
     public static String GetDakaPost=HttpIpPost+"api/CarManage/SelKQ";//查询打卡记录
+    public static String ChargePost=HttpIpPost+"api/CarManage/SelParkingRecord";//查询打卡记录
 
     public static String SMSUrl="http://api.boxunpark.com/SMS/sendMsg";//短信验证接口
 }
