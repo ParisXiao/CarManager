@@ -21,7 +21,7 @@ public class DakaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private LayoutInflater inflater;
     private List<DakaBean> dakaList = new ArrayList<>(1);
     private static final int TYPE_TOP = 0x0000;
-    private static final int TYPE_NORMAL= 0x0001;
+    private static final int TYPE_NORMAL = 0x0001;
 
     public DakaListAdapter(Context context, List<DakaBean> dakaList) {
         inflater = LayoutInflater.from(context);
@@ -66,9 +66,10 @@ public class DakaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return TYPE_NORMAL;
     }
 
-    public  class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView dakaTime, dakaAddress;
-//        private TextView tvTopLine, tvDot;
+
+        //        private TextView tvTopLine, tvDot;
         public ViewHolder(View itemView) {
             super(itemView);
             dakaTime = (TextView) itemView.findViewById(R.id.daka_Time);
@@ -78,13 +79,8 @@ public class DakaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         public void bindHolder(DakaBean dakaBean) {
-            if (dakaBean.getDakaType()==1){
-                dakaTime.setText("上班签到时间："+dakaBean.getDakaTime());
-                dakaAddress.setText(dakaBean.getDakaAddress());
-            }else if (dakaBean.getDakaType()==2){
-                dakaTime.setText("下班签到时间："+dakaBean.getDakaTime());
-                dakaAddress.setText(dakaBean.getDakaAddress());
-            }
+            dakaTime.setText(dakaBean.getDakaTime());
+            dakaAddress.setText(dakaBean.getDakaAddress());
 
         }
     }

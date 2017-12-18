@@ -3,6 +3,7 @@ package com.pda.carmanager.presenter;
 import android.content.Context;
 
 import com.pda.carmanager.bean.MyParkBean;
+import com.pda.carmanager.bean.PrintBean;
 import com.pda.carmanager.model.ParkModel;
 import com.pda.carmanager.model.inter.IParkInter;
 import com.pda.carmanager.presenter.inter.IParkPreInter;
@@ -32,8 +33,18 @@ public class ParkPresenter implements IParkPreInter {
     }
 
     @Override
+    public void getPrintInfo(String id) {
+        iParkInter.getPrintInfo(id);
+    }
+
+    @Override
     public void parkSuccess(String pages) {
         iParkViewInter.parkSuccess(pages);
+    }
+
+    @Override
+    public void getPrintSuccess(PrintBean printBean) {
+        iParkViewInter.getPrintSuccess(printBean);
     }
 
     @Override

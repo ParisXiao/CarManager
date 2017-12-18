@@ -26,7 +26,7 @@ public class BaseApplication extends Application {
     static BaseApplication instance = null;
     //PosSDK mSDK = null;
     PosApi mPosApi = null;
-    public boolean isPos=true;
+    public static boolean isPos=true;
     public BaseApplication(){
         super.onCreate();
         instance = this;

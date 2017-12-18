@@ -126,6 +126,15 @@ public class MyParkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             }
         });
+        ((MyViewHolder) holder).item_mypark_btn.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (parkBeanList.get(position).getParkType().equals("3")) {
+                    parkItemOnInter.LongOnItem(false,parkBeanList.get(position).getParkingrecordid());
+                }
+                return true;
+            }
+        });
     }
 
     @Override

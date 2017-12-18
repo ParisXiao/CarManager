@@ -29,7 +29,7 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        if (BaseApplication.getInstance().isPosApi()) {
+        if (BaseApplication.isPos) {
             mPosSDK = BaseApplication.getInstance().getPosApi();
             //初始化接口时回调
             mPosSDK.setOnComEventListener(mCommEventListener);

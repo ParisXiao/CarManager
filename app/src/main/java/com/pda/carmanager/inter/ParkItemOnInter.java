@@ -9,4 +9,5 @@ public interface ParkItemOnInter {
     void writeCarNum(String Id);
     void payCar(String Id);
     void AutoPayCar(String carNum,String Id);
+    void LongOnItem(boolean print,String Id);
 }

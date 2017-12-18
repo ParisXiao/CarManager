@@ -275,7 +275,7 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
                  * 参数：1.文本 2 3.二维码的宽高 4.二维码中间的那个logo
                  */
                 Intent intent = new Intent(PayMessageActivity.this, ZXingImageActivity.class);
-                Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+                Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
                 Bitmap bitmap = EncodingUtils.createQRCode(url, 400, 400, logoBitmap);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);

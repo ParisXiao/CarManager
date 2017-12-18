@@ -158,16 +158,24 @@ public class DakaModel implements IDakaInter {
                                 JSONArray jsonArray = new JSONArray(jsonObject1.getString("items"));
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     DakaBean dakaBean=new DakaBean();
+                                    DakaBean dakaBean1=new DakaBean();
                                     JSONObject temp = (JSONObject) jsonArray.get(i);
-                                    dakaBean.setDakaAddress(temp.getString("addaddr"));
                                     if (StringEqualUtil.stringNull(temp.getString("addbegtime"))){
-                                        dakaBean.setDakaTime(temp.getString("addbegtime"));
-                                        dakaBean.setDakaType(1);
+                                        dakaBean.setDakaTime("上班签到时间："+temp.getString("addbegtime"));
+                                        dakaBean.setDakaAddress(temp.getString("begaddr"));
                                     }else {
-                                        dakaBean.setDakaTime(temp.getString("addendtime"));
-                                        dakaBean.setDakaType(2);
+                                        dakaBean.setDakaTime("上班未签到");
+                                        dakaBean.setDakaAddress("");
+                                    }
+                                    if (StringEqualUtil.stringNull(temp.getString("addendtime"))){
+                                        dakaBean1.setDakaTime("下班签到时间："+temp.getString("addendtime"));
+                                        dakaBean.setDakaAddress(temp.getString("endaddr"));
+                                    }else {
+                                        dakaBean1.setDakaTime("下班未签到");
+                                        dakaBean1.setDakaAddress("");
                                     }
                                     dakaBeanList.add(dakaBean);
+                                    dakaBeanList.add(dakaBean1);
                                 }
                                 e.onNext(0);
                             } else if (code.equals("1")) {

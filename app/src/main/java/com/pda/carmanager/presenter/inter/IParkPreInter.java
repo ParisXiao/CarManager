@@ -1,6 +1,7 @@
 package com.pda.carmanager.presenter.inter;
 
 import com.pda.carmanager.bean.MyParkBean;
+import com.pda.carmanager.bean.PrintBean;
 
 import java.util.List;
 
@@ -10,6 +11,8 @@ import java.util.List;
 
 public interface IParkPreInter {
     void postParkList(final String pageIndex, String pagesortfield,final List<MyParkBean> parkBeans);
+    void getPrintInfo(String id);
     void parkSuccess(String pages);
+    void getPrintSuccess(PrintBean printBean);
     void parkFail(String msg);
 }

@@ -10,4 +10,5 @@ import java.util.List;
 
 public interface IParkInter {
     void postParkList(final String pageIndex, String pagesortfield,final List<MyParkBean> parkBeans);
+    void getPrintInfo(String id);
 }

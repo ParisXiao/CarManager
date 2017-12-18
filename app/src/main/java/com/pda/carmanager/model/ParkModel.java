@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.bean.MyParkBean;
+import com.pda.carmanager.bean.PrintBean;
 import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.config.UrlConfig;
 import com.pda.carmanager.model.inter.IParkInter;
@@ -13,6 +14,7 @@ import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
+import com.pda.carmanager.util.StringEqualUtil;
 import com.pda.carmanager.view.activity.LoginActivity;
 
 import org.json.JSONArray;
@@ -42,6 +44,7 @@ public class ParkModel implements IParkInter {
     private IParkPreInter iParkPreInter;
     private String desc;
     private String pages;
+    private PrintBean  printBean;
 
     public ParkModel(Context context, IParkPreInter iParkPreInter) {
         this.context = context;
@@ -178,5 +181,115 @@ public class ParkModel implements IParkInter {
 
                     }
                 });
+    }
+
+    @Override
+    public void getPrintInfo(final String id) {
+        Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
+                if (OKHttpUtil.isConllection(context)) {
+                    String[] key = new String[]{"id"};
+                    Map map = new HashMap();
+                    map.put("id", id);
+                    String Http = OKHttpUtil.GetMessage(context, UrlConfig.PrintPost, key, map);
+                    if (Http != null) {
+                        JSONObject jsonObject;
+                        try {
+                            jsonObject = new JSONObject(Http);
+
+                            String code = jsonObject.getString("code");
+                            desc = jsonObject.getString("desc");
+
+                            if (code.equals("0")) {
+                                printBean = new PrintBean();
+                                JSONObject jsonObject1 = new JSONObject(jsonObject.getString("result"));
+                                printBean.setCarNo(jsonObject1.getString("MyCarNo"));
+                                printBean.setStartTime(jsonObject1.getString("StartTime"));
+                                if (StringEqualUtil.stringNull(jsonObject1.getString("MemberNo"))) {
+                                    printBean.setMemberNo(jsonObject1.getString("MemberNo"));
+                                }
+                                printBean.setUrl(jsonObject1.getString("Url"));
+                                List<PrintBean.IsQFModel> isQFModels = new ArrayList<PrintBean.IsQFModel>();
+                                if (StringEqualUtil.stringNull(jsonObject1.getString("IsQFModel"))) {
+                                    JSONArray jsonArray = new JSONArray(jsonObject1.getString("IsQFModel"));
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        PrintBean.IsQFModel isQFModel = new PrintBean.IsQFModel();
+                                        JSONObject temp = (JSONObject) jsonArray.get(i);
+                                        isQFModel.setJD(temp.getString("JD"));
+                                        isQFModel.setStartTime(temp.getString("StartTime"));
+                                        isQFModel.setStopTime(temp.getString("StopTime"));
+                                        isQFModel.setCarNO(temp.getString("MyCarNo"));
+                                        isQFModel.setMoney(temp.getString("TotalMoney"));
+                                        isQFModels.add(isQFModel);
+                                    }
+                                }
+                                if (isQFModels.size() > 0) {
+                                    printBean.setIsQFModels(isQFModels);
+                                }
+                                e.onNext(0);
+                            } else if (code.equals("1")) {
+                                e.onNext(1);
+                            } else {
+                                e.onNext(2);
+                            }
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                        }
+                    } else {
+                        e.onNext(3);
+                    }
+                } else {
+                    e.onNext(4);
+                }
+                e.onComplete();
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Integer>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@NonNull Integer integer) {
+                switch (integer) {
+                    case 0:
+                        DialogUtil.dismise();
+                        iParkPreInter.getPrintSuccess(printBean);
+                        break;
+                    case 1:
+                        DialogUtil.dismise();
+                        iParkPreInter.parkFail(context.getResources().getString(R.string.httpOut));
+                        Toast.makeText(context, context.getResources().getString(R.string.httpOut), Toast.LENGTH_SHORT).show();
+                        break;
+                    case 2:
+                        DialogUtil.dismise();
+                        iParkPreInter.parkFail(desc);
+
+                        Toast.makeText(context, desc, Toast.LENGTH_SHORT).show();
+                        break;
+                    case 3:
+                        DialogUtil.dismise();
+                        iParkPreInter.parkFail(context.getResources().getString(R.string.httpError));
+                        Toast.makeText(context, context.getResources().getString(R.string.httpError), Toast.LENGTH_SHORT).show();
+                        break;
+                    case 4:
+                        DialogUtil.dismise();
+                        iParkPreInter.parkFail(context.getResources().getString(R.string.httpNo));
+                        DialogUtil.showSetMessage(context);
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 }

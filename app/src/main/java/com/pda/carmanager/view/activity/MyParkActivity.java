@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -231,6 +232,12 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
+    public void LongOnItem(boolean print, String Id) {
+        DialogUtil.showMessage(MyParkActivity.this,getResources().getString(R.string.text_loading));
+        parkPresenter.getPrintInfo(Id);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_CANCELED)
@@ -242,7 +249,9 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
                     printBean = (PrintBean) data.getSerializableExtra("Print");
                     if (StringEqualUtil.stringNull(printBean.getMemberNo())) {
                         if (BaseApplication.getInstance().isPosApi()) {
-                            showChooseMessage(this, CarNum, "是否打印小票");
+                            Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
+                            Bitmap bitmap = EncodingUtils.createQRCode(printBean.getUrl(), 400, 400, logoBitmap);
+                            showChooseMessage(this,printBean, bitmap,printBean.getCarNum(), "是否打印小票");
                         }else {
                             DialogUtil.showBoXunVIP(MyParkActivity.this, "该终端无法进行打印", 1);
                         }
@@ -284,6 +293,13 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
         } else {
             handler.sendEmptyMessageDelayed(1, 1000);
         }
+    }
+
+    @Override
+    public void getPrintSuccess(PrintBean printBeanlong) {
+        Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
+        Bitmap bitmap = EncodingUtils.createQRCode(printBeanlong.getUrl(), 400, 400, logoBitmap);
+        showChooseMessage(this,printBeanlong,bitmap, printBeanlong.getCarNum(), "是否打印小票");
     }
 
     @Override
@@ -390,14 +406,15 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
                         }).show();
     }
 
-    private void printMix() {
+    private void printMix(PrintBean printBean1,Bitmap bitmap) {
 
         try {
             int concentration = 35;
             StringBuilder sb = new StringBuilder();
             byte[] text = null;
             sb.append("  泊讯停车|临街");
-            sb.append("   车位缴费小票");
+            sb.append("  车位缴费小票");
+            sb.append("\n");
             sb.append("\n");
 
             text = sb.toString().getBytes("GBK");
@@ -409,40 +426,41 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
             sb.append("   " + PreferenceUtils.getInstance(MyParkActivity.this).getString(AccountConfig.Departmentname));
             sb.append("\n");
             sb.append("车位编号：");
-            sb.append("   " + printBean.getCarNo());
+            sb.append("   " + printBean1.getCarNo());
             sb.append("\n");
             sb.append("车牌号  ：");
-            sb.append("   " + printBean.getCarNum());
+            sb.append("   " + printBean1.getCarNum());
             sb.append("\n");
             sb.append("停车时刻： ");
-            sb.append(printBean.getStartTime());
+            sb.append(printBean1.getStartTime());
             sb.append("\n");
-            if (printBean.getIsQFModels() != null) {
-                if (printBean.getIsQFModels().size() > 0) {
-                    for (int i = 0; i < printBean.getIsQFModels().size(); i++) {
+            if (printBean1.getIsQFModels() != null) {
+                if (printBean1.getIsQFModels().size() > 0) {
+                    for (int i = 0; i < printBean1.getIsQFModels().size(); i++) {
                         sb.append("==============================");
                         sb.append("\n");
                         sb.append("             欠费信息");
                         sb.append("\n");
                         sb.append("停车街道：");
-                        sb.append("   " + printBean.getIsQFModels().get(i).getJD());
+                        sb.append("   " + printBean1.getIsQFModels().get(i).getJD());
                         sb.append("\n");
                         sb.append("车位编号：");
-                        sb.append("   " + printBean.getIsQFModels().get(i).getCarNO());
+                        sb.append("   " + printBean1.getIsQFModels().get(i).getCarNO());
                         sb.append("\n");
                         sb.append("停车时刻： ");
-                        sb.append(printBean.getIsQFModels().get(i).getStartTime());
+                        sb.append(printBean1.getIsQFModels().get(i).getStartTime());
 
                         sb.append("\n");
-                        sb.append("         至" + printBean.getIsQFModels().get(i).getStopTime());
+                        sb.append("         至" + printBean1.getIsQFModels().get(i).getStopTime());
                         sb.append("\n");
                         sb.append("欠费金额：");
-                        sb.append("         " + printBean.getIsQFModels().get(i).getMoney() + "元");
+                        sb.append("         " + printBean1.getIsQFModels().get(i).getMoney() + "元");
                         sb.append("\n");
 
                     }
                 }
             }
+
             sb.append("==============================");
             sb.append("\n");
             sb.append("\n");
@@ -471,11 +489,11 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
 
 //            mBitmap = BarcodeCreater.encode2dAsBitmap(printBean.getUrl(), mWidth,
 //                    mHeight, 2);
-            mBitmap = EncodingUtils.createQRCode("http://baidu.com", 400, 400, null);
+//            mBitmap = EncodingUtils.createQRCode(printBean1.getUrl(), 400, 400, null);
 
-            byte[] printData = BitmapTools.bitmap2PrinterBytes(mBitmap);
-            mPrintQueue.addBmp(concentration, 5, mBitmap.getWidth(),
-                    mBitmap.getHeight(), printData);
+            byte[] printData = BitmapTools.bitmap2PrinterBytes(bitmap);
+            mPrintQueue.addBmp(concentration, 5, bitmap.getWidth(),
+                    bitmap.getHeight(), printData);
 
             sb = new StringBuilder();
             sb.append("\n");
@@ -533,7 +551,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     }
 
 
-    private void showChooseMessage(final Context context, String text, String textContent) {
+    private void showChooseMessage(final Context context, final PrintBean printBeanS, final Bitmap bitmap, String text, final String textContent) {
         final AlertDialog progressDialog = new AlertDialog.Builder(context).create();
         if (!(progressDialog != null && progressDialog.isShowing())) {
             try {
@@ -586,7 +604,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
                             e.printStackTrace();
                         }
 
-                        printMix();
+                        printMix(printBeanS,bitmap);
                         progressDialog.dismiss();
 
                     }
