@@ -417,7 +417,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
             StringBuilder sb = new StringBuilder();
             byte[] text = null;
             sb.append("  泊讯停车|临街");
-            sb.append("  车位缴费小票");
+            sb.append("     车位缴费小票");
             sb.append("\n");
             sb.append("\n");
 
