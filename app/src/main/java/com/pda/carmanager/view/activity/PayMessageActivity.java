@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -67,6 +68,21 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
     private boolean flags = false;
     private boolean aorw = false;
     private String Id;
+    private Handler handler=new Handler(){
+        @Override
+        public void dispatchMessage(Message msg) {
+            super.dispatchMessage(msg);
+            switch (msg.what){
+                case 1:
+                    DialogUtil.dismise();
+                    Intent intent=new Intent(PayMessageActivity.this,PaySuccessActivity.class);
+                    intent.putExtra("payMoney",payMoney);
+                    startActivity(intent);
+                    finish();
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,6 +217,7 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
         if (!(progressDialog != null && progressDialog.isShowing())) {
             try {
                 progressDialog.show();
+                progressDialog.setCanceledOnTouchOutside(false);
 //            WindowManager.LayoutParams params =
 //                    dialog.getWindow().getAttributes();
 //            params.width = 250;
@@ -236,6 +253,7 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+            DialogUtil.showMessage(PayMessageActivity.this,"支付中，请稍后...");
             String result = data.getExtras().getString("result");
             Log.d("zxing", result);
             if (aorw) {
@@ -288,17 +306,10 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
             }
             finish();
         } else {
-                DialogUtil.showMessage(PayMessageActivity.this,"支付中，请稍后...");
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    DialogUtil.dismise();
-                    Intent intent=new Intent(PayMessageActivity.this,PaySuccessActivity.class);
-                    intent.putExtra("payMoney",payMoney);
-                    startActivity(intent);
-                    finish();
-                }
-            },60000);
+            Intent intent=new Intent(PayMessageActivity.this,PaySuccessActivity.class);
+            intent.putExtra("payMoney",payMoney);
+            startActivity(intent);
+            finish();
         }
     }
 

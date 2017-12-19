@@ -2,7 +2,7 @@
 <Keyboard
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:horizontalGap="4px"
-    android:keyHeight="40dp"
+    android:keyHeight="60dp"
     android:verticalGap="4px">
     <Row android:keyWidth="9.6%p">
         <Key
@@ -158,7 +158,7 @@
         <Key
             android:codes="112"
             android:keyEdgeFlags="left"
-            android:keyWidth="50sp"
+            android:keyWidth="100sp"
             android:isRepeatable="true"
             android:keyIcon="@drawable/key_del"
             />

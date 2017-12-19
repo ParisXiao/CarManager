@@ -151,6 +151,7 @@ public class DialogUtil {
             try {
                 progressDialog = new AlertDialog.Builder(context).create();
                 progressDialog.show();
+                progressDialog.setCanceledOnTouchOutside(false);
 //            WindowManager.LayoutParams params =
 //                    dialog.getWindow().getAttributes();
 //            params.width = 250;
@@ -182,6 +183,7 @@ public class DialogUtil {
         if (!(progressDialog != null && progressDialog.isShowing())) {
             try {
                 progressDialog.show();
+                progressDialog.setCanceledOnTouchOutside(false);
 //            WindowManager.LayoutParams params =
 //                    dialog.getWindow().getAttributes();
 //            params.width = 250;

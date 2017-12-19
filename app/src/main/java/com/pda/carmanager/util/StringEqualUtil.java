@@ -6,9 +6,10 @@ package com.pda.carmanager.util;
 
 public class StringEqualUtil {
     public static boolean stringNull(String s){
-        if (s.equals("")&&s.equals("null")&&s==null){
+        if (s.equals("")||s.equals("null")||s==null){
             return false;
+        }else {
+            return true;
         }
-        return true;
     }
 }

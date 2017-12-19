@@ -561,6 +561,7 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
         if (!(progressDialog != null && progressDialog.isShowing())) {
             try {
                 progressDialog.show();
+                progressDialog.setCanceledOnTouchOutside(false);
 //            WindowManager.LayoutParams params =
 //                    dialog.getWindow().getAttributes();
 //            params.width = 250;
