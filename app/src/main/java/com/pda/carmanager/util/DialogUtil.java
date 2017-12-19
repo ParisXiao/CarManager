@@ -178,7 +178,7 @@ public class DialogUtil {
      * @param context
      */
     public static void showSetMessage(final Context context) {
-        final AlertDialog progressDialog = new AlertDialog.Builder(context).create();
+        progressDialog = new AlertDialog.Builder(context).create();
         if (!(progressDialog != null && progressDialog.isShowing())) {
             try {
                 progressDialog.show();
@@ -204,13 +204,13 @@ public class DialogUtil {
                 button1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        progressDialog.dismiss();
+                        DialogUtil.dismise();
                     }
                 });
                 button2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        progressDialog.dismiss();
+                        DialogUtil.dismise();
                         Intent intent =  new Intent(Settings.ACTION_SETTINGS);
                         context.startActivity(intent);
 

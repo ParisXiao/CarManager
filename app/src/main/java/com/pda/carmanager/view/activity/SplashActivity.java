@@ -5,30 +5,39 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.posapi.PosApi;
 import android.view.KeyEvent;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.base.BaseApplication;
 import com.pda.carmanager.config.AccountConfig;
+import com.pda.carmanager.presenter.SplashPresenter;
 import com.pda.carmanager.service.ScanService;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.PreferenceUtils;
-import com.pda.carmanager.view.test.PDAPrintActivity;
+import com.pda.carmanager.view.inter.ISplashViewInter;
+import com.pda.carmanager.view.widght.LoopProgressBar;
+
+import java.io.Serializable;
 
 /**
  * Created by Admin on 2017/12/7.
  */
 
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends BaseActivity    implements ISplashViewInter {
     private final int SPLASH_DISPLAY_LENGHT = 2000;
     private Handler handler;
     private PosApi mPosSDK;
+    private LoopProgressBar splashProgress;
+    private TextView splash_status;
+    private SplashPresenter splashPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        initView();
         if (BaseApplication.isPos) {
             mPosSDK = BaseApplication.getInstance().getPosApi();
             //初始化接口时回调
@@ -39,26 +48,15 @@ public class SplashActivity extends BaseActivity {
             newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startService(newIntent);
         }
-        handler = new Handler();
+        splashPresenter=new SplashPresenter(this,this);
+        splash_status.setText(getResources().getString(R.string.text_splash_login));
+        splashProgress.start();
         // 延迟SPLASH_DISPLAY_LENGHT时间然后跳转
-        handler.postDelayed(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
 
             @Override
             public void run() {
-                Intent intent = null;
-                //判断是否登录
-                if (PreferenceUtils.getInstance(SplashActivity.this).getBoolean(AccountConfig.IsLogin)) {
-                    intent = new Intent(SplashActivity.this,
-                            MainActivity.class);
-                    startActivity(intent);
-                    SplashActivity.this.finish();
-                } else {
-                    intent = new Intent(SplashActivity.this,
-                            LoginActivity.class);
-                    startActivity(intent);
-                    SplashActivity.this.finish();
-                }
-
+                splashPresenter.splash();
             }
         }, SPLASH_DISPLAY_LENGHT);
 
@@ -73,7 +71,7 @@ public class SplashActivity extends BaseActivity {
                     if (state == PosApi.COMM_STATUS_SUCCESS) {
                         Toast.makeText(getApplicationContext(), "打印设备初始化成功", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getApplicationContext(), "设备初始化失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "打印设备初始化失败", Toast.LENGTH_SHORT).show();
                     }
                     break;
             }
@@ -183,5 +181,46 @@ public class SplashActivity extends BaseActivity {
             return false;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void initView() {
+        splashProgress = (LoopProgressBar) findViewById(R.id.splashProgress);
+        splash_status = (TextView) findViewById(R.id.splash_status);
+    }
+
+    @Override
+    public void needUpdata(Serializable object) {
+
+    }
+
+    @Override
+    public void notUpdata() {
+
+    }
+
+    @Override
+    public void updataFail(String msg) {
+
+    }
+
+    @Override
+    public void splashLoginSuccess() {
+        splash_status.setText(getResources().getString(R.string.text_splash_com));
+        splashProgress.stop();
+        Intent intent = new Intent(SplashActivity.this,
+                MainActivity.class);
+        startActivity(intent);
+        SplashActivity.this.finish();
+
+    }
+
+    @Override
+    public void splashLoginFail(String msg) {
+        splash_status.setText(getResources().getString(R.string.text_splash_com));
+        splashProgress.stop();
+        Intent intent = new Intent(SplashActivity.this,
+                LoginActivity.class);
+        startActivity(intent);
+        SplashActivity.this.finish();
     }
 }

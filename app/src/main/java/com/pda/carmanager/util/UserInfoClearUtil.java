@@ -11,12 +11,12 @@ import com.pda.carmanager.config.AccountConfig;
 public class UserInfoClearUtil {
     public static void ClearUserInfo(Context context){
         PreferenceUtils.getInstance(context).saveString(AccountConfig.UserId, "");
-        PreferenceUtils.getInstance(context).saveString(AccountConfig.AccountId, "");
+//        PreferenceUtils.getInstance(context).saveString(AccountConfig.AccountId, "");
         PreferenceUtils.getInstance(context).saveString(AccountConfig.AccountPassword, "");
         PreferenceUtils.getInstance(context).saveString(AccountConfig.Platform, "PDA");
         PreferenceUtils.getInstance(context).saveString(AccountConfig.Token, "");
         PreferenceUtils.getInstance(context).saveString(AccountConfig.Realname, "");
-        PreferenceUtils.getInstance(context).saveString(AccountConfig.CommenyCode, "");
+//        PreferenceUtils.getInstance(context).saveString(AccountConfig.CommenyCode, "");
         PreferenceUtils.getInstance(context).saveString(AccountConfig.Organizeid, "");
         PreferenceUtils.getInstance(context).saveString(AccountConfig.Organizename, "");
         PreferenceUtils.getInstance(context).saveString(AccountConfig.Departmentid, "");

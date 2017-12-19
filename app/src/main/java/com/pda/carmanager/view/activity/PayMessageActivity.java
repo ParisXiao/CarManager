@@ -197,7 +197,7 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
      * @param context
      */
     public void showTimeOutMessage(final Context context) {
-        AlertDialog progressDialog = new AlertDialog.Builder(context).create();
+        final AlertDialog progressDialog = new AlertDialog.Builder(context).create();
         if (!(progressDialog != null && progressDialog.isShowing())) {
             try {
                 progressDialog.show();
@@ -219,7 +219,7 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
                 button2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DialogUtil.dismise();
+                        progressDialog.dismiss();
                         payInfoPresenter.getPayInfo(Id);
                         flags = false;
 

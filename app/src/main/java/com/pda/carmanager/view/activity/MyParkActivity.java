@@ -297,9 +297,14 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void getPrintSuccess(PrintBean printBeanlong) {
-        Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
-        Bitmap bitmap = EncodingUtils.createQRCode(printBeanlong.getUrl(), 400, 400, logoBitmap);
-        showChooseMessage(this,printBeanlong,bitmap, printBeanlong.getCarNum(), "是否打印小票");
+        if (BaseApplication.getInstance().isPosApi()) {
+            Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
+            Bitmap bitmap = EncodingUtils.createQRCode(printBeanlong.getUrl(), 400, 400, logoBitmap);
+            showChooseMessage(this,printBeanlong,bitmap, printBeanlong.getCarNum(), "是否打印小票");
+        }else {
+            DialogUtil.showBoXunVIP(MyParkActivity.this, "该终端无法进行打印", 1);
+        }
+
     }
 
     @Override

@@ -4,6 +4,8 @@
     <string name="hint_password">请输入密码</string>
     <string name="hint_encode">请输入企业代码</string>
     <string name="btn_login">登录</string>
+    <string name="text_splash_login">正在初始化...</string>
+    <string name="text_splash_com">初始化完成</string>
     <string name="success_login">登录成功</string>
     <string name="btn_logout">注销</string>
     <string name="success_logout">注销成功</string>

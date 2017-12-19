@@ -72,6 +72,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         UpdateUI(layout_login);
         loginPresenter = new LoginPresenter(this, this);
+        if (!TextUtils.isEmpty(PreferenceUtils.getInstance(LoginActivity.this).getString(AccountConfig.AccountId))){
+            name_edit.setText(PreferenceUtils.getInstance(LoginActivity.this).getString(AccountConfig.AccountId));
+        }
+        if (!TextUtils.isEmpty(PreferenceUtils.getInstance(LoginActivity.this).getString(AccountConfig.CommenyCode))){
+            encode_edit.setText(PreferenceUtils.getInstance(LoginActivity.this).getString(AccountConfig.CommenyCode));
+        }
     }
 
     @Override
