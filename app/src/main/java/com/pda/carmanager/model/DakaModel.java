@@ -10,6 +10,7 @@ import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.config.UrlConfig;
 import com.pda.carmanager.model.inter.IDakaInter;
 import com.pda.carmanager.presenter.inter.IDakaPreInter;
+import com.pda.carmanager.util.DataUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
@@ -164,14 +165,16 @@ public class DakaModel implements IDakaInter {
                                         dakaBean.setDakaTime("上班签到时间："+temp.getString("addbegtime"));
                                         dakaBean.setDakaAddress(temp.getString("begaddr"));
                                     }else {
-                                        dakaBean.setDakaTime("上班未签到");
+                                        long today=DataUtil.getStringToDate(temp.getString("kqday"));
+                                        dakaBean.setDakaTime("上班未签到 日期："+DataUtil.getDateToString(today));
                                         dakaBean.setDakaAddress("");
                                     }
                                     if (StringEqualUtil.stringNull(temp.getString("addendtime"))){
                                         dakaBean1.setDakaTime("下班签到时间："+temp.getString("addendtime"));
-                                        dakaBean.setDakaAddress(temp.getString("endaddr"));
+                                        dakaBean1.setDakaAddress(temp.getString("endaddr"));
                                     }else {
-                                        dakaBean1.setDakaTime("下班未签到");
+                                        long today=DataUtil.getStringToDate(temp.getString("kqday"));
+                                        dakaBean1.setDakaTime("下班未签到 日期："+DataUtil.getDateToString(today));
                                         dakaBean1.setDakaAddress("");
                                     }
                                     dakaBeanList.add(dakaBean);

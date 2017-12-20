@@ -25,16 +25,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="点击"
-                android:textColor="@color/black"
-                android:textSize="@dimen/texttitle_size"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_bigSize"
                 />
             <TextView
                 android:id="@+id/text_sbdk_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="申诉"
-                android:textColor="@color/black"
-                android:textSize="@dimen/texttitle_size"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_bigSize"
                 />
         </LinearLayout>
     </RelativeLayout>

@@ -6,6 +6,8 @@ package com.pda.carmanager.bean;
 
 public class DakaBean {
     private int dakaType;
+
+    private String DakaDay;
     private String DakaTime;
     private String DakaAddress;
 
@@ -15,6 +17,14 @@ public class DakaBean {
     public DakaBean(String DakaTime, String DakaAddress){
         this.DakaTime=DakaTime;
         this.DakaAddress=DakaAddress;
+    }
+
+    public String getDakaDay() {
+        return DakaDay;
+    }
+
+    public void setDakaDay(String dakaDay) {
+        DakaDay = dakaDay;
     }
 
     public String getDakaTime() {

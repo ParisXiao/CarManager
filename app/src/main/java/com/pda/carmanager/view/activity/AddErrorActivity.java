@@ -16,10 +16,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.config.CommonlConfig;
+import com.pda.carmanager.presenter.AddErrorPresenter;
+import com.pda.carmanager.util.AMUtil;
+import com.pda.carmanager.util.DataUtil;
+import com.pda.carmanager.util.DialogUtil;
+import com.pda.carmanager.util.GZIPutil;
 import com.pda.carmanager.util.PhotoUtils;
+import com.pda.carmanager.util.UserInfoClearUtil;
+import com.pda.carmanager.view.inter.IAddErrorViewInter;
 import com.pda.carmanager.view.widght.PhotoShowDialog;
 
 import java.io.File;
@@ -28,7 +38,7 @@ import java.io.File;
  * Created by Administrator on 2017/12/12 0012.
  */
 
-public class AddErrorActivity extends BaseActivity implements View.OnClickListener {
+public class AddErrorActivity extends BaseActivity implements View.OnClickListener ,IAddErrorViewInter{
     private TextView toolbar_mid;
     private ImageButton toolbar_left_btn;
     private Toolbar toolbar;
@@ -41,6 +51,15 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
     private String IMG_PATH;
     private int flage = 0;
     private static final int PHOTO_CAPTURE = 0x11;// 拍照
+    private AddErrorPresenter addErrorPresenter;
+    private  Bitmap bitmap;
+    private String carnum;
+    public LocationClient mLocationClient = null;
+    private LocationListener myListener = new LocationListener();
+    private String city = "";     //获取城市
+    private String district = "";    //获取区县
+    private String street = "";   //获取街道信息
+    private String address = "";   //获取详细信息
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +90,7 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
         toolbar_left_btn.setVisibility(View.VISIBLE);
         toolbar_mid.setText(R.string.add_error);
         IMG_PATH = PhotoUtils.getSDPath(this);
+        addErrorPresenter=new AddErrorPresenter(this,this);
     }
     private void takePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -88,7 +108,7 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
             return;
 
         if (requestCode == PHOTO_CAPTURE) {
-            Bitmap bitmap = PhotoUtils.decodeUriAsBitmap(Uri.fromFile(new File(IMG_PATH, "temp.jpg")), PhotoUtils.getBitmapDegree(Uri.fromFile(new File(IMG_PATH, "temp.jpg")).getPath()));
+            bitmap= PhotoUtils.decodeUriAsBitmap(Uri.fromFile(new File(IMG_PATH, "temp.jpg")), PhotoUtils.getBitmapDegree(Uri.fromFile(new File(IMG_PATH, "temp.jpg")).getPath()));
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
@@ -120,14 +140,44 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
 
     private void submit() {
         // validate
-        String carnum = add_error_carnum.getText().toString().trim();
+        carnum = add_error_carnum.getText().toString().trim();
         if (TextUtils.isEmpty(carnum)) {
             Toast.makeText(this, "请输入车位编号", Toast.LENGTH_SHORT).show();
             return;
         }
-
         // TODO validate success, do something
+        mLocationClient.start();
 
+    }
 
+    @Override
+    public void addSuccess() {
+        mLocationClient.stop();
+        finish();
+    }
+
+    @Override
+    public void addFail(String msg) {
+        if (msg.equals(getResources().getString(R.string.httpOut))) {
+            UserInfoClearUtil.ClearUserInfo(AddErrorActivity.this);
+            AMUtil.actionStart(AddErrorActivity.this, LoginActivity.class);
+            finish();
+        }
+    }
+    class LocationListener implements BDLocationListener {
+
+        @Override
+        public void onReceiveLocation(BDLocation bdLocation) {
+            city = bdLocation.getCity();
+            district = bdLocation.getDistrict();
+            street = bdLocation.getStreet();
+            String address = city + district + street;
+//            address = bdLocation.getAddrStr();
+            if (address!=null) {
+                DialogUtil.showMessage(AddErrorActivity.this,getResources().getString(R.string.text_uping));
+                addErrorPresenter.addError(carnum,GZIPutil.compressForGzip(PhotoUtils.SendBitmap(bitmap)),address);
+
+            }
+        }
     }
 }

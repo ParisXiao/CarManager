@@ -5,13 +5,35 @@ package com.pda.carmanager.bean;
  */
 
 public class ChargeBean {
+    private String Id;
     private String CarNumber;
     private String StopTime;
+    private String StartTime;
     private String ParkPrice;
-    public ChargeBean(String CarNumber,String StopTime,String ParkPrice){
-        this.CarNumber=CarNumber;
-        this.StopTime=StopTime;
-        this.ParkPrice=ParkPrice;
+    private String Status;
+
+    public String getId() {
+        return Id;
+    }
+
+    public void setId(String id) {
+        Id = id;
+    }
+
+    public String getStartTime() {
+        return StartTime;
+    }
+
+    public void setStartTime(String startTime) {
+        StartTime = startTime;
+    }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
     }
 
     public String getCarNumber() {

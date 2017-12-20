@@ -11,10 +11,33 @@
         android:layout_height="match_parent"
         android:background="@drawable/shape_msg_item"
         >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/theme_button_next"
+            android:textColor="@color/white"
+            android:textSize="@dimen/texttitle_size"
+            android:text="欠费"
+            android:id="@+id/btn_needPay"
+            android:visibility="gone"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/alreadyPay"
+            android:textSize="@dimen/texttitle_size"
+            android:text="已 缴"
+            android:id="@+id/text_already"
+            android:layout_marginRight="20dp"
+            android:visibility="gone"
+            />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:id="@+id/linear_itemtitle"
             >
             <View
@@ -43,13 +66,13 @@
             />
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="100dp"
             android:layout_below="@+id/line_item"
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
@@ -61,14 +84,31 @@
                     android:textSize="@dimen/text_size"
                     android:textColor="@color/black"
                     />
-                <TextView
-                    android:id="@+id/charger_time"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:textSize="@dimen/text_size"
-                    android:textColor="@color/text_msgtime"
-                    />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    >
+                    <TextView
+                        android:id="@+id/charger_startTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:textSize="@dimen/text_size"
+                        android:textColor="@color/text_msgtime"
+                        android:layout_marginBottom="10dp"
+                        />
+                    <TextView
+                        android:id="@+id/charger_stopTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:textSize="@dimen/text_size"
+                        android:textColor="@color/text_msgtime"
+                        />
+                </LinearLayout>
+
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -85,6 +125,7 @@
                     android:textSize="@dimen/text_size"
                     android:textColor="@color/black"
                     />
+
                 <TextView
                     android:id="@+id/charger_price"
                     android:layout_width="wrap_content"

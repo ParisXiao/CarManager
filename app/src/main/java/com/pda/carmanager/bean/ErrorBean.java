@@ -7,9 +7,14 @@ package com.pda.carmanager.bean;
 public class ErrorBean {
     private String ErrorAddress;
     private String ErrorTime;
-    public ErrorBean(String ErrorAddress, String ErrorTime){
-        this.ErrorAddress=ErrorAddress;
-        this.ErrorTime=ErrorTime;
+    private String ErrorStatus;
+
+    public String getErrorStatus() {
+        return ErrorStatus;
+    }
+
+    public void setErrorStatus(String errorStatus) {
+        ErrorStatus = errorStatus;
     }
 
     public String getErrorAddress() {
