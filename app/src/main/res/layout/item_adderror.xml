@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    >
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/logon_line"
+        android:background="@color/text_msgtime"
         android:layout_alignParentTop="true"
         />
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="20dp"
         >
         <TextView
             android:id="@+id/shenshu_address"
@@ -21,6 +23,7 @@
             android:textColor="@color/black"
             android:textSize="@dimen/text_size"
             android:drawableLeft="@drawable/weizhi"
+            android:layout_marginBottom="10dp"
             android:text="  贵阳市时代广场"
             />
         <TextView

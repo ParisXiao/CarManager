@@ -19,18 +19,17 @@ import android.widget.Toast;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.config.CommonlConfig;
 import com.pda.carmanager.presenter.AddErrorPresenter;
 import com.pda.carmanager.util.AMUtil;
-import com.pda.carmanager.util.DataUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.GZIPutil;
 import com.pda.carmanager.util.PhotoUtils;
 import com.pda.carmanager.util.UserInfoClearUtil;
 import com.pda.carmanager.view.inter.IAddErrorViewInter;
-import com.pda.carmanager.view.widght.PhotoShowDialog;
 
 import java.io.File;
 
@@ -60,6 +59,7 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
     private String district = "";    //获取区县
     private String street = "";   //获取街道信息
     private String address = "";   //获取详细信息
+    private boolean flag=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +91,15 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
         toolbar_mid.setText(R.string.add_error);
         IMG_PATH = PhotoUtils.getSDPath(this);
         addErrorPresenter=new AddErrorPresenter(this,this);
+        mLocationClient = new LocationClient(getApplicationContext());
+        //声明LocationClient类
+        mLocationClient.registerLocationListener(myListener);
+        //注册监听函数
+        LocationClientOption option = new LocationClientOption();
+        option.setIsNeedAddress(true);
+//可选，是否需要地址信息，默认为不需要，即参数为false
+//如果开发者需要获得当前点的地址信息，此处必须为true
+        mLocationClient.setLocOption(option);
     }
     private void takePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -140,12 +149,22 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
 
     private void submit() {
         // validate
+        if (flag)return;
+        flag=true;
         carnum = add_error_carnum.getText().toString().trim();
         if (TextUtils.isEmpty(carnum)) {
             Toast.makeText(this, "请输入车位编号", Toast.LENGTH_SHORT).show();
+            flag=false;
             return;
         }
+        if (bitmap==null) {
+            Toast.makeText(this, "请拍照上传", Toast.LENGTH_SHORT).show();
+            flag=false;
+            return;
+        }
+
         // TODO validate success, do something
+        DialogUtil.showMessage(AddErrorActivity.this,getResources().getString(R.string.text_uping));
         mLocationClient.start();
 
     }
@@ -153,11 +172,14 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void addSuccess() {
         mLocationClient.stop();
+        flag=false;
         finish();
     }
 
     @Override
     public void addFail(String msg) {
+        flag=false;
+        mLocationClient.stop();
         if (msg.equals(getResources().getString(R.string.httpOut))) {
             UserInfoClearUtil.ClearUserInfo(AddErrorActivity.this);
             AMUtil.actionStart(AddErrorActivity.this, LoginActivity.class);
@@ -174,7 +196,6 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
             String address = city + district + street;
 //            address = bdLocation.getAddrStr();
             if (address!=null) {
-                DialogUtil.showMessage(AddErrorActivity.this,getResources().getString(R.string.text_uping));
                 addErrorPresenter.addError(carnum,GZIPutil.compressForGzip(PhotoUtils.SendBitmap(bitmap)),address);
 
             }

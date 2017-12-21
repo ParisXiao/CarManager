@@ -22,16 +22,14 @@ import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.bean.ErrorBean;
 import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.presenter.ErrorNotesPresenter;
-import com.pda.carmanager.presenter.inter.IErrorNotesPreInter;
+import com.pda.carmanager.pullrefresh.SpacesItemDecoration;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.util.UserInfoClearUtil;
 import com.pda.carmanager.view.inter.IErrorNotesViewInter;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -129,11 +127,12 @@ public class ErrorNoteActivity extends BaseActivity implements View.OnClickListe
         empty_text.setText(R.string.empty_shensu_view);
 
         pullRefresh_myError.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        pullRefresh_myError.setHasFixedSize(false);
+        pullRefresh_myError.addItemDecoration(new SpacesItemDecoration(getResources().getDimensionPixelSize(R.dimen.padding_middle1)));
+        pullRefresh_myError.setHasFixedSize(true);
         //设置是否开启上拉加载
-        pullRefresh_myError.setLoadingMoreEnabled(false);
+        pullRefresh_myError.setLoadingMoreEnabled(true);
         //设置是否开启下拉刷新
-        pullRefresh_myError.setPullRefreshEnabled(false);
+        pullRefresh_myError.setPullRefreshEnabled(true);
         //设置是否显示上次刷新的时间
         pullRefresh_myError.displayLastRefreshTime(false);
         //设置刷新回调

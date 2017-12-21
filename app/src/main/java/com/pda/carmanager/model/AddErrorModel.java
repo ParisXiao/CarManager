@@ -4,21 +4,18 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.pda.carmanager.R;
-import com.pda.carmanager.bean.PrintBean;
+import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.config.UrlConfig;
 import com.pda.carmanager.model.inter.IAddErrorInter;
 import com.pda.carmanager.presenter.inter.IAddErrorPreInter;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
-import com.pda.carmanager.util.StringEqualUtil;
+import com.pda.carmanager.util.PreferenceUtils;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
@@ -50,12 +47,13 @@ public class AddErrorModel implements IAddErrorInter {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
                 if (OKHttpUtil.isConllection(context)) {
-                    String[] key = new String[]{"id", "mycarno", "imgurl","addr"};
+                    String[] key = new String[]{"id", "mycarno", "imgurl","addr","jddid"};
                     Map map = new HashMap();
                     map.put("id", "");
                     map.put("mycarno", mycarno);
                     map.put("imgurl", imgurl);
                     map.put("addr", addr);
+                    map.put("jddid", PreferenceUtils.getInstance(context).getString(AccountConfig.Departmentid));
 
                     String Http = OKHttpUtil.GetMessage(context, UrlConfig.DualCatchPost, key, map);
                     if (Http != null) {

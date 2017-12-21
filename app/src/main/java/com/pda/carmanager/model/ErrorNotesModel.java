@@ -4,17 +4,14 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.pda.carmanager.R;
-import com.pda.carmanager.bean.DakaBean;
 import com.pda.carmanager.bean.ErrorBean;
 import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.config.UrlConfig;
 import com.pda.carmanager.model.inter.IErrorNotesInter;
 import com.pda.carmanager.presenter.inter.IErrorNotesPreInter;
-import com.pda.carmanager.util.DataUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
-import com.pda.carmanager.util.StringEqualUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,6 +70,12 @@ public class ErrorNotesModel implements IErrorNotesInter {
                                 pages = jsonObject1.getString("pages");
                                 JSONArray jsonArray = new JSONArray(jsonObject1.getString("items"));
                                 for (int i = 0; i < jsonArray.length(); i++) {
+                                    ErrorBean errorBean=new ErrorBean();
+                                    JSONObject temp=(JSONObject) jsonArray.get(i);
+                                    errorBean.setErrorAddress(temp.getString("addr"));
+                                    errorBean.setErrorStatus(temp.getString("status"));
+                                    errorBean.setErrorTime(temp.getString("statetime"));
+                                    errorBeanList.add(errorBean);
                                 }
                                 e.onNext(0);
                             } else if (code.equals("1")) {

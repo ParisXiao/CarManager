@@ -1,14 +1,10 @@
 package com.pda.carmanager.adapter;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pda.carmanager.R;
@@ -57,20 +53,18 @@ public class ErrorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         ((ErrorAdapter.MyViewHolder) holder).text_errorAddress.setText("  " + errorBeanList.get(position).getErrorAddress());
-        ((ErrorAdapter.MyViewHolder) holder).text_errorTime.setText("  " + errorBeanList.get(position).getErrorAddress());
-        if (errorBeanList.get(position).equals("待处理")) {
-            ((ErrorAdapter.MyViewHolder) holder).text_errorResult.setText("  " + errorBeanList.get(position).getErrorAddress());
+        ((ErrorAdapter.MyViewHolder) holder).text_errorTime.setText("  " + errorBeanList.get(position).getErrorTime());
+        if (errorBeanList.get(position).getErrorStatus().equals("1")) {
+            ((ErrorAdapter.MyViewHolder) holder).text_errorResult.setText("待处理");
             ((ErrorAdapter.MyViewHolder) holder).text_errorResult.setTextColor(context.getResources().getColor(R.color.red));
 
-        } else if (errorBeanList.get(position).equals("申诉成功")) {
-            ((ErrorAdapter.MyViewHolder) holder).text_errorResult.setText("  " + errorBeanList.get(position).getErrorAddress());
+        } else if (errorBeanList.get(position).getErrorStatus().equals("2")) {
+            ((ErrorAdapter.MyViewHolder) holder).text_errorResult.setText("申诉成功");
             ((ErrorAdapter.MyViewHolder) holder).text_errorResult.setTextColor(context.getResources().getColor(R.color.park_blue));
 
-        } else if (errorBeanList.get(position).equals("申诉失败")) {
-            ((ErrorAdapter.MyViewHolder) holder).text_errorResult.setText("  " + errorBeanList.get(position).getErrorAddress());
+        } else if (errorBeanList.get(position).getErrorStatus().equals("3")) {
+            ((ErrorAdapter.MyViewHolder) holder).text_errorResult.setText("申诉失败");
             ((ErrorAdapter.MyViewHolder) holder).text_errorResult.setTextColor(context.getResources().getColor(R.color.text_msgtime));
-
-
         }
 
 

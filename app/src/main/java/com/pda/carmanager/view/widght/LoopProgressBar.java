@@ -58,7 +58,7 @@ public class LoopProgressBar extends View {
         canvas.drawRoundRect(new RectF(0, 0, width, height),
                 height / 2, height / 2, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        paint.setColor(Color.rgb(254, 166, 1));
+        paint.setColor(Color.RED);
         Path path;
         int count = width / height;
         for (int i = -1 ; i < count + 1; i += 2) {
