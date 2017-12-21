@@ -3,8 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CarManager.iml" filepath="$PROJECT_DIR$/CarManager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SignalA/SignalA.iml" filepath="$PROJECT_DIR$/SignalA/SignalA.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SignalA.LongPolling/SignalA.LongPolling.iml" filepath="$PROJECT_DIR$/SignalA.LongPolling/SignalA.LongPolling.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/libzxing/libzxing.iml" filepath="$PROJECT_DIR$/libzxing/libzxing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/parallel-basic-http-client/parallel-basic-http-client.iml" filepath="$PROJECT_DIR$/parallel-basic-http-client/parallel-basic-http-client.iml" />
       <module fileurl="file://$PROJECT_DIR$/pulltorefreshlibrary/pulltorefreshlibrary.iml" filepath="$PROJECT_DIR$/pulltorefreshlibrary/pulltorefreshlibrary.iml" />
     </modules>
   </component>
