@@ -122,6 +122,13 @@ public static final android.os.Parcelable$Creator *;
 *;
 }
 -dontwarn  uk.co.senab.photoview.**
+-keep class android.posapi.**{
+*;
+}
+-dontwarn  android.posapi.**
+
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
 
 -keep class **$Properties
 -dontwarn org.xmlpull.v1.XmlPullParser

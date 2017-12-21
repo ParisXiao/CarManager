@@ -6,324 +6,341 @@
     android:background="@drawable/shape_msg_item"
     android:layout_margin="20dp"
     android:orientation="vertical">
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shape_msg_item"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="@string/choose_carType"
-            android:textColor="@color/text_msgtime"
-            android:textSize="@dimen/text_size" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-
-            <Button
-                android:id="@+id/pop_choose_small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="20dp"
-                android:background="@drawable/shape_choose_on"
-                android:text="@string/carType_small" />
-
-            <Button
-                android:id="@+id/pop_choose_big"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/shape_choose"
-                android:text="@string/carType_big" />
-
-        </RelativeLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/choose_carNumType"
-            android:textColor="@color/text_msgtime"
-            android:textSize="@dimen/text_size" />
-
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp">
-
-            <TextView
-                android:id="@+id/text_carType_new"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/carType_new"
-                android:textColor="@color/text_msgtime"
-                android:textSize="@dimen/text_size" />
-
-            <com.suke.widget.SwitchButton
-                android:id="@+id/btn_catType_new"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                app:sb_background="#A7A7A7"
-                app:sb_checked_color="@color/text_red"
-                app:sb_show_indicator="false" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp">
-
-            <TextView
-                android:id="@+id/text_carType_stu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/carType_stu"
-                android:textColor="@color/text_msgtime"
-                android:textSize="@dimen/text_size" />
-
-            <com.suke.widget.SwitchButton
-                android:id="@+id/btn_catType_stu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                app:sb_background="#A7A7A7"
-                app:sb_checked_color="@color/text_red"
-                app:sb_show_indicator="false" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/carNum"
-                android:textColor="@color/text_msgtime"
-                android:textSize="@dimen/text_size" />
-
-        </RelativeLayout>
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        >
 
         <LinearLayout
-            android:id="@+id/linear_input"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_msg_item"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/text_area1"
-                android:layout_width="@dimen/dimen_edit"
-                android:layout_height="@dimen/dimen_edit"
-                android:background="@drawable/shape_edit"
-                android:textColor="@color/black"
-                android:gravity="center"
-                android:textSize="@dimen/text_size" />
-
-            <TextView
-                android:id="@+id/text_area2"
-                android:layout_width="@dimen/dimen_edit"
-                android:layout_height="@dimen/dimen_edit"
-                android:layout_marginLeft="5dp"
-                android:background="@drawable/shape_edit"
-                android:textColor="@color/black"
-                android:gravity="center"
-                android:textSize="@dimen/text_size" />
-
-            <TextView
-                android:id="@+id/text_key1"
-                android:layout_width="@dimen/dimen_edit"
-                android:layout_height="@dimen/dimen_edit"
-                android:layout_marginLeft="5dp"
-                android:background="@drawable/shape_edit"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size" />
-
-            <TextView
-                android:id="@+id/text_key2"
-                android:layout_width="@dimen/dimen_edit"
-                android:layout_height="@dimen/dimen_edit"
-                android:layout_marginLeft="5dp"
-                android:background="@drawable/shape_edit"
-                android:textColor="@color/black"
-                android:gravity="center"
-                android:textSize="@dimen/text_size" />
-
-            <TextView
-                android:id="@+id/text_key3"
-                android:layout_width="@dimen/dimen_edit"
-                android:layout_height="@dimen/dimen_edit"
-                android:layout_marginLeft="5dp"
-                android:background="@drawable/shape_edit"
-                android:textColor="@color/black"
-                android:gravity="center"
-                android:textSize="@dimen/text_size" />
-            <TextView
-                android:id="@+id/text_key4"
-                android:layout_width="@dimen/dimen_edit"
-                android:layout_height="@dimen/dimen_edit"
-                android:layout_marginLeft="5dp"
-                android:background="@drawable/shape_edit"
-                android:textColor="@color/black"
-                android:gravity="center"
-                android:textSize="@dimen/text_size" />
-
-            <TextView
-                android:id="@+id/text_key5"
-                android:layout_width="@dimen/dimen_edit"
-                android:layout_height="@dimen/dimen_edit"
-                android:layout_marginLeft="5dp"
-                android:background="@drawable/shape_edit"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size" />
-
-            <TextView
-                android:id="@+id/text_key6"
-                android:layout_width="@dimen/dimen_edit"
-                android:layout_height="@dimen/dimen_edit"
-                android:layout_marginLeft="5dp"
-                android:gravity="center"
-                android:background="@drawable/shape_edit"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size"
-                android:visibility="gone" />
-
-
-            <TextView
-                android:id="@+id/text_stucar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="学"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_bigSize"
-                android:visibility="gone" />
-        </LinearLayout>
+                android:text="@string/choose_carType"
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                android:textColor="@color/text_msgtime"
+                android:textSize="@dimen/text_size" />
 
             <RelativeLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <ImageView
-                    android:id="@+id/camera_1"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/paizhao" />
-
-                <TextView
-                    android:id="@+id/text_camera1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/camera_1"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="20dp"
-                    android:text="@string/camera"
-                    android:textColor="@color/text_msgtime"
-                    android:textSize="@dimen/text_smallSize" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <ImageView
-                    android:id="@+id/camera_2"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/paizhao" />
-
-                <TextView
-                    android:id="@+id/text_camera2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/camera_2"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="20dp"
-                    android:text="@string/camera"
-                    android:textColor="@color/text_msgtime"
-                    android:textSize="@dimen/text_smallSize" />
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:orientation="horizontal">
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_marginTop="10dp">
 
                 <Button
-                    android:id="@+id/pop1_exit"
+                    android:id="@+id/pop_choose_small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/theme_button_exit"
-                    android:text="@string/exit"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/texttitle_size" />
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/shape_choose_on"
+                    android:text="@string/carType_small" />
 
+                <Button
+                    android:id="@+id/pop_choose_big"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/shape_choose"
+                    android:text="@string/carType_big" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/choose_carNumType"
+                android:textColor="@color/text_msgtime"
+                android:textSize="@dimen/text_size" />
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/text_carType_new"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/carType_new"
+                    android:textColor="@color/text_msgtime"
+                    android:textSize="@dimen/text_size" />
+
+                <com.suke.widget.SwitchButton
+                    android:id="@+id/btn_catType_new"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    app:sb_background="#A7A7A7"
+                    app:sb_checked_color="@color/text_red"
+                    app:sb_show_indicator="false" />
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp">
 
-                <Button
-                    android:id="@+id/pop1_next"
+                <TextView
+                    android:id="@+id/text_carType_stu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/theme_button_next"
-                    android:text="@string/next"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/texttitle_size" />
+                    android:layout_centerVertical="true"
+                    android:text="@string/carType_stu"
+                    android:textColor="@color/text_msgtime"
+                    android:textSize="@dimen/text_size" />
+
+                <com.suke.widget.SwitchButton
+                    android:id="@+id/btn_catType_stu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    app:sb_background="#A7A7A7"
+                    app:sb_checked_color="@color/text_red"
+                    app:sb_show_indicator="false" />
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/carNum"
+                    android:textColor="@color/text_msgtime"
+                    android:textSize="@dimen/text_size" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_input"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text_area1"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_edit"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_edit"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size" />
+
+                <TextView
+                    android:id="@+id/text_area2"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_edit"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/shape_edit"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size" />
+
+                <TextView
+                    android:id="@+id/text_key1"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_edit"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/shape_edit"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size" />
+
+                <TextView
+                    android:id="@+id/text_key2"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_edit"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/shape_edit"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size" />
+
+                <TextView
+                    android:id="@+id/text_key3"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_edit"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/shape_edit"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size" />
+                <TextView
+                    android:id="@+id/text_key4"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_edit"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/shape_edit"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size" />
+
+                <TextView
+                    android:id="@+id/text_key5"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_edit"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/shape_edit"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size" />
+
+                <TextView
+                    android:id="@+id/text_key6"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_edit"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center"
+                    android:background="@drawable/shape_edit"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size"
+                    android:visibility="gone" />
+
+
+                <TextView
+                    android:id="@+id/text_stucar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="学"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_bigSize"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/camera_1"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/paizhao" />
+
+                    <TextView
+                        android:id="@+id/text_camera1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/camera_1"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/camera"
+                        android:textColor="@color/text_msgtime"
+                        android:textSize="@dimen/text_smallSize" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/camera_2"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/paizhao" />
+
+                    <TextView
+                        android:id="@+id/text_camera2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/camera_2"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/camera"
+                        android:textColor="@color/text_msgtime"
+                        android:textSize="@dimen/text_smallSize" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <Button
+                        android:id="@+id/pop1_exit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/theme_button_exit"
+                        android:text="@string/exit"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/texttitle_size" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <Button
+                        android:id="@+id/pop1_next"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/theme_button_next"
+                        android:text="@string/next"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/texttitle_size" />
+                </RelativeLayout>
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+
+    </ScrollView>
+
 
 
 </RelativeLayout>

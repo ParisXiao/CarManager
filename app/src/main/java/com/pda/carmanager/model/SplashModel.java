@@ -55,6 +55,7 @@ public class SplashModel implements ISplashInter {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
                 if (OKHttpUtil.isConllection(context)) {
+
                     if (!TextUtils.isEmpty(PreferenceUtils.getInstance(context).getString(AccountConfig.AccountId)) && PreferenceUtils.getInstance(context).getBoolean(AccountConfig.IsLogin, false)) {
 
                         String[] key = new String[]{"username", "password", "companycode", "platform"};

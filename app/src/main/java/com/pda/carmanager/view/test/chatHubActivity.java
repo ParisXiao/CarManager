@@ -30,7 +30,7 @@ import java.util.List;
 public class chatHubActivity extends Activity implements View.OnClickListener {
 
     private final static String TAG = "KING";
-    private final static String HUB_URL = "http://192.168.1.232:7782/signalr/hubs";
+    private final static String HUB_URL = "http://192.168.1.232:8008/signalr/hubs";
     private Button btnSend;
     private EditText chat_name;
     private EditText chat_value;
@@ -137,11 +137,10 @@ public class chatHubActivity extends Activity implements View.OnClickListener {
                 Toast.makeText(chatHubActivity.this, "Error: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
             }
         };
-
         List<String> args = new ArrayList<String>(2);
-        args.add(chat_name.getText().toString());
-        args.add(chat_value.getText().toString());
-        hub.Invoke("send", args, callback);
+        args.add("123");
+        args.add("xiaoli");
+        hub.Invoke("login", args, callback);
         // TODO validate success, do something
 
 

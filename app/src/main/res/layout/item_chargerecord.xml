@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:id="@+id/rel_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_horizontal"
+    android:background="@drawable/shape_msg_item"
     >
-    <RelativeLayout
-        android:id="@+id/rel_item"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/shape_msg_item"
-        >
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:background="@drawable/theme_button_next"
+            android:background="@drawable/theme_button_qf"
             android:textColor="@color/white"
-            android:textSize="@dimen/texttitle_size"
+            android:textSize="@dimen/text_size"
             android:text="欠费"
             android:id="@+id/btn_needPay"
-            android:visibility="gone"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -64,66 +58,55 @@
             android:layout_marginTop="5dp"
             android:id="@+id/line_item"
             />
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/line_item"
-            android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2"
-                android:orientation="horizontal"
-                android:layout_marginLeft="10dp"
-                android:gravity="center_vertical"
-                >
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/linear_time"
+            >
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/text_time"
                     android:textSize="@dimen/text_size"
+                    android:id="@+id/text_time"
                     android:textColor="@color/black"
                     />
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center_vertical"
-                    >
                     <TextView
                         android:id="@+id/charger_startTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="10dp"
                         android:textSize="@dimen/text_size"
+                        android:layout_toRightOf="@+id/text_time"
                         android:textColor="@color/text_msgtime"
-                        android:layout_marginBottom="10dp"
+                        android:text="2017"
                         />
                     <TextView
                         android:id="@+id/charger_stopTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
                         android:textSize="@dimen/text_size"
+                        android:text="2017"
+                        android:layout_marginTop="5dp"
+                        android:layout_alignStart="@+id/charger_startTime"
+                        android:layout_below="@+id/charger_startTime"
                         android:textColor="@color/text_msgtime"
                         />
-                </LinearLayout>
 
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_marginLeft="10dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                >
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/text_chargerPrice"
                     android:textSize="@dimen/text_size"
                     android:textColor="@color/black"
+                    android:layout_alignStart="@+id/text_time"
+                    android:layout_below="@+id/charger_stopTime"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/text_price"
                     />
 
                 <TextView
@@ -133,9 +116,9 @@
                     android:layout_marginLeft="20dp"
                     android:textSize="@dimen/text_size"
                     android:textColor="@color/red"
+                    android:text="20"
+                    android:layout_toRightOf="@+id/text_price"
+                    android:layout_alignBottom="@+id/text_price"
                     />
-            </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
-
-</LinearLayout>
