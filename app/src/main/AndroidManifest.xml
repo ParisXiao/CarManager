@@ -150,6 +150,7 @@
         <service android:name="com.pda.carmanager.service.ScanService" >
 
         </service>
+        <service android:name=".service.SignalAService" />
     </application>
 
 </manifest>

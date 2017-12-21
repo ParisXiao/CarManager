@@ -1,11 +1,13 @@
 package com.pda.carmanager.model;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.pda.carmanager.R;
+import com.pda.carmanager.bean.UpdataBean;
 import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.config.UrlConfig;
 import com.pda.carmanager.model.inter.ISplashInter;
@@ -14,10 +16,13 @@ import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.MD5util;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
+import com.pda.carmanager.util.StringEqualUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,6 +42,7 @@ import io.reactivex.schedulers.Schedulers;
 public class SplashModel implements ISplashInter {
     private Context context;
     private ISplashPreInter iSplashPreInter;
+    private  UpdataBean updataBean;
     private String decs;
 
     public SplashModel(Context context, ISplashPreInter iSplashPreInter) {
@@ -46,7 +52,75 @@ public class SplashModel implements ISplashInter {
 
     @Override
     public void updata() {
+        Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
+                String Http = OKHttpUtil.updataPost( UrlConfig.UpdataApp);
+                if (Http != null) {
+                    JSONObject jsonObject;
+                    try {
+                        jsonObject = new JSONObject(Http);
+                       updataBean = new UpdataBean();
+                        updataBean.setAppVersion(jsonObject.getString("Version"));
+                        updataBean.setUpdataUrl(UrlConfig.PCHttpPost+jsonObject.getString("Url"));
+                        try {
+                            PackageInfo info = context.getPackageManager().getPackageInfo(
+                                    context.getPackageName(), 0);
+                            String versionName = info.versionName;
+                            if (StringEqualUtil.stringNull(updataBean.getAppVersion()) || StringEqualUtil.stringNull(updataBean.getUpdataUrl())) {
+                                if (!versionName.trim().equals(updataBean.getAppVersion().trim())) {
+                                    URL url = new URL(updataBean.getUpdataUrl());
+                                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                    conn.setConnectTimeout(5000);
+                                    //获取到文件的大小
+                                    int contentLength = conn.getContentLength();
+                                    final String size = DialogUtil.setFileSize(contentLength);
+                                    updataBean.setSize(size);
+                                    e.onNext(1);
+                                } else {
+                                    e.onNext(0);
+                                }
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    } catch (JSONException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                }
+                e.onComplete();
 
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Integer>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+
+
+            }
+
+            @Override
+            public void onNext(@NonNull Integer integer) {
+                switch (integer) {
+                    case 0:
+                        iSplashPreInter.notUpdata();
+                        break;
+                    case 1:
+                        iSplashPreInter.needUpdata(updataBean);
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
     @Override
@@ -118,7 +192,7 @@ public class SplashModel implements ISplashInter {
                         } else {
                             e.onNext(3);
                         }
-                    }else {
+                    } else {
                         e.onNext(5);
                     }
                 } else {

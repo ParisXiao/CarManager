@@ -1,31 +1,41 @@
 package com.pda.carmanager.view.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.posapi.PosApi;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.base.BaseApplication;
-import com.pda.carmanager.config.AccountConfig;
+import com.pda.carmanager.bean.UpdataBean;
+import com.pda.carmanager.inter.UpdataApkInterface;
 import com.pda.carmanager.presenter.SplashPresenter;
 import com.pda.carmanager.service.ScanService;
 import com.pda.carmanager.util.DialogUtil;
-import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.view.inter.ISplashViewInter;
 import com.pda.carmanager.view.widght.LoopProgressBar;
 
+import java.io.File;
 import java.io.Serializable;
 
 /**
  * Created by Admin on 2017/12/7.
  */
 
-public class SplashActivity extends BaseActivity    implements ISplashViewInter {
+public class SplashActivity extends BaseActivity implements ISplashViewInter {
     private final int SPLASH_DISPLAY_LENGHT = 2000;
     private Handler handler;
     private PosApi mPosSDK;
@@ -48,17 +58,11 @@ public class SplashActivity extends BaseActivity    implements ISplashViewInter 
             newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startService(newIntent);
         }
-        splashPresenter=new SplashPresenter(this,this);
+        splashPresenter = new SplashPresenter(this, this);
         splash_status.setText(getResources().getString(R.string.text_splash_login));
         splashProgress.start();
         // 延迟SPLASH_DISPLAY_LENGHT时间然后跳转
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                splashPresenter.splash();
-            }
-        }, SPLASH_DISPLAY_LENGHT);
+        splashPresenter.updata();
 
     }
 
@@ -189,12 +193,114 @@ public class SplashActivity extends BaseActivity    implements ISplashViewInter 
     }
 
     @Override
-    public void needUpdata(Serializable object) {
+    public void needUpdata(final Serializable object) {
+        UpdataBean value = (UpdataBean) object;
+        showUpdata(value.getUpdataUrl(), value.getAppVersion(), value.getSize());
+    }
 
+    private void showUpdata(final String url, final String AppVersion, final String size) {
+        int i = DialogUtil.GetNetworkType(SplashActivity.this);
+        if (i == 0) {
+            splash_status.setText(getResources().getString(R.string.text_splash_net));
+        } else if (i == DialogUtil.NETTYPE_WIFI) {
+            downLoadApk(url, AppVersion, size);
+        } else {
+            DialogUtil.showMessageAndEventDialog(SplashActivity.this, "当前网络处于2G/3G/4G，是否继续下载更新", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    downLoadApk(url, AppVersion, size);
+                }
+            }, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }
+    }
+
+    protected void downLoadApk(final String url, String AppVersion, String size) {
+        deleteApk();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        window.setGravity(Gravity.CENTER);
+        lp.alpha = 1f;
+        window.setAttributes(lp);
+        window.setContentView(R.layout.updata_progress);
+        TextView updata_progress_versions = (TextView) window.findViewById(R.id.updata_progress_versions);
+        TextView updata_progress_size = (TextView) window.findViewById(R.id.updata_progress_size);
+        updata_progress_versions.setText("最新版本：v" + AppVersion);
+        updata_progress_size.setText("APK大小：" + size);
+        final NumberProgressBar updata_progress_numberbar = (NumberProgressBar) window.findViewById(R.id.updata_progress_numberbar);
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+//
+                    File file = DialogUtil.getFileFromServerForNumberProgressBar(url, "updata.apk", new UpdataApkInterface() {
+                        @Override
+                        public void getCurrentProcestion(final int data) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    updata_progress_numberbar.setProgress(data);
+                                }
+                            });
+                        }
+                    });
+                    sleep(300);
+                    installApk(file);
+                    dialog.dismiss(); //结束掉进度条对话框
+                    finish();
+                } catch (Exception e) {
+                    dialog.dismiss();
+                    deleteApk();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(SplashActivity.this, "下载失败,请检查网络问题并重新下载",
+                                    Toast.LENGTH_LONG).show();
+                            finish();
+                        }
+                    });
+                    Log.d("WelcomeActivity", e.toString());
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
+    //删除之前下载的apk文件
+    public void deleteApk() {
+        File file = new File(Environment.getExternalStorageDirectory(), "updata.apk");
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+
+    //安装apk
+    protected void installApk(File file) {
+        Intent intent = new Intent();
+        //执行动作
+        intent.setAction(Intent.ACTION_VIEW);
+        //执行的数据类型
+        intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+        startActivity(intent);
     }
 
     @Override
     public void notUpdata() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                splashPresenter.splash();
+            }
+        },SPLASH_DISPLAY_LENGHT);
 
     }
 

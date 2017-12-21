@@ -78,15 +78,6 @@
             android:id="@+id/add_error_priview"
             android:visibility="gone"
             />
-
-        <TextView
-            android:id="@+id/text_add_error_camera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/add_error_camera"
-            android:layout_centerHorizontal="true"
-            android:text="点击拍照" />
-
     </RelativeLayout>
 
 

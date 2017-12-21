@@ -44,7 +44,6 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
     private EditText add_error_carnum;
     private ImageView add_error_camera;
     private ImageView add_error_priview;
-    private TextView text_add_error_camera;
     private Button add_error_sure;
     private Button add_error_exit;
     private String IMG_PATH;
@@ -76,7 +75,6 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
         add_error_carnum = (EditText) findViewById(R.id.add_error_carnum);
         add_error_camera = (ImageView) findViewById(R.id.add_error_camera);
         add_error_priview = (ImageView) findViewById(R.id.add_error_priview);
-        text_add_error_camera = (TextView) findViewById(R.id.text_add_error_camera);
         add_error_sure = (Button) findViewById(R.id.add_error_sure);
         add_error_exit = (Button) findViewById(R.id.add_error_exit);
 
