@@ -5,31 +5,34 @@ package com.pda.carmanager.bean;
  */
 
 public class MsgBean {
-    String msg_day;
-    String msg_hour;
+    String id;
+    String msg_time;
     String msg_title;
+    String msg_titleColor;
     String msg_content;
-    public MsgBean( String msg_day,   String msg_hour, String msg_title,String msg_content){
-        this.msg_day=msg_day;
-        this.msg_hour=msg_hour;
-        this.msg_title=msg_title;
-        this.msg_content=msg_content;
+
+    public String getId() {
+        return id;
     }
 
-    public String getMsg_day() {
-        return msg_day;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setMsg_day(String msg_day) {
-        this.msg_day = msg_day;
+    public String getMsg_time() {
+        return msg_time;
     }
 
-    public String getMsg_hour() {
-        return msg_hour;
+    public void setMsg_time(String msg_time) {
+        this.msg_time = msg_time;
     }
 
-    public void setMsg_hour(String msg_hour) {
-        this.msg_hour = msg_hour;
+    public String getMsg_titleColor() {
+        return msg_titleColor;
+    }
+
+    public void setMsg_titleColor(String msg_titleColor) {
+        this.msg_titleColor = msg_titleColor;
     }
 
     public String getMsg_title() {

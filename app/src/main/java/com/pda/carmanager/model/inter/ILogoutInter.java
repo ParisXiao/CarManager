@@ -6,4 +6,5 @@ package com.pda.carmanager.model.inter;
 
 public interface ILogoutInter {
     void logout();
+    void getTodayPrice();
 }

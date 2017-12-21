@@ -86,4 +86,5 @@ dependencies {
     compile files('libs/bugly_crash_release.jar')
     compile project(path: ':SignalA')
     compile project(path: ':SignalA.LongPolling')
+    compile project(path: ':notilibrary')
 }

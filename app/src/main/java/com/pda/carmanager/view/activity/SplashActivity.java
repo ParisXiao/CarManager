@@ -24,12 +24,15 @@ import com.pda.carmanager.bean.UpdataBean;
 import com.pda.carmanager.inter.UpdataApkInterface;
 import com.pda.carmanager.presenter.SplashPresenter;
 import com.pda.carmanager.service.ScanService;
+import com.pda.carmanager.service.SignalAService;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.view.inter.ISplashViewInter;
 import com.pda.carmanager.view.widght.LoopProgressBar;
 
 import java.io.File;
 import java.io.Serializable;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 /**
  * Created by Admin on 2017/12/7.
@@ -55,7 +58,7 @@ public class SplashActivity extends BaseActivity implements ISplashViewInter {
             //获取状态时回调
             mPosSDK.setOnDeviceStateListener(onDeviceStateListener);
             Intent newIntent = new Intent(SplashActivity.this, ScanService.class);
-            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            newIntent.addFlags(FLAG_ACTIVITY_NEW_TASK);
             startService(newIntent);
         }
         splashPresenter = new SplashPresenter(this, this);
@@ -313,9 +316,13 @@ public class SplashActivity extends BaseActivity implements ISplashViewInter {
     public void splashLoginSuccess() {
         splash_status.setText(getResources().getString(R.string.text_splash_com));
         splashProgress.stop();
-        Intent intent = new Intent(SplashActivity.this,
+        //        启动signalA
+        Intent intent=new Intent(this, SignalAService.class);
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+        startService(intent);
+        Intent intent1 = new Intent(SplashActivity.this,
                 MainActivity.class);
-        startActivity(intent);
+        startActivity(intent1);
         SplashActivity.this.finish();
 
     }

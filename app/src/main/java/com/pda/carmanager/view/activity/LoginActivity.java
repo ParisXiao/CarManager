@@ -1,6 +1,6 @@
 package com.pda.carmanager.view.activity;
 
-import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -17,12 +17,15 @@ import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.presenter.LoginPresenter;
+import com.pda.carmanager.service.SignalAService;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.HideSoftKeyboardUtil;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.view.inter.LoginViewInter;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 /**
  * Created by Admin on 2017/12/7.
@@ -161,6 +164,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public void loginSuccess() {
         flag=false;
+//        启动signalA
+        Intent intent=new Intent(this, SignalAService.class);
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+        startService(intent);
         AMUtil.actionStart(LoginActivity.this, MainActivity.class);
         finish();
     }

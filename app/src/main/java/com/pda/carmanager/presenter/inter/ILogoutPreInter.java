@@ -6,6 +6,8 @@ package com.pda.carmanager.presenter.inter;
 
 public interface ILogoutPreInter {
     void logout();
+    void getTodayPrice();
+    void getSuccess(String moneny);
     void logoutSuccess();
     void logoutFails(String msg);
 }

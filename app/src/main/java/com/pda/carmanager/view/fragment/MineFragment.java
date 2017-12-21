@@ -20,8 +20,8 @@ import android.widget.TextView;
 import com.pda.carmanager.R;
 import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.presenter.LogoutPresenter;
+import com.pda.carmanager.service.SignalAService;
 import com.pda.carmanager.util.AMUtil;
-import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.view.activity.ChargeRecordActivity;
@@ -29,10 +29,6 @@ import com.pda.carmanager.view.activity.DakaActivity;
 import com.pda.carmanager.view.activity.ErrorNoteActivity;
 import com.pda.carmanager.view.activity.LoginActivity;
 import com.pda.carmanager.view.inter.ILogoutViewInter;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
@@ -82,6 +78,12 @@ public class MineFragment extends Fragment implements View.OnClickListener,ILogo
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        logoutPresenter.getTodayPrice();
+    }
+
+    @Override
     public void onClick(View v) {
         Intent dakaType=new Intent(context,DakaActivity.class);
         dakaType.addFlags(FLAG_ACTIVITY_NEW_TASK);
@@ -103,6 +105,8 @@ public class MineFragment extends Fragment implements View.OnClickListener,ILogo
             case R.id.button_logout:
                 if (!flag1)
                     flag1=true;
+                Intent intent=new Intent(context, SignalAService.class);
+                context.stopService(intent);
                 showChooseMessage(context,"注销确认","是否确认注销并清空个人信息？");
                 break;
         }
@@ -150,6 +154,11 @@ public class MineFragment extends Fragment implements View.OnClickListener,ILogo
 
             }
         }
+    }
+
+    @Override
+    public void getSuccess(String moneny) {
+        text_todayMoney.setText(moneny+"元");
     }
 
     @Override

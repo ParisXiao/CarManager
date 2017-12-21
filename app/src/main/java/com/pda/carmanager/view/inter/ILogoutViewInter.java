@@ -5,6 +5,7 @@ package com.pda.carmanager.view.inter;
  */
 
 public interface ILogoutViewInter {
+    void getSuccess(String moneny);
     void logoutSuccess();
     void logoutFail(String Msg);
 }

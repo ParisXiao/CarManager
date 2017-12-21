@@ -8,7 +8,7 @@ import java.util.Date;
  * Created by Admin on 2017/12/20.
  */
 
-public class DataUtil {
+public class DateUtil {
 
     private static SimpleDateFormat sf=null;
     /*获取系统时间 格式为："yyyy/MM/dd "*/
@@ -24,7 +24,12 @@ public class DataUtil {
         sf = new SimpleDateFormat("yyyy-MM-dd");
         return sf.format(d);
     }
-
+    /*时间戳转换成字符窜*/
+    public static String getDateToStringHour(long time) {
+        Date d = new Date(time);
+        sf = new SimpleDateFormat("HH:mm");
+        return sf.format(d);
+    }
     /*将字符串转为时间戳*/
     public static long getStringToDate(String time) {
         sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

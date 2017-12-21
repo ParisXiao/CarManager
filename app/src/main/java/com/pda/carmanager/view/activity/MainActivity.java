@@ -6,11 +6,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -18,7 +15,6 @@ import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
-import com.pda.carmanager.util.StatusBarUtil;
 import com.pda.carmanager.view.fragment.ManagementFragment;
 import com.pda.carmanager.view.fragment.MessageFragment;
 import com.pda.carmanager.view.fragment.MineFragment;
@@ -101,7 +97,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         initFragment();
-        startView();
+        Intent intent = getIntent();
+        if (intent != null) {
+            if (intent.getStringExtra("Notifi") != null) {
+                if (intent.getStringExtra("Notifi").equals("Msg")) {
+                    refreshImageButtons(1);
+                    toolbar_mid.setText("信息中心");
+                }else {
+                    startView();
+                }
+            } else {
+                startView();
+            }
+        }
+
     }
 
     private void showFragment(int position) {
@@ -163,7 +172,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 showFragment(1);
                 break;
             case R.id.imb_mine:
-                toolbar_mid.setText("我的信息");
+                toolbar_mid.setText("个人中心");
                 refreshImageButtons(2);
                 showFragment(2);
                 break;

@@ -2,7 +2,6 @@ package com.pda.carmanager.presenter;
 
 import android.content.Context;
 
-import com.pda.carmanager.bean.ChargeBean;
 import com.pda.carmanager.model.LogoutModel;
 import com.pda.carmanager.model.inter.ILogoutInter;
 import com.pda.carmanager.presenter.inter.ILogoutPreInter;
@@ -26,6 +25,16 @@ public class LogoutPresenter   implements ILogoutPreInter{
     @Override
     public void logout() {
         iLogoutInter.logout();
+    }
+
+    @Override
+    public void getTodayPrice() {
+        iLogoutInter.getTodayPrice();
+    }
+
+    @Override
+    public void getSuccess(String moneny) {
+        iLogoutViewInter.getSuccess(moneny);
     }
 
     @Override

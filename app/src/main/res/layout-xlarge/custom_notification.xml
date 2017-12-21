@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_marginTop="12dp"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/noti_title"
+        android:layout_width="fill_parent"
+        android:textColor="@color/gray"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textSize="@dimen/texttitle_size"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/noti_context"
+    android:text="来自 zzz40500"
+        android:layout_width="fill_parent"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:lines="3"
+        android:textSize="@dimen/text_size"
+        android:textColor="@color/gray"
+        android:ellipsize="end"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:text="打开查看"
+        android:id="@+id/openSource"
+        android:background="@drawable/butto"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+
+
+</LinearLayout>
+    </RelativeLayout>

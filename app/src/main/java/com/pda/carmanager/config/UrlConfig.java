@@ -8,8 +8,8 @@ public class UrlConfig {
     /**
      * 接口配置
      */
-    public static String HttpIpPost="http://www.bianlile.cc:89/" ;
-    //    public static String HttpIpPost="http://192.168.43.249:8008/" ;
+//    public static String HttpIpPost="http://www.bianlile.cc:89/" ;
+        public static String HttpIpPost="http://192.168.43.249:8001/" ;
 //    public static String HttpIpPost="http://192.168.1.238:8001/" ;
 
 
@@ -28,6 +28,8 @@ public class UrlConfig {
     public static String PrintPost=HttpIpPost+"api/CarManage/EnregisterCarNumPrint";//查询打印信息
     public static String DualCatchPost=HttpIpPost+"api/CarManage/DualCatch";//新增申诉
     public static String SelCatchPost=HttpIpPost+"api/CarManage/SelCatch";//查询申诉进度
+    public static String MsgPost=HttpIpPost+"api/CarManage/SelNews";//查询信息列表
+    public static String TotalMoneyPost=HttpIpPost+"api/CarManage/SelTodayTotalMoneyByUser";//查询今日收费
 
 
     /**
@@ -38,4 +40,10 @@ public class UrlConfig {
     public static String UpdataApp=PCHttpPost+"Update/GetUpdateEntity";//查询申诉进度
 
     public static String SMSUrl="http://api.boxunpark.com/SMS/sendMsg";//短信验证接口
+
+
+
+    //signalR+signalA
+    public static String HUB_POST=HttpIpPost+"signalr/hubs";//
+    public static String NEWHTML_POST="http://www.bianlile.cc:88/Update/NoticeDetail?newsid=";
 }

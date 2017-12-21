@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pda.carmanager.R;
-import com.pda.carmanager.bean.ChargeBean;
 import com.pda.carmanager.bean.MsgBean;
+import com.pda.carmanager.util.DateUtil;
 import com.pda.carmanager.view.activity.ContentActivity;
 
 import java.util.ArrayList;
@@ -68,16 +69,19 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        ((MyViewHolder) holder).msg_day.setText(msgBeenList.get(position).getMsg_day());
-        ((MyViewHolder) holder).msg_hour.setText(msgBeenList.get(position).getMsg_hour());
+        long date = DateUtil.getStringToDate(msgBeenList.get(position).getMsg_time());
+        ((MyViewHolder) holder).msg_day.setText(DateUtil.getDateToString(date));
+        ((MyViewHolder) holder).msg_hour.setText(DateUtil.getDateToStringHour(date));
         ((MyViewHolder) holder).msg_title.setText(msgBeenList.get(position).getMsg_title());
-        ((MyViewHolder) holder).msg_content.setText(msgBeenList.get(position).getMsg_content());
+        ((MyViewHolder) holder).msg_content.setText(Html.fromHtml(msgBeenList.get(position).getMsg_content()));
         ((MyViewHolder) holder).msg_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(context, ContentActivity.class);
                 Bundle bundle=new Bundle();
                 bundle.putString("Title",msgBeenList.get(position).getMsg_title());
+                bundle.putString("Id",msgBeenList.get(position).getId());
+                bundle.putString("TitleColor",msgBeenList.get(position).getMsg_titleColor());
                 bundle.putString("Content",msgBeenList.get(position).getMsg_content());
                 intent.putExtras(bundle);
                 context.startActivity(intent);
