@@ -55,7 +55,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         fragmentTransaction.show(managementFragment);
         fragmentTransaction.commitAllowingStateLoss();
     }
-
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //super.onSaveInstanceState(outState);
+    }
     private void initFragment() {
         fragmentList = new ArrayList<>();
         managementFragment = new ManagementFragment();

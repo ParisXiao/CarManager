@@ -9,7 +9,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,8 +31,6 @@ import com.pda.carmanager.view.inter.IAddParkViewInter;
 import org.angmarch.views.NiceSpinner;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -66,7 +63,6 @@ public class AddParkActivity extends BaseActivity implements View.OnClickListene
 
     private void initData() {
         niceSpinner = (NiceSpinner) findViewById(R.id.niceSpinner);
-        List<String> dataset = new LinkedList<>(Arrays.asList("街道段一", "街道段二", "街道段三", "街道段四", "街道段五"));
         DialogUtil.showMessage(this, getResources().getString(R.string.text_loading));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);

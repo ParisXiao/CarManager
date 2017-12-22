@@ -27,6 +27,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -158,7 +159,10 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
         emptyView = View.inflate(this, R.layout.layout_empty_view, null);
         emptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
-
+        ImageView empty_img = (ImageView) emptyView.findViewById(R.id.empty_img);
+        TextView empty_text = (TextView) emptyView.findViewById(R.id.empty_text);
+        empty_img.setImageDrawable(getResources().getDrawable(R.drawable.chewei_null));
+        empty_text.setText("您还没有可管理车位！");
         pullRefresh_myPark.setLayoutManager(new GridLayoutManager(this, 2));
         pullRefresh_myPark.addItemDecoration(new GridSpacingItemDecoration(getResources().getDimensionPixelSize(R.dimen.padding_middle), 2, true));
         pullRefresh_myPark.setHasFixedSize(true);

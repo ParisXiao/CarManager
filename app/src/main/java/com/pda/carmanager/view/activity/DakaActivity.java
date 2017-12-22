@@ -3,7 +3,6 @@ package com.pda.carmanager.view.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -13,7 +12,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.androidkun.PullToRefreshRecyclerView;
 import com.androidkun.callback.PullToRefreshListener;
@@ -26,7 +24,6 @@ import com.pda.carmanager.adapter.DakaListAdapter;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.bean.DakaBean;
 import com.pda.carmanager.presenter.DakaPresenter;
-import com.pda.carmanager.pullrefresh.GridSpacingItemDecoration;
 import com.pda.carmanager.pullrefresh.SpacesItemDecoration;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
@@ -37,8 +34,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import static com.pda.carmanager.R.id.pullRefresh_myPark;
 
 /**
  * Created by Administrator on 2017/12/8 0008.
@@ -264,7 +259,7 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
         ImageView empty_img = (ImageView) emptyView.findViewById(R.id.empty_img);
         TextView empty_text = (TextView) emptyView.findViewById(R.id.empty_text);
         empty_img.setImageDrawable(getResources().getDrawable(R.drawable.shoufeijilu_no));
-        empty_text.setText("你还没有打卡记录！");
+        empty_text.setText("您还没有打卡记录！");
         pullRefresh_Daka.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         pullRefresh_Daka.addItemDecoration(new SpacesItemDecoration(getResources().getDimensionPixelSize(R.dimen.padding_middle)));
         pullRefresh_Daka.setHasFixedSize(true);
