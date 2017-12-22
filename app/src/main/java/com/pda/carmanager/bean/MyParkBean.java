@@ -11,6 +11,8 @@ public class MyParkBean {
     private String ParkNum;
     private String parkingrecordid;
     private String startTime;
+    private boolean in=false;
+    private boolean out=false;
 
     public MyParkBean() {
     }
@@ -20,6 +22,22 @@ public class MyParkBean {
         this.ParkType=ParkType;
         this.CarNum=CarNum;
         this.ParkNum=ParkNum;
+    }
+
+    public boolean isOut() {
+        return out;
+    }
+
+    public void setOut(boolean out) {
+        this.out = out;
+    }
+
+    public boolean isIn() {
+        return in;
+    }
+
+    public void setIn(boolean in) {
+        this.in = in;
     }
 
     public String getStartTime() {

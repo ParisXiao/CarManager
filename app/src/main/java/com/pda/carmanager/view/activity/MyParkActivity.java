@@ -3,16 +3,17 @@ package com.pda.carmanager.view.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.posapi.PosApi;
 import android.posapi.PrintQueue;
@@ -20,14 +21,12 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +37,6 @@ import com.pda.carmanager.R;
 import com.pda.carmanager.adapter.MyParkAdapter;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.base.BaseApplication;
-import com.pda.carmanager.bean.ChargeBean;
 import com.pda.carmanager.bean.MyParkBean;
 import com.pda.carmanager.bean.PrintBean;
 import com.pda.carmanager.config.AccountConfig;
@@ -46,34 +44,27 @@ import com.pda.carmanager.inter.ParkItemOnInter;
 import com.pda.carmanager.presenter.ParkPresenter;
 import com.pda.carmanager.pullrefresh.GridSpacingItemDecoration;
 import com.pda.carmanager.service.ScanService;
+import com.pda.carmanager.service.SignalAService;
 import com.pda.carmanager.util.AMUtil;
-import com.pda.carmanager.util.BarcodeCreater;
 import com.pda.carmanager.util.BitmapTools;
 import com.pda.carmanager.util.DialogUtil;
-import com.pda.carmanager.util.OKHttpUtil;
-import com.pda.carmanager.util.PhotoUtils;
 import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.util.StringEqualUtil;
 import com.pda.carmanager.util.UserInfoClearUtil;
 import com.pda.carmanager.view.inter.IParkViewInter;
-import com.pda.carmanager.view.test.PDAPrintActivity;
-import com.pda.carmanager.view.widght.CustomerCarDialog;
-import com.pda.carmanager.view.widght.IdentifyingCodeView;
-import com.suke.widget.SwitchButton;
 import com.xys.libzxing.zxing.encoding.EncodingUtils;
 
-import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by Administrator on 2017/12/9 0009.
  */
 
-public class MyParkActivity extends BaseActivity implements View.OnClickListener, ParkItemOnInter, PullToRefreshListener, IParkViewInter {
+public class MyParkActivity extends BaseActivity implements Observer,View.OnClickListener, ParkItemOnInter, PullToRefreshListener, IParkViewInter {
     private TextView toolbar_mid;
     private ImageButton toolbar_left_btn;
     private Toolbar toolbar;
@@ -104,6 +95,9 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     PrintBean printBean;
     private String CarNum;
     private int load = 0;
+
+    private SignalAService mService;
+    private CarServiceConn conn;
 
     private Handler handler = new Handler() {
         @Override
@@ -192,6 +186,8 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
         parkBeanList = new ArrayList<>();
         myParkAdapter = new MyParkAdapter(this, parkBeanListshow, this);
         pullRefresh_myPark.setAdapter(myParkAdapter);
+        conn = new CarServiceConn();
+        bindService(new Intent(this,SignalAService.class),conn,BIND_AUTO_CREATE);
 
     }
 
@@ -204,11 +200,62 @@ public class MyParkActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(conn);
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_left_btn:
                 finish();
                 break;
+        }
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
+        MyParkBean myParkBean=(MyParkBean)arg;
+        Log.d("HubOb",myParkBean.getParkingrecordid());
+        for (int i = 0; i < parkBeanListshow.size(); i++) {
+            if (myParkBean.getParkingrecordid().equals(parkBeanListshow.get(i).getParkingrecordid())){
+                parkBeanListshow.remove(i);
+            }
+        }
+        if (myParkBean.isIn()){
+            myParkBean.setParkType("2");
+            parkBeanListshow.add(0,myParkBean);
+            myParkAdapter.notifyDataSetChanged();
+        }
+        if (myParkBean.isOut()){
+            myParkBean.setParkType("1");
+            if (parkBeanListshow.size()>0){
+                parkBeanListshow.add(parkBeanListshow.size()-1,myParkBean);
+
+            }else {
+                parkBeanListshow.add(0,myParkBean);
+
+            }
+            myParkAdapter.notifyDataSetChanged();
+        }
+
+
+    }
+
+    public class CarServiceConn implements ServiceConnection {
+
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            mService = ((SignalAService.LocalBinder) iBinder).getService();
+            //将当前Activity添加为观察者
+            mService.addCarObservable(MyParkActivity.this);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mService = null;
         }
     }
 

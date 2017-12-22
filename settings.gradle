@@ -1,1 +1,1 @@
-include ':app', ':libzxing', ':pulltorefreshlibrary', ':SignalA', ':parallel-basic-http-client', ':SignalA.LongPolling', ':notilibrary'
+include ':app', ':libzxing', ':pulltorefreshlibrary', ':SignalA', ':parallel-basic-http-client', ':SignalA.LongPolling'

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.pda.carmanager.R;
 import com.pda.carmanager.bean.MsgBean;
 import com.pda.carmanager.util.DateUtil;
+import com.pda.carmanager.util.HtmlUtil;
 import com.pda.carmanager.view.activity.ContentActivity;
 
 import java.util.ArrayList;
@@ -37,21 +38,21 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     }
 
-    @Override
-    public int getItemViewType(int position) {
-
-//        if (position % 2 == 0) {
-//            return 1;
-//        } else if (position % 3 == 0) {
-//            return 2;
-//        } else {
-//            return 3;
+//    @Override
+//    public int getItemViewType(int position) {
+//
+////        if (position % 2 == 0) {
+////            return 1;
+////        } else if (position % 3 == 0) {
+////            return 2;
+////        } else {
+////            return 3;
+////        }
+//        if (msgBeenList.size() <= 0) {
+//            return position;
 //        }
-        if (msgBeenList.size() <= 0) {
-            return VIEW_TYPE;
-        }
-        return super.getItemViewType(position);
-    }
+//        return super.getItemViewType(position);
+//    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -73,7 +74,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         ((MyViewHolder) holder).msg_day.setText(DateUtil.getDateToString(date));
         ((MyViewHolder) holder).msg_hour.setText(DateUtil.getDateToStringHour(date));
         ((MyViewHolder) holder).msg_title.setText(msgBeenList.get(position).getMsg_title());
-        ((MyViewHolder) holder).msg_content.setText(Html.fromHtml(msgBeenList.get(position).getMsg_content()));
+        ((MyViewHolder) holder).msg_content.setText(HtmlUtil.delHTMLTag(Html.fromHtml(msgBeenList.get(position).getMsg_content()).toString()));
         ((MyViewHolder) holder).msg_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

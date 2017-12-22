@@ -1,17 +1,18 @@
 package com.zsoft.signala.transport.longpolling;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.text.TextUtils;
 
 import com.turbomanage.httpclient.AsyncCallback;
 import com.turbomanage.httpclient.HttpResponse;
+import com.zsoft.parallelhttpclient.ParallelHttpClient;
 import com.zsoft.signala.ConnectionBase;
 import com.zsoft.signala.ConnectionState;
-import com.zsoft.signala.SignalAUtils;
 import com.zsoft.signala.SendCallback;
+import com.zsoft.signala.SignalAUtils;
 import com.zsoft.signala.transport.ProcessResult;
 import com.zsoft.signala.transport.TransportHelper;
-import com.zsoft.parallelhttpclient.ParallelHttpClient;
+
+import org.json.JSONObject;
 
 import java.util.Map;
 
@@ -49,7 +50,11 @@ public class ConnectingState extends StopableStateWithCallback {
 			@Override
 			public void onComplete(HttpResponse httpResponse) {
                 if(DoStop()) return;
-
+                if(TextUtils.isEmpty(httpResponse.getBodyAsString())){
+                    mConnection.setError(new Exception("Response BodyString is null!!! " + httpResponse.getStatus()));
+                    mConnection.SetNewState(new DisconnectedState(mConnection));
+                    return;
+                }
                 try
                 {
                     if(httpResponse != null && httpResponse.getStatus() == 200)

@@ -22,6 +22,7 @@ import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.presenter.LogoutPresenter;
 import com.pda.carmanager.service.SignalAService;
 import com.pda.carmanager.util.AMUtil;
+import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.view.activity.ChargeRecordActivity;
@@ -145,6 +146,7 @@ public class MineFragment extends Fragment implements View.OnClickListener,ILogo
                         if (!flag)
                             flag=true;
                         if (OKHttpUtil.isConllection(context))
+                            DialogUtil.showMessage(context,"正在注销...");
                         logoutPresenter.logout();
                         progressDialog.dismiss();
 

@@ -10,7 +10,6 @@
         android:id="@+id/text_item_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="2017年12月8日"
         android:textSize="@dimen/text_size"
         android:textColor="@color/text_msgtime"
         />
@@ -34,7 +33,6 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textColor="@color/black"
-                android:text="消息标题"
                 android:layout_weight="1"
                 android:layout_marginLeft="20dp"
                 />
@@ -44,7 +42,6 @@
                 android:id="@+id/text_msg_itemmin"
                 android:textSize="@dimen/texttitle_size"
                 android:textColor="@color/black"
-                android:text="12:00"
                 android:layout_weight="1"
                 android:gravity="right"
                     android:layout_marginRight="20dp"
@@ -65,6 +62,8 @@
             android:layout_below="@+id/line_item"
             android:lines="3"
             android:textSize="@dimen/text_size"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:textColor="@color/text_msgtime"
             android:ellipsize="end"
             />
