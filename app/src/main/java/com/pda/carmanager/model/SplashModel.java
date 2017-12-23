@@ -42,7 +42,7 @@ import io.reactivex.schedulers.Schedulers;
 public class SplashModel implements ISplashInter {
     private Context context;
     private ISplashPreInter iSplashPreInter;
-    private  UpdataBean updataBean;
+    private UpdataBean updataBean;
     private String decs;
 
     public SplashModel(Context context, ISplashPreInter iSplashPreInter) {
@@ -55,42 +55,48 @@ public class SplashModel implements ISplashInter {
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
-                String Http = OKHttpUtil.updataPost( UrlConfig.UpdataApp);
-                if (Http != null) {
-                    JSONObject jsonObject;
-                    try {
-                        jsonObject = new JSONObject(Http);
-                       updataBean = new UpdataBean();
-                        updataBean.setAppVersion(jsonObject.getString("Version"));
-                        updataBean.setUpdataUrl(UrlConfig.PCHttpPost+jsonObject.getString("Url"));
+                if (OKHttpUtil.isConllection(context)) {
+                    String Http = OKHttpUtil.updataPost(UrlConfig.UpdataApp);
+                    if (Http != null) {
+                        JSONObject jsonObject;
                         try {
-                            PackageInfo info = context.getPackageManager().getPackageInfo(
-                                    context.getPackageName(), 0);
-                            String versionName = info.versionName;
-                            if (StringEqualUtil.stringNull(updataBean.getAppVersion()) || StringEqualUtil.stringNull(updataBean.getUpdataUrl())) {
-                                if (!versionName.trim().equals(updataBean.getAppVersion().trim())) {
-                                    URL url = new URL(updataBean.getUpdataUrl());
-                                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                                    conn.setConnectTimeout(5000);
-                                    //获取到文件的大小
-                                    int contentLength = conn.getContentLength();
-                                    final String size = DialogUtil.setFileSize(contentLength);
-                                    updataBean.setSize(size);
-                                    e.onNext(1);
-                                } else {
-                                    e.onNext(0);
+                            jsonObject = new JSONObject(Http);
+                            updataBean = new UpdataBean();
+                            updataBean.setAppVersion(jsonObject.getString("Version"));
+                            updataBean.setUpdataUrl(UrlConfig.PCHttpPost + jsonObject.getString("Url"));
+                            try {
+                                PackageInfo info = context.getPackageManager().getPackageInfo(
+                                        context.getPackageName(), 0);
+                                String versionName = info.versionName;
+                                if (StringEqualUtil.stringNull(updataBean.getAppVersion()) || StringEqualUtil.stringNull(updataBean.getUpdataUrl())) {
+                                    if (!versionName.trim().equals(updataBean.getAppVersion().trim())) {
+                                        URL url = new URL(updataBean.getUpdataUrl());
+                                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                        conn.setConnectTimeout(5000);
+                                        //获取到文件的大小
+                                        int contentLength = conn.getContentLength();
+                                        final String size = DialogUtil.setFileSize(contentLength);
+                                        updataBean.setSize(size);
+                                        e.onNext(1);
+                                    } else {
+                                        e.onNext(0);
+                                    }
                                 }
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
                             }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
+                        } catch (JSONException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
                         }
-                    } catch (JSONException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
+                    }else {
+                        e.onNext(0);
                     }
+
+                } else {
+                    e.onNext(4);
                 }
                 e.onComplete();
-
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Integer>() {
             @Override
@@ -107,6 +113,12 @@ public class SplashModel implements ISplashInter {
                         break;
                     case 1:
                         iSplashPreInter.needUpdata(updataBean);
+                        break;
+
+                    case 4:
+                        DialogUtil.dismise();
+                        iSplashPreInter.splashLoginFail(context.getResources().getString(R.string.httpNo));
+                        DialogUtil.showSetMessage(context);
                         break;
                 }
             }

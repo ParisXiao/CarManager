@@ -38,20 +38,27 @@
             android:layout_marginRight="40dp"
             android:layout_weight="3"
             android:background="#ffffff">
-
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/add_error_carnum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
+                android:layout_marginLeft="20dp"
                 android:background="@null"
+                android:completionThreshold="1"
+                android:dropDownHeight="200dp"
+                android:dropDownWidth="180dp"
+                android:imeOptions="actionSearch"
                 android:hint="请输入车位编号"
+                android:maxLength="12"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
                 android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/text_msgtime"
                 android:textSize="@dimen/text_size" />
-
         </RelativeLayout>
 
     </LinearLayout>

@@ -198,7 +198,7 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
     @Override
     protected void onResume() {
         super.onResume();
-        reFreshNext = false;
+        page=1;
         DialogUtil.showMessage(MyParkActivity.this,getResources().getString(R.string.text_loading));
         parkPresenter.postParkList(page + "", "", parkBeanList);
     }
@@ -224,8 +224,9 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
         MyParkBean myParkBean=(MyParkBean)arg;
         Log.d("HubOb",myParkBean.getParkingrecordid());
         for (int i = 0; i < parkBeanListshow.size(); i++) {
-            if (myParkBean.getParkingrecordid().equals(parkBeanListshow.get(i).getParkingrecordid())){
+            if (myParkBean.getParkNum().equals(parkBeanListshow.get(i).getParkNum())){
                 parkBeanListshow.remove(i);
+                myParkAdapter.notifyDataSetChanged();
             }
         }
         if (myParkBean.isIn()){
@@ -302,7 +303,7 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
             switch (requestCode) {
                 case RequsetPark:
                     printBean = (PrintBean) data.getSerializableExtra("Print");
-                    if (StringEqualUtil.stringNull(printBean.getMemberNo())) {
+                    if (StringEqualUtil.stringNull(printBean.getCarNum())) {
                         if (BaseApplication.getInstance().isPosApi()) {
                             Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
                             Bitmap bitmap = EncodingUtils.createQRCode(printBean.getUrl(), 400, 400, logoBitmap);
@@ -467,8 +468,10 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
             int concentration = 35;
             StringBuilder sb = new StringBuilder();
             byte[] text = null;
+            sb.append("\n");
+            sb.append("\n");
             sb.append("  泊讯停车|临街");
-            sb.append("     车位缴费小票");
+            sb.append("   车位缴费小票");
             sb.append("\n");
             sb.append("\n");
 

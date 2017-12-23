@@ -1,14 +1,14 @@
 package com.pda.carmanager.view.activity;
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.provider.Settings;
+import android.os.IBinder;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,8 +24,10 @@ import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
+import com.pda.carmanager.bean.PayCallBackBean;
 import com.pda.carmanager.bean.PayInfoBean;
 import com.pda.carmanager.presenter.PayInfoPresenter;
+import com.pda.carmanager.service.SignalAService;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.StringEqualUtil;
@@ -35,12 +37,14 @@ import com.xys.libzxing.zxing.activity.CaptureActivity;
 import com.xys.libzxing.zxing.encoding.EncodingUtils;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by Administrator on 2017/12/11 0011.
  */
 
-public class PayMessageActivity extends BaseActivity implements View.OnClickListener, IPayInfoViewInter {
+public class PayMessageActivity extends BaseActivity implements View.OnClickListener, IPayInfoViewInter, Observer {
     private TextView toolbar_mid;
     private ImageButton toolbar_left_btn;
     private Toolbar toolbar;
@@ -65,24 +69,11 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
     private long firstTime = 0;
     private String money = "";
     private String payMoney = "";
-    private boolean flags = false;
+    public static boolean flags = false;
     private boolean aorw = false;
     private String Id;
-    private Handler handler=new Handler(){
-        @Override
-        public void dispatchMessage(Message msg) {
-            super.dispatchMessage(msg);
-            switch (msg.what){
-                case 1:
-                    DialogUtil.dismise();
-                    Intent intent=new Intent(PayMessageActivity.this,PaySuccessActivity.class);
-                    intent.putExtra("payMoney",payMoney);
-                    startActivity(intent);
-                    finish();
-                    break;
-            }
-        }
-    };
+    private SignalAService mService;
+    private PayServiceConn conn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +89,8 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
         Id = getIntent().getStringExtra("ID");
         payInfoPresenter = new PayInfoPresenter(this, this);
         payInfoPresenter.getPayInfo(Id);
+        conn = new PayServiceConn();
+        bindService(new Intent(this, SignalAService.class), conn, BIND_AUTO_CREATE);
     }
 
     private void initView() {
@@ -133,8 +126,40 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
     }
 
     @Override
+    public void update(Observable o, Object arg) {
+        PayCallBackBean payCallBackBean = (PayCallBackBean) arg;
+        Intent intent = new Intent(this, PaySuccessActivity.class);
+        intent.putExtra("payStatus", payCallBackBean.getStutas());
+        intent.putExtra("payMoney", payCallBackBean.getMoney());
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(conn);
+    }
+
+    public class PayServiceConn implements ServiceConnection {
+
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            mService = ((SignalAService.LocalBinder) iBinder).getService();
+            //将当前Activity添加为观察者
+            mService.addPayObservable(PayMessageActivity.this);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mService = null;
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+        firstTime = System.currentTimeMillis();
     }
 
     @Override
@@ -155,13 +180,13 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
 
                             startActivityForResult(new Intent(PayMessageActivity.this, CaptureActivity.class), 0);
                         } else if (flag.equals("aimg")) {
-                            DialogUtil.showMessage(PayMessageActivity.this,"二维码生成中，请稍后...");
+                            DialogUtil.showMessage(PayMessageActivity.this, "二维码生成中，请稍后...");
                             payInfoPresenter.Pay(Id, "3", "");
                         } else if (flag.equals("wsao")) {
                             aorw = true;
                             startActivityForResult(new Intent(PayMessageActivity.this, CaptureActivity.class), 0);
                         } else if (flag.equals("wimg")) {
-                            DialogUtil.showMessage(PayMessageActivity.this,"二维码生成中，请稍后...");
+                            DialogUtil.showMessage(PayMessageActivity.this, "二维码生成中，请稍后...");
                             payInfoPresenter.Pay(Id, "1", "");
 //
                         }
@@ -253,7 +278,7 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            DialogUtil.showMessage(PayMessageActivity.this,"支付中，请稍后...");
+            DialogUtil.showMessage(PayMessageActivity.this, "支付中，请稍后...");
             String result = data.getExtras().getString("result");
             Log.d("zxing", result);
             if (aorw) {
@@ -300,16 +325,11 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
                 byte[] bitmapByte = baos.toByteArray();
                 intent.putExtra("zxingBitmap", bitmapByte);
                 startActivity(intent);
+                finish();
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            finish();
-        } else {
-            Intent intent=new Intent(PayMessageActivity.this,PaySuccessActivity.class);
-            intent.putExtra("payMoney",payMoney);
-            startActivity(intent);
-            finish();
         }
     }
 

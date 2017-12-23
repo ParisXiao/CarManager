@@ -48,8 +48,8 @@ public class MineFragment extends Fragment implements View.OnClickListener,ILogo
     private Button button_logout;
     private Activity context;
     private LogoutPresenter logoutPresenter;
-    private boolean flag=false;
-    private boolean flag1=false;
+    public static boolean flag=false;
+    public static boolean flag1=false;
 
     @Nullable
     @Override

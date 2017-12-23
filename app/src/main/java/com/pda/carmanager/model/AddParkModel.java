@@ -13,7 +13,7 @@ import com.pda.carmanager.presenter.inter.IAddParkPreInter;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
-import com.pda.carmanager.view.inter.IAddParkViewInter;
+import com.pda.carmanager.view.activity.AddParkActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -133,6 +133,7 @@ public class AddParkModel implements AddParkInter {
                     case 4:
                         DialogUtil.dismise();
                         DialogUtil.showSetMessage(context);
+                        AddParkActivity.flag=false;
                         break;
                 }
             }

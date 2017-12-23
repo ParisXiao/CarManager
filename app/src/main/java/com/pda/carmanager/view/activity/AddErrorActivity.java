@@ -58,7 +58,7 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
     private String district = "";    //获取区县
     private String street = "";   //获取街道信息
     private String address = "";   //获取详细信息
-    private boolean flag=false;
+    public static boolean flag=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,8 +122,10 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
                 e.printStackTrace();
             }
             bitmap = PhotoUtils.createWatermark(bitmap);
+            add_error_priview.setVisibility(View.VISIBLE);
             add_error_priview.setImageBitmap(bitmap);
             add_error_camera.setVisibility(View.GONE);
+
         }
     }
     @Override
@@ -140,7 +142,7 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.add_error_camera:
                 takePhoto();
-                add_error_priview.setVisibility(View.VISIBLE);
+
                 break;
         }
     }

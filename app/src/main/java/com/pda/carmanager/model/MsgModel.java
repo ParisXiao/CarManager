@@ -10,6 +10,7 @@ import com.pda.carmanager.model.inter.IMsgInter;
 import com.pda.carmanager.presenter.inter.IMsgPreInter;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
+import com.pda.carmanager.view.activity.PayMessageActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -134,6 +135,7 @@ public class MsgModel implements IMsgInter {
                             case 4:
                                 DialogUtil.dismise();
                                 DialogUtil.showSetMessage(context);
+                                PayMessageActivity.flags=false;
                                 break;
                         }
                     }

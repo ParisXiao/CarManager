@@ -43,7 +43,12 @@ public class PaySuccessActivity extends BaseActivity implements View.OnClickList
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar_left_btn.setVisibility(View.VISIBLE);
-        toolbar_mid.setText("支付成功");
+        if (getIntent().getStringExtra("payStatus").equals("1")){
+            toolbar_mid.setText("支付成功");
+        }else {
+            toolbar_mid.setText("支付失败");
+        }
+
     }
 
     @Override

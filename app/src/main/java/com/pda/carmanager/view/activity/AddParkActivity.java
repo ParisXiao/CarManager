@@ -9,7 +9,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -20,11 +19,12 @@ import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.bean.SweetBean;
 import com.pda.carmanager.bean.SweetDuanBean;
+import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.presenter.AddParkPresenter;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.FormatUtil;
-import com.pda.carmanager.util.SearchAdapter;
+import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.util.UserInfoClearUtil;
 import com.pda.carmanager.view.inter.IAddParkViewInter;
 
@@ -41,7 +41,8 @@ public class AddParkActivity extends BaseActivity implements View.OnClickListene
     private TextView toolbar_mid;
     private ImageButton toolbar_left_btn;
     private Toolbar toolbar;
-    private AutoCompleteTextView jiedaoNum_edit;
+//    private AutoCompleteTextView jiedaoNum_edit;
+    private TextView jiedaoNum_edit;
     private NiceSpinner niceSpinner;
     private EditText dici_edit;
     private EditText carnum_edit;
@@ -52,6 +53,7 @@ public class AddParkActivity extends BaseActivity implements View.OnClickListene
     private List<SweetDuanBean> sweetDuanBeen = new ArrayList<>();
     private String jd;
     private String jdd;
+    public static  boolean flag=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ public class AddParkActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initData() {
+        jiedaoNum_edit.setText(PreferenceUtils.getInstance(this).getString(AccountConfig.Jdname));
         niceSpinner = (NiceSpinner) findViewById(R.id.niceSpinner);
         DialogUtil.showMessage(this, getResources().getString(R.string.text_loading));
         setSupportActionBar(toolbar);
@@ -70,7 +73,6 @@ public class AddParkActivity extends BaseActivity implements View.OnClickListene
         toolbar_mid.setText(R.string.add_park);
         addParkPresenter = new AddParkPresenter(this, this);
         addParkPresenter.getSweetData(sweetBeens);
-        jiedaoNum_edit.addTextChangedListener(new listener1());
         niceSpinner.addTextChangedListener(new listener2());
 
     }
@@ -79,7 +81,7 @@ public class AddParkActivity extends BaseActivity implements View.OnClickListene
         toolbar_mid = (TextView) findViewById(R.id.toolbar_mid);
         toolbar_left_btn = (ImageButton) findViewById(R.id.toolbar_left_btn);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        jiedaoNum_edit = (AutoCompleteTextView) findViewById(R.id.jiedaoNum_edit);
+        jiedaoNum_edit = (TextView) findViewById(R.id.jiedaoNum_edit);
         niceSpinner = (NiceSpinner) findViewById(R.id.niceSpinner);
         dici_edit = (EditText) findViewById(R.id.dici_edit);
         carnum_edit = (EditText) findViewById(R.id.carnum_edit);
@@ -110,41 +112,7 @@ public class AddParkActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
-    class listener1 implements TextWatcher{
 
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            jiedaoNum_edit.getText().toString().trim();
-            List<String> strings=new ArrayList<String>();
-            for (int i = 0; i < sweetBeens.size()&&sweetBeens.size()>0; i++) {
-                if (jiedaoNum_edit.getText().toString().trim().equals(sweetBeens.get(i).getName())){
-                    jd=sweetBeens.get(i).getId();
-                    sweetDuanBeen=new ArrayList<>();
-                    for (int j = 0; j < sweetBeens.get(i).getSweetDuanBean().size(); j++) {
-                        SweetDuanBean sweetDuanBean=new SweetDuanBean();
-                        sweetDuanBean.setId(sweetBeens.get(i).getSweetDuanBean().get(j).getId());
-                        sweetDuanBean.setName(sweetBeens.get(i).getSweetDuanBean().get(j).getName());
-                        sweetDuanBeen.add(sweetDuanBean);
-                        strings.add(sweetBeens.get(i).getSweetDuanBean().get(j).getName());
-                    }
-                }
-            }
-            if (strings.size()>0) {
-                Log.d("jdd",FormatUtil.listToString(strings));
-                niceSpinner.attachDataSource(strings);
-            }
-        }
-    }
     class listener2 implements TextWatcher{
 
         @Override
@@ -172,6 +140,8 @@ public class AddParkActivity extends BaseActivity implements View.OnClickListene
         }
     }
     private void submit() {
+        if (flag)return;
+
         // validate
         String edit = jiedaoNum_edit.getText().toString().trim();
         if (TextUtils.isEmpty(edit)) {
@@ -190,6 +160,7 @@ public class AddParkActivity extends BaseActivity implements View.OnClickListene
             Toast.makeText(this, "请输入车位编号", Toast.LENGTH_SHORT).show();
             return;
         }
+        flag=true;
         addParkPresenter.addPark(jd,jdd,edit1,edit3);
 
         // TODO validate success, do something
@@ -199,17 +170,34 @@ public class AddParkActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void getSuccesss() {
-
-        List<String> str = new ArrayList<>();
-        if (sweetBeens.size() > 0) {
-            for (int i = 0; i < sweetBeens.size(); i++) {
-                str.add(sweetBeens.get(i).getName());
-
+        List<String> strings=new ArrayList<>();
+        for (int i = 0; i < sweetBeens.size()&&sweetBeens.size()>0; i++) {
+            if (jiedaoNum_edit.getText().toString().trim().equals(sweetBeens.get(i).getName())){
+                jd=sweetBeens.get(i).getId();
+                sweetDuanBeen=new ArrayList<>();
+                for (int j = 0; j < sweetBeens.get(i).getSweetDuanBean().size(); j++) {
+                    SweetDuanBean sweetDuanBean=new SweetDuanBean();
+                    sweetDuanBean.setId(sweetBeens.get(i).getSweetDuanBean().get(j).getId());
+                    sweetDuanBean.setName(sweetBeens.get(i).getSweetDuanBean().get(j).getName());
+                    sweetDuanBeen.add(sweetDuanBean);
+                    strings.add(sweetBeens.get(i).getSweetDuanBean().get(j).getName());
+                }
             }
-            SearchAdapter<String> adapter = new SearchAdapter<String>(AddParkActivity.this,
-                    android.R.layout.simple_list_item_1, str, SearchAdapter.ALL);
-            jiedaoNum_edit.setAdapter(adapter);
         }
+        if (strings.size()>0) {
+            Log.d("jdd",FormatUtil.listToString(strings));
+            niceSpinner.attachDataSource(strings);
+        }
+//        List<String> str = new ArrayList<>();
+//        if (sweetBeens.size() > 0) {
+//            for (int i = 0; i < sweetBeens.size(); i++) {
+//                str.add(sweetBeens.get(i).getName());
+//
+//            }
+//            SearchAdapter<String> adapter = new SearchAdapter<String>(AddParkActivity.this,
+//                    android.R.layout.simple_list_item_1, str, SearchAdapter.ALL);
+//            jiedaoNum_edit.setAdapter(adapter);
+//        }
     }
 
     @Override
@@ -254,9 +242,11 @@ public class AddParkActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void addFail(String msg) {
+        flag=true;
         if (msg.equals(getResources().getString(R.string.httpOut))) {
             UserInfoClearUtil.ClearUserInfo(AddParkActivity.this);
             AMUtil.actionStart(AddParkActivity.this, LoginActivity.class);
+
             finish();
         }
     }

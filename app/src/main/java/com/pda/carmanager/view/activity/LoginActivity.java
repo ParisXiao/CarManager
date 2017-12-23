@@ -21,7 +21,6 @@ import com.pda.carmanager.service.SignalAService;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.HideSoftKeyboardUtil;
-import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.view.inter.LoginViewInter;
 
@@ -43,7 +42,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private String usrid;
     private String password;
     private String commenyCode;
-    private boolean flag = false;
+    public static boolean flag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,10 +74,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         UpdateUI(layout_login);
         loginPresenter = new LoginPresenter(this, this);
-        if (!TextUtils.isEmpty(PreferenceUtils.getInstance(LoginActivity.this).getString(AccountConfig.AccountId))){
+        if (!TextUtils.isEmpty(PreferenceUtils.getInstance(LoginActivity.this).getString(AccountConfig.AccountId))) {
             name_edit.setText(PreferenceUtils.getInstance(LoginActivity.this).getString(AccountConfig.AccountId));
         }
-        if (!TextUtils.isEmpty(PreferenceUtils.getInstance(LoginActivity.this).getString(AccountConfig.CommenyCode))){
+        if (!TextUtils.isEmpty(PreferenceUtils.getInstance(LoginActivity.this).getString(AccountConfig.CommenyCode))) {
             encode_edit.setText(PreferenceUtils.getInstance(LoginActivity.this).getString(AccountConfig.CommenyCode));
         }
     }
@@ -87,16 +86,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_login:
-                if (OKHttpUtil.isConllection(this)) {
-                    if (!flag) {
-                        flag = true;
-                        submit();
-                    }
-                } else {
-
+                if (!flag) {
+                    flag = true;
+                    submit();
                 }
-
-
                 break;
             case R.id.name_edit:
                 name_edit.setCursorVisible(true);
@@ -163,9 +156,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void loginSuccess() {
-        flag=false;
+        flag = false;
 //        启动signalA
-        Intent intent=new Intent(this, SignalAService.class);
+        Intent intent = new Intent(this, SignalAService.class);
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         startService(intent);
         AMUtil.actionStart(LoginActivity.this, MainActivity.class);
@@ -174,12 +167,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void loginFail(String failMsg) {
-        flag=false;
+        flag = false;
     }
 
     @Override
     public void loginError(String errorMsgs) {
-        flag=false;
+        flag = false;
 
     }
 }

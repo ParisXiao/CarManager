@@ -58,7 +58,6 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
     private String street = "";   //获取街道信息
     private String address = "";   //获取详细信息
     private DakaPresenter dakaPresenter;
-    private boolean flag = false;
     private PullToRefreshRecyclerView pullRefresh_Daka;
     private View emptyView;
     private int page = 1;
@@ -68,6 +67,7 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
     private boolean isRefreah;
     private int list = 10;
     private int load = 0;
+    public static   boolean flag=false;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -280,6 +280,7 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.linear_sbdk_btn:
+                if (flag)return;
                 mLocationClient.start();
                 break;
 
@@ -294,6 +295,7 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
 
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
+            flag=true;
             city = bdLocation.getCity();
             district = bdLocation.getDistrict();
             street = bdLocation.getStreet();

@@ -11,6 +11,7 @@ import com.pda.carmanager.presenter.inter.IAddErrorPreInter;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
+import com.pda.carmanager.view.activity.AddErrorActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -116,6 +117,7 @@ public class AddErrorModel implements IAddErrorInter {
                     case 4:
                         DialogUtil.dismise();
                         DialogUtil.showSetMessage(context);
+                        AddErrorActivity.flag=false;
                         break;
                 }
             }

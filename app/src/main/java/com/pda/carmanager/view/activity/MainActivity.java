@@ -40,8 +40,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ImageButton imb_management;
     private ImageButton imb_message;
     private ImageButton imb_mine;
-    private int[] resIds = {R.drawable.nav_cheweiguanli, R.drawable.nav_xinxizhongxin, R.drawable.nav_wodexinxi};
-    private int[] resSelectIds = {R.drawable.nav_cheweiguanli_on, R.drawable.nav_xinxizhongxin_on, R.drawable.nav_wodexinxi_on};
+    private int[] resIds = {R.drawable.nav_cheweiguanli, R.drawable.nav_xinxizhongxin, R.drawable.gerenzhongxinmoren};
+    private int[] resSelectIds = {R.drawable.nav_cheweiguanli_on, R.drawable.nav_xinxizhongxin_on, R.drawable.gerenzhongxinxuanzhong};
     private ManagementFragment managementFragment;
     private MessageFragment messageFragment;
     private MineFragment mineFragment;

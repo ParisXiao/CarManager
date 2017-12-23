@@ -15,7 +15,6 @@ import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.view.activity.LoginActivity;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -153,6 +152,7 @@ public class LoginModel implements LoginModelInter {
                     case 4:
                         DialogUtil.dismise();
                         DialogUtil.showSetMessage(context);
+                        LoginActivity.flag=false;
                         break;
                 }
             }

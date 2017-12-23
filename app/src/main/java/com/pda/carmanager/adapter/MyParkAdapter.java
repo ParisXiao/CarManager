@@ -2,8 +2,6 @@ package com.pda.carmanager.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,14 +12,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pda.carmanager.R;
-import com.pda.carmanager.bean.ChargeBean;
 import com.pda.carmanager.bean.MyParkBean;
 import com.pda.carmanager.inter.ParkItemOnInter;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Created by Administrator on 2017/12/9 0009.
@@ -70,7 +65,7 @@ public class MyParkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ((MyViewHolder) holder).text_carType.setVisibility(View.INVISIBLE);
             ((MyViewHolder) holder).img_parkType.setImageDrawable(context.getResources().getDrawable(R.drawable.kongxinchewei));
             ((MyViewHolder) holder).text_carNum.setText("空");
-            ((MyViewHolder) holder).text_carNum.setTextColor(context.getResources().getColor(R.color.youche));
+            ((MyViewHolder) holder).text_carNum.setTextColor(context.getResources().getColor(R.color.chenull));
         } else if (parkBeanList.get(position).getParkType().equals("2")) {
             ((MyViewHolder) holder).text_carNum.setText("有车");
             ((MyViewHolder) holder).text_carNum.setTextColor(context.getResources().getColor(R.color.youche));

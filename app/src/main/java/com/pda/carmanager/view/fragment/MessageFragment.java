@@ -146,7 +146,7 @@ public class MessageFragment extends Fragment implements PullToRefreshListener, 
     private void initView(View view) {
         context = getActivity();
         pullRefresh_msg = (PullToRefreshRecyclerView) view.findViewById(R.id.pullRefresh_msg);
-        View emptyView = View.inflate(context, R.layout.layout_empty_view, null);
+        emptyView = View.inflate(context, R.layout.layout_empty_view, null);
         emptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
         pullRefresh_msg.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
@@ -164,7 +164,7 @@ public class MessageFragment extends Fragment implements PullToRefreshListener, 
         //pullRefresh_msg.onRefresh();
         msgBeanList = new ArrayList<>();
         msgPresenter = new MsgPresenter(context, this);
-        messageAdapter = new MessageAdapter(context, msgBeanList);
+        messageAdapter = new MessageAdapter(context, msgBeanListShow);
         pullRefresh_msg.setAdapter(messageAdapter);
         conn = new NewsServiceConn();
         context.bindService(new Intent(context, SignalAService.class), conn, BIND_AUTO_CREATE);
@@ -173,6 +173,7 @@ public class MessageFragment extends Fragment implements PullToRefreshListener, 
     @Override
     public void onResume() {
         super.onResume();
+        page=1;
         msgPresenter.getMsg(page + "", msgBeanList);
     }
 

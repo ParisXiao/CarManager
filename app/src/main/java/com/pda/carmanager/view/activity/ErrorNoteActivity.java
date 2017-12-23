@@ -24,7 +24,6 @@ import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.presenter.ErrorNotesPresenter;
 import com.pda.carmanager.pullrefresh.SpacesItemDecoration;
 import com.pda.carmanager.util.AMUtil;
-import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.util.UserInfoClearUtil;
 import com.pda.carmanager.view.inter.IErrorNotesViewInter;
@@ -149,7 +148,7 @@ public class ErrorNoteActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        DialogUtil.showMessage(this,getResources().getString(R.string.text_loading));
+        page=1;
         errorNotesPresenter.getError(page+"", PreferenceUtils.getInstance(ErrorNoteActivity.this).getString(AccountConfig.Departmentid),errorBeanList);
 
     }

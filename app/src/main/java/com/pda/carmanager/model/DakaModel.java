@@ -12,6 +12,7 @@ import com.pda.carmanager.util.DateUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.StringEqualUtil;
+import com.pda.carmanager.view.activity.DakaActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -114,6 +115,7 @@ public class DakaModel implements IDakaInter {
                     case 4:
                         DialogUtil.dismise();
                         DialogUtil.showSetMessage(context);
+                        DakaActivity.flag=false;
                         break;
                 }
             }

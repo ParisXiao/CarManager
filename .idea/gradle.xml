@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/SignalA.LongPolling" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/libzxing" />
+            <option value="$PROJECT_DIR$/notilibrary" />
             <option value="$PROJECT_DIR$/parallel-basic-http-client" />
             <option value="$PROJECT_DIR$/pulltorefreshlibrary" />
           </set>

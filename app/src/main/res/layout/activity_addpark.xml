@@ -32,10 +32,11 @@
             android:layout_weight="3"
             android:background="@color/white">
 
-        <AutoCompleteTextView
+        <TextView
             android:id="@+id/jiedaoNum_edit"
             android:layout_width="match_parent"
             android:layout_height="42dp"
+            android:gravity="center_vertical"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="20dp"
@@ -44,7 +45,6 @@
             android:completionThreshold="1"
             android:dropDownHeight="200dp"
             android:dropDownWidth="180dp"
-            android:hint="请输入街道"
             android:imeOptions="actionSearch"
             android:maxLength="12"
             android:paddingBottom="5dp"

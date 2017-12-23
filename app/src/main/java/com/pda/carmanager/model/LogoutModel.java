@@ -10,6 +10,7 @@ import com.pda.carmanager.presenter.inter.ILogoutPreInter;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.UserInfoClearUtil;
+import com.pda.carmanager.view.fragment.MineFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -183,6 +184,8 @@ public class LogoutModel implements ILogoutInter {
                     case 4:
                         DialogUtil.dismise();
                         DialogUtil.showSetMessage(context);
+                        MineFragment.flag=false;
+                        MineFragment.flag1=false;
                         break;
                 }
             }
