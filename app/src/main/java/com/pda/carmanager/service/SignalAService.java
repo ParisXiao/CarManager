@@ -26,6 +26,7 @@ import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.util.StringEqualUtil;
 import com.pda.carmanager.view.activity.MainActivity;
 import com.pda.carmanager.view.activity.MyParkActivity;
+import com.pda.carmanager.view.activity.PaySuccessActivity;
 import com.zsoft.signala.hubs.HubConnection;
 import com.zsoft.signala.hubs.HubInvokeCallback;
 import com.zsoft.signala.hubs.HubOnDataCallback;
@@ -141,6 +142,11 @@ public class SignalAService extends Service {
                 payCallBackBean.setStutas(args.opt(1).toString());
                 payCallBackBean.setMoney(args.opt(2).toString());
                 payObservable.notifyChanged(payCallBackBean);
+                Intent intent = new Intent(SignalAService.this, PaySuccessActivity.class);
+                intent.putExtra("payStatus", payCallBackBean.getStutas());
+                intent.putExtra("payMoney", payCallBackBean.getMoney());
+                intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
             }
         });
         conn.Start();

@@ -8,16 +8,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.posapi.PosApi;
-import android.posapi.PrintQueue;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,24 +24,18 @@ import com.pda.carmanager.bean.PrintBean;
 import com.pda.carmanager.config.CommonlConfig;
 import com.pda.carmanager.inter.PhotoInter;
 import com.pda.carmanager.presenter.PostParkPresenter;
-import com.pda.carmanager.service.ScanService;
 import com.pda.carmanager.util.AMUtil;
-import com.pda.carmanager.util.BarcodeCreater;
-import com.pda.carmanager.util.BitmapTools;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.GZIPutil;
 import com.pda.carmanager.util.PhotoUtils;
 import com.pda.carmanager.util.UserInfoClearUtil;
 import com.pda.carmanager.view.inter.IPostParkViewInter;
-import com.pda.carmanager.view.test.PDAPrintActivity;
 import com.pda.carmanager.view.widght.CustomerCarDialog;
-import com.pda.carmanager.view.widght.IdentifyingCodeView;
 import com.pda.carmanager.view.widght.LicenseKeyboardUtil;
 import com.pda.carmanager.view.widght.PhotoShowDialog;
 import com.suke.widget.SwitchButton;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -292,29 +281,33 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
                 finish();
                 break;
             case R.id.pop1_next:
+                DialogUtil.showMessage(DialogCarWriteActivity.this,getResources().getString(R.string.text_uping));
                 if (inputType==0){
                     if (area1.equals("")||area2.equals("")||key1.equals("")||key2.equals("")||key3.equals("")||key4.equals("")||key5.equals("")){
                         Toast.makeText(this,"请输入完整车牌号",Toast.LENGTH_SHORT).show();
+                        DialogUtil.dismise();
                         return;
                     }
                 }else if (inputType==1){
                     if (area1.equals("")||area2.equals("")||key1.equals("")||key2.equals("")||key3.equals("")||key4.equals("")||key5.equals("")||key6.equals("")){
                         Toast.makeText(this,"请输入完整车牌号",Toast.LENGTH_SHORT).show();
+                        DialogUtil.dismise();
                         return;
                     }
                 }else if (inputType==2){
                     if (area1.equals("")||area2.equals("")||key1.equals("")||key2.equals("")||key3.equals("")||key4.equals("")){
                         Toast.makeText(this,"请输入完整车牌号",Toast.LENGTH_SHORT).show();
+                        DialogUtil.dismise();
                         return;
                     }
                 }
                 if (maps.size()!=2){
                     Toast.makeText(this,"请拍两张照片",Toast.LENGTH_SHORT).show();
+                    DialogUtil.dismise();
                     return;
                 }
                 if (!flag){
                     flag=true;
-                    DialogUtil.showMessage(DialogCarWriteActivity.this,getResources().getString(R.string.text_uping));
                     postParkPresenter.postPark(ParkId,carNum.trim(),carType, GZIPutil.compressForGzip(PhotoUtils.SendBitmap(maps.get(0))), GZIPutil.compressForGzip(PhotoUtils.SendBitmap(maps.get(1))));
                 }else {
                     Toast.makeText(DialogCarWriteActivity.this,"数据提交中，请勿重复操作",Toast.LENGTH_SHORT).show();

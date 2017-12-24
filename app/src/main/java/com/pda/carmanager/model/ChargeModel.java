@@ -5,7 +5,6 @@ import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.bean.ChargeBean;
-import com.pda.carmanager.bean.DakaBean;
 import com.pda.carmanager.config.UrlConfig;
 import com.pda.carmanager.model.inter.IChargeInter;
 import com.pda.carmanager.presenter.inter.IChargePreInter;
@@ -75,7 +74,9 @@ public class ChargeModel implements IChargeInter {
                                     chargeBean.setId(temp.getString("id"));
                                     if (StringEqualUtil.stringNull(temp.getString("carnum"))) {
                                         chargeBean.setCarNumber(temp.getString("carnum"));
-                                    }
+                                    }else {
+                                        chargeBean.setCarNumber(temp.getString("carnum"));
+                                }
                                     chargeBean.setStatus(temp.getString("status"));
                                     chargeBean.setParkPrice(temp.getString("totalmoney"));
                                     chargeBean.setStartTime(temp.getString("starttime")+"至");

@@ -84,6 +84,7 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
     }
 
     private void initaData() {
+        firstTime = System.currentTimeMillis();
         toolbar_mid.setText(R.string.title_pay);
         DialogUtil.showMessage(this, getResources().getString(R.string.text_loading));
         Id = getIntent().getStringExtra("ID");
@@ -159,7 +160,7 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
-        firstTime = System.currentTimeMillis();
+        flags=false;
     }
 
     @Override
@@ -190,11 +191,11 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
                             payInfoPresenter.Pay(Id, "1", "");
 //
                         }
-                    } else {
-
-                        showTimeOutMessage(PayMessageActivity.this);
-
                     }
+                } else {
+
+                    showTimeOutMessage(PayMessageActivity.this);
+
                 }
                 break;
             case R.id.aipay_manager:

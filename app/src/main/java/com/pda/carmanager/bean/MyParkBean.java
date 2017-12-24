@@ -11,6 +11,7 @@ public class MyParkBean {
     private String ParkNum;
     private String parkingrecordid;
     private String startTime;
+    private String status;
     private boolean in=false;
     private boolean out=false;
 
@@ -22,6 +23,14 @@ public class MyParkBean {
         this.ParkType=ParkType;
         this.CarNum=CarNum;
         this.ParkNum=ParkNum;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public boolean isOut() {

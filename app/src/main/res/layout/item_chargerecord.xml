@@ -15,6 +15,7 @@
             android:textColor="@color/white"
             android:textSize="@dimen/text_size"
             android:text="欠费"
+            android:visibility="gone"
             android:id="@+id/btn_needPay"
             />
         <TextView

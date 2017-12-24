@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 
 /**
  * 活动管理器
@@ -106,7 +107,7 @@ public final class AMUtil<T extends Activity> {
      * 根据Activity对象移除Activity
      * @param activity
      */
-    public void removeActivity(T activity) {
+    public  void removeActivity(T activity) {
         Set<String> activityNames = map.keySet();
         for (String name : activityNames) {
             if (activity == map.get(name)) {
@@ -151,7 +152,7 @@ public final class AMUtil<T extends Activity> {
     public static void actionStart(Context context, Class clazz) {
         Intent intent = new Intent(context, clazz);
         if (!(context instanceof Activity)) {
-            intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_SINGLE_TOP);
         }
         context.startActivity(intent);
     }

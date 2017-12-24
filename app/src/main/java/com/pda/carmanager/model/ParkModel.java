@@ -10,12 +10,10 @@ import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.config.UrlConfig;
 import com.pda.carmanager.model.inter.IParkInter;
 import com.pda.carmanager.presenter.inter.IParkPreInter;
-import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.util.StringEqualUtil;
-import com.pda.carmanager.view.activity.LoginActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -80,7 +78,7 @@ public class ParkModel implements IParkInter {
                                     MyParkBean myParkBean = new MyParkBean();
                                     JSONObject temp = (JSONObject) jsonArray.get(i);
                                     myParkBean.setParkNum(temp.getString("cwbh"));
-                                    if (!temp.getString("starttime").equals("null")) {
+                                    if (temp.getString("status").equals("1")) {
                                         myParkBean.setStartTime(temp.getString("starttime"));
                                         if (!temp.getString("parkingrecordid").equals("null")) {
                                             myParkBean.setParkingrecordid(temp.getString("parkingrecordid"));
