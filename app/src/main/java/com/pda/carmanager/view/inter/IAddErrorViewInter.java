@@ -5,6 +5,7 @@ package com.pda.carmanager.view.inter;
  */
 
 public interface IAddErrorViewInter {
+    void getSuccess();
     void addSuccess();
     void addFail(String msg);
 }

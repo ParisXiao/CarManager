@@ -83,6 +83,7 @@ public class ErrorNoteActivity extends BaseActivity implements View.OnClickListe
                     } else if (load == 2) {
                         pullRefresh_myError.setLoadMoreComplete();
                     }
+                    pullRefresh_myError.setEmptyView(emptyView);
 
                     break;
                 case 1:
@@ -176,7 +177,6 @@ public class ErrorNoteActivity extends BaseActivity implements View.OnClickListe
             hasNext = true;
         }
         handler.sendEmptyMessage(0);
-        pullRefresh_myError.setEmptyView(emptyView);
     }
 
     @Override

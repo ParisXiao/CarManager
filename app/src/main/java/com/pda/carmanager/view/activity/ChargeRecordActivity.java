@@ -26,9 +26,7 @@ import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.util.UserInfoClearUtil;
 import com.pda.carmanager.view.inter.IChargeViewInter;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -82,6 +80,7 @@ public class ChargeRecordActivity extends BaseActivity implements View.OnClickLi
                     } else if (load == 2) {
                         pullRefresh_Charge.setLoadMoreComplete();
                     }
+                    pullRefresh_Charge.setEmptyView(emptyView);
 
                     break;
                 case 1:
@@ -200,7 +199,6 @@ public class ChargeRecordActivity extends BaseActivity implements View.OnClickLi
             hasNext = true;
         }
         handler.sendEmptyMessage(0);
-        pullRefresh_Charge.setEmptyView(emptyView);
     }
 
     @Override

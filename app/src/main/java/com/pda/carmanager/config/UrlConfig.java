@@ -30,6 +30,7 @@ public class UrlConfig {
     public static String SelCatchPost=HttpIpPost+"api/CarManage/SelCatch";//查询申诉进度
     public static String MsgPost=HttpIpPost+"api/CarManage/SelNews";//查询信息列表
     public static String TotalMoneyPost=HttpIpPost+"api/CarManage/SelTodayTotalMoneyByUser";//查询今日收费
+    public static String ParkNumPost=HttpIpPost+"api/CarManage/SelParkingLot";//查询个人车位编号
 
 
     /**

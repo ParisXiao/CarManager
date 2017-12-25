@@ -14,10 +14,9 @@ public class DateUtil {
     /*获取系统时间 格式为："yyyy/MM/dd "*/
     public static String getCurrentDate() {
         Date d = new Date();
-        sf = new SimpleDateFormat("yyyy年MM月dd日");
+        sf = new SimpleDateFormat("yyyy-MM-dd");
         return sf.format(d);
     }
-
     /*时间戳转换成字符窜*/
     public static String getDateToString(long time) {
         Date d = new Date(time);

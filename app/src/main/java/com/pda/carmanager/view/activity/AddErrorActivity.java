@@ -9,8 +9,8 @@ import android.provider.MediaStore;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,20 +28,23 @@ import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.GZIPutil;
 import com.pda.carmanager.util.PhotoUtils;
+import com.pda.carmanager.util.SearchAdapter;
 import com.pda.carmanager.util.UserInfoClearUtil;
 import com.pda.carmanager.view.inter.IAddErrorViewInter;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/12/12 0012.
  */
 
-public class AddErrorActivity extends BaseActivity implements View.OnClickListener ,IAddErrorViewInter{
+public class AddErrorActivity extends BaseActivity implements View.OnClickListener, IAddErrorViewInter {
     private TextView toolbar_mid;
     private ImageButton toolbar_left_btn;
     private Toolbar toolbar;
-    private EditText add_error_carnum;
+    private AutoCompleteTextView add_error_carnum;
     private ImageView add_error_camera;
     private ImageView add_error_priview;
     private Button add_error_sure;
@@ -50,7 +53,7 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
     private int flage = 0;
     private static final int PHOTO_CAPTURE = 0x11;// 拍照
     private AddErrorPresenter addErrorPresenter;
-    private  Bitmap bitmap;
+    private Bitmap bitmap;
     private String carnum;
     public LocationClient mLocationClient = null;
     private LocationListener myListener = new LocationListener();
@@ -58,7 +61,8 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
     private String district = "";    //获取区县
     private String street = "";   //获取街道信息
     private String address = "";   //获取详细信息
-    public static boolean flag=false;
+    public static boolean flag = false;
+    private List<String> parkNums = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +76,7 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
         toolbar_mid = (TextView) findViewById(R.id.toolbar_mid);
         toolbar_left_btn = (ImageButton) findViewById(R.id.toolbar_left_btn);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        add_error_carnum = (EditText) findViewById(R.id.add_error_carnum);
+        add_error_carnum = (AutoCompleteTextView) findViewById(R.id.add_error_carnum);
         add_error_camera = (ImageView) findViewById(R.id.add_error_camera);
         add_error_priview = (ImageView) findViewById(R.id.add_error_priview);
         add_error_sure = (Button) findViewById(R.id.add_error_sure);
@@ -88,7 +92,7 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
         toolbar_left_btn.setVisibility(View.VISIBLE);
         toolbar_mid.setText(R.string.add_error);
         IMG_PATH = PhotoUtils.getSDPath(this);
-        addErrorPresenter=new AddErrorPresenter(this,this);
+        addErrorPresenter = new AddErrorPresenter(this, this);
         mLocationClient = new LocationClient(getApplicationContext());
         //声明LocationClient类
         mLocationClient.registerLocationListener(myListener);
@@ -98,7 +102,9 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
 //可选，是否需要地址信息，默认为不需要，即参数为false
 //如果开发者需要获得当前点的地址信息，此处必须为true
         mLocationClient.setLocOption(option);
+        addErrorPresenter.getParkNum(parkNums);
     }
+
     private void takePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT,
@@ -115,7 +121,7 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
             return;
 
         if (requestCode == PHOTO_CAPTURE) {
-            bitmap= PhotoUtils.decodeUriAsBitmap(Uri.fromFile(new File(IMG_PATH, "temp.jpg")), PhotoUtils.getBitmapDegree(Uri.fromFile(new File(IMG_PATH, "temp.jpg")).getPath()));
+            bitmap = PhotoUtils.decodeUriAsBitmap(Uri.fromFile(new File(IMG_PATH, "temp.jpg")), PhotoUtils.getBitmapDegree(Uri.fromFile(new File(IMG_PATH, "temp.jpg")).getPath()));
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
@@ -128,6 +134,7 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
 
         }
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -149,36 +156,40 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
 
     private void submit() {
         // validate
-        if (flag)return;
-        flag=true;
+
         carnum = add_error_carnum.getText().toString().trim();
         if (TextUtils.isEmpty(carnum)) {
             Toast.makeText(this, "请输入车位编号", Toast.LENGTH_SHORT).show();
-            flag=false;
             return;
         }
-        if (bitmap==null) {
+        if (bitmap == null) {
             Toast.makeText(this, "请拍照上传", Toast.LENGTH_SHORT).show();
-            flag=false;
             return;
         }
 
         // TODO validate success, do something
-        DialogUtil.showMessage(AddErrorActivity.this,getResources().getString(R.string.text_uping));
+        DialogUtil.showMessage(AddErrorActivity.this, getResources().getString(R.string.text_uping));
         mLocationClient.start();
 
     }
 
     @Override
+    public void getSuccess() {
+        SearchAdapter<String> adapter = new SearchAdapter<String>(AddErrorActivity.this,
+                android.R.layout.simple_list_item_1, parkNums, SearchAdapter.ALL);
+        add_error_carnum.setAdapter(adapter);
+    }
+
+    @Override
     public void addSuccess() {
         mLocationClient.stop();
-        flag=false;
+        flag = false;
         finish();
     }
 
     @Override
     public void addFail(String msg) {
-        flag=false;
+        flag = false;
         mLocationClient.stop();
         if (msg.equals(getResources().getString(R.string.httpOut))) {
             UserInfoClearUtil.ClearUserInfo(AddErrorActivity.this);
@@ -186,6 +197,7 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
             finish();
         }
     }
+
     class LocationListener implements BDLocationListener {
 
         @Override
@@ -195,9 +207,24 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
             street = bdLocation.getStreet();
             String address = city + district + street;
 //            address = bdLocation.getAddrStr();
-            if (address!=null) {
-                addErrorPresenter.addError(carnum,GZIPutil.compressForGzip(PhotoUtils.SendBitmap(bitmap)),address);
+            boolean post=false;
+            if (address != null && parkNums.size() > 0) {
+                for (int i = 0; i < parkNums.size(); i++) {
+                    if (add_error_carnum.getText().toString().trim().equals(parkNums.get(i))) {
+                        post=true;
+                    }
 
+                }
+
+            }
+            if (post) {
+                if (flag) return;
+                flag = true;
+                addErrorPresenter.addError(carnum, GZIPutil.compressForGzip(PhotoUtils.SendBitmap(bitmap)), address);
+            } else {
+                Toast.makeText(AddErrorActivity.this, "您的街道段没有该车位！", Toast.LENGTH_SHORT).show();
+                DialogUtil.dismise();
+                mLocationClient.stop();
             }
         }
     }

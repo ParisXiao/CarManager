@@ -127,6 +127,7 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
                     } else if (load == 2) {
                         pullRefresh_myPark.setLoadMoreComplete();
                     }
+                    pullRefresh_myPark.setEmptyView(emptyView);
 
                     break;
                 case 1:
@@ -367,7 +368,6 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
             hasNext = true;
         }
         handler.sendEmptyMessage(0);
-        pullRefresh_myPark.setEmptyView(emptyView);
     }
 
     @Override

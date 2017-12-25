@@ -87,6 +87,7 @@ public class MessageFragment extends Fragment implements PullToRefreshListener, 
                     } else if (load == 2) {
                         pullRefresh_msg.setLoadMoreComplete();
                     }
+                    pullRefresh_msg.setEmptyView(emptyView);
 
                     break;
                 case 1:
@@ -222,7 +223,6 @@ public class MessageFragment extends Fragment implements PullToRefreshListener, 
             hasNext = true;
         }
         handler.sendEmptyMessage(0);
-        pullRefresh_msg.setEmptyView(emptyView);
     }
 
     @Override

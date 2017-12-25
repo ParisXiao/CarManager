@@ -188,16 +188,6 @@ public class AddParkActivity extends BaseActivity implements View.OnClickListene
             Log.d("jdd",FormatUtil.listToString(strings));
             niceSpinner.attachDataSource(strings);
         }
-//        List<String> str = new ArrayList<>();
-//        if (sweetBeens.size() > 0) {
-//            for (int i = 0; i < sweetBeens.size(); i++) {
-//                str.add(sweetBeens.get(i).getName());
-//
-//            }
-//            SearchAdapter<String> adapter = new SearchAdapter<String>(AddParkActivity.this,
-//                    android.R.layout.simple_list_item_1, str, SearchAdapter.ALL);
-//            jiedaoNum_edit.setAdapter(adapter);
-//        }
     }
 
     @Override

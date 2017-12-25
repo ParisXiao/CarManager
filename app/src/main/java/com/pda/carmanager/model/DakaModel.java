@@ -5,12 +5,14 @@ import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.bean.DakaBean;
+import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.config.UrlConfig;
 import com.pda.carmanager.model.inter.IDakaInter;
 import com.pda.carmanager.presenter.inter.IDakaPreInter;
 import com.pda.carmanager.util.DateUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
+import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.util.StringEqualUtil;
 import com.pda.carmanager.view.activity.DakaActivity;
 
@@ -52,10 +54,11 @@ public class DakaModel implements IDakaInter {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
                 if (OKHttpUtil.isConllection(context)){
-                String[] key = new String[]{"addaddr", "kqtype"};
+                String[] key = new String[]{"addaddr", "kqtype","jddid"};
                 Map map = new HashMap();
                 map.put("addaddr", address);
                 map.put("kqtype", DakaType);
+                map.put("jddid", PreferenceUtils.getInstance(context).getString(AccountConfig.Departmentid));
                 String Http = OKHttpUtil.GetMessage(context, UrlConfig.DakaPost, key, map);
                 if (Http != null) {
                     JSONObject jsonObject;
@@ -139,9 +142,9 @@ public class DakaModel implements IDakaInter {
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
                 if (OKHttpUtil.isConllection(context)) {
                     dakaBeanList.clear();
-                    String[] key = new String[]{"kqdate", "pageindex", "pagerows"};
+                    String[] key = new String[]{"kqday", "pageindex", "pagerows"};
                     Map map = new HashMap();
-                    map.put("kqdate", kqdate);
+                    map.put("kqday", kqdate);
                     map.put("pageindex", page);
                     map.put("pagerows", "10");
                     String Http = OKHttpUtil.GetMessage(context, UrlConfig.GetDakaPost, key, map);

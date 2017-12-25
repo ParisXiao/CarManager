@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
-import com.pda.carmanager.util.AMUtil;
 
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 
@@ -31,6 +30,11 @@ public class PaySuccessActivity extends BaseActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_paysuccess);
         initView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     private void initView() {
@@ -63,13 +67,13 @@ public class PaySuccessActivity extends BaseActivity implements View.OnClickList
                 Intent intent=new Intent(this,MyParkActivity.class);
                 intent.addFlags(FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
-                AMUtil.getManager().removeActivity(PaySuccessActivity.this);
+                finish();
                 break;
             case R.id.toolbar_left_btn:
                 Intent intent1=new Intent(this,MyParkActivity.class);
                 intent1.addFlags(FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent1);
-                AMUtil.getManager().removeActivity(PaySuccessActivity.this);
+                finish();
                 break;
         }
     }
@@ -81,7 +85,7 @@ public class PaySuccessActivity extends BaseActivity implements View.OnClickList
             Intent intent=new Intent(this,MyParkActivity.class);
             intent.addFlags( FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
-            AMUtil.getManager().removeActivity(PaySuccessActivity.this);
+            finish();
             return false;
         }
         return super.onKeyDown(keyCode, event);

@@ -7,6 +7,8 @@ import com.pda.carmanager.model.inter.IAddErrorInter;
 import com.pda.carmanager.presenter.inter.IAddErrorPreInter;
 import com.pda.carmanager.view.inter.IAddErrorViewInter;
 
+import java.util.List;
+
 /**
  * Created by Admin on 2017/12/20.
  */
@@ -20,6 +22,16 @@ public class AddErrorPresenter implements IAddErrorPreInter {
         this.context = context;
         this.iAddErrorViewInter = iAddErrorViewInter;
         iAddErrorInter=new AddErrorModel(context,this);
+    }
+
+    @Override
+    public void getSuccess() {
+        iAddErrorViewInter.getSuccess();
+    }
+
+    @Override
+    public void getParkNum(List<String> parks) {
+        iAddErrorInter.getParkNum(parks);
     }
 
     @Override

@@ -1,13 +1,19 @@
 package com.pda.carmanager.view.activity;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,7 +32,9 @@ import com.pda.carmanager.bean.DakaBean;
 import com.pda.carmanager.presenter.DakaPresenter;
 import com.pda.carmanager.pullrefresh.SpacesItemDecoration;
 import com.pda.carmanager.util.AMUtil;
+import com.pda.carmanager.util.DateUtil;
 import com.pda.carmanager.util.DialogUtil;
+import com.pda.carmanager.util.StringEqualUtil;
 import com.pda.carmanager.util.UserInfoClearUtil;
 import com.pda.carmanager.view.inter.IDakaViewInter;
 
@@ -68,12 +76,25 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
     private int list = 10;
     private int load = 0;
     public static   boolean flag=false;
+    String day;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0:
+                    if (DakaType.equals("2")){
+                        if (StringEqualUtil.stringNull(dakaBeanList.get(1).getDakaTime())){
+                            daka_text.setText("下班已打卡");
+                            linear_sbdk_btn.setEnabled(false);
+                        }
+                    }
+                    if (DakaType.equals("1")){
+                        if (StringEqualUtil.stringNull(dakaBeanList.get(0).getDakaTime())){
+                            daka_text.setText("上班已打卡");
+                            linear_sbdk_btn.setEnabled(false);
+                        }
+                    }
                     if (!reFreshNext) {
                         dakaBeanListShow.clear();
                     }
@@ -95,7 +116,7 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
                     } else if (load == 2) {
                         pullRefresh_Daka.setLoadMoreComplete();
                     }
-
+                    pullRefresh_Daka.setEmptyView(emptyView);
                     break;
                 case 1:
                     if (load == 1) {
@@ -124,8 +145,8 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void dakaSuccess() {
         mLocationClient.stop();
-        reFreshNext=false;
-        dakaPresenter.getDaka("",page+"",dakaBeanList);
+
+        dakaPresenter.getDaka(day,page+"",dakaBeanList);
     }
 
     @Override
@@ -137,7 +158,7 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
             hasNext = true;
         }
         handler.sendEmptyMessage(0);
-        pullRefresh_Daka.setEmptyView(emptyView);
+
 
     }
 
@@ -158,7 +179,7 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
             if (!reFreshNext) {
                 page = 1;
             }
-            dakaPresenter.getDaka("",page+"",dakaBeanList);
+            dakaPresenter.getDaka(day,page+"",dakaBeanList);
         }
     }
 
@@ -173,7 +194,7 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
                 if (!reFreshNext) {
                     page = 1;
                 }
-                dakaPresenter.getDaka("",page+"",dakaBeanList);
+                dakaPresenter.getDaka(day,page+"",dakaBeanList);
             }
         } else {
             handler.sendEmptyMessageDelayed(1, 1000);
@@ -203,7 +224,45 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
         super.onResume();
 
     }
+    private void showChooseMessage(final Context context, String text, final String textContent) {
+        final AlertDialog progressDialog = new AlertDialog.Builder(context).create();
+        if (!(progressDialog != null && progressDialog.isShowing())) {
+            try {
+                progressDialog.show();
+                progressDialog.setCanceledOnTouchOutside(false);
+                Window window = progressDialog.getWindow();
+                WindowManager.LayoutParams lp = window.getAttributes();
+                window.setGravity(Gravity.CENTER);
+                lp.alpha = 1f;
+                window.setAttributes(lp);
+                window.setContentView(R.layout.layout_choose_dialog);
+                TextView text1 = (TextView) window.findViewById(R.id.note_text);
+                TextView text2 = (TextView) window.findViewById(R.id.note_text_content);
+                Button button1 = (Button) window.findViewById(R.id.note_exit);
+                Button button2 = (Button) window.findViewById(R.id.note_sure);
+                text1.setText(text);
+                text2.setText(textContent);
+                button1.setText("取消");
+                button2.setText("打卡");
+                button1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        progressDialog.dismiss();
+                    }
+                });
+                button2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (flag)return;
+                        mLocationClient.start();
+                        progressDialog.dismiss();
+                    }
+                });
+            } catch (Exception e) {
 
+            }
+        }
+    }
 
     private void initData() {
         DakaType = getIntent().getStringExtra("DakaType");
@@ -231,8 +290,9 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
         mLocationClient.setLocOption(option);
 //mLocationClient为第二步初始化过的LocationClient对象
         DialogUtil.showMessage(DakaActivity.this,getResources().getString(R.string.text_loading));
+        day= DateUtil.getDateToString(System.currentTimeMillis());
         dakaBeanList=new ArrayList<>();
-        dakaPresenter.getDaka("",page+"",dakaBeanList);
+        dakaPresenter.getDaka(day,page+"",dakaBeanList);
         dakaListAdapter = new DakaListAdapter(this, dakaBeanListShow);
         pullRefresh_Daka.setAdapter(dakaListAdapter);
     }
@@ -280,8 +340,7 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.linear_sbdk_btn:
-                if (flag)return;
-                mLocationClient.start();
+                showChooseMessage(this,"打卡确认","只能打卡一次，是否确认打卡");
                 break;
 
             case R.id.toolbar_left_btn:
