@@ -24,6 +24,7 @@ import com.pda.carmanager.config.UrlConfig;
 import com.pda.carmanager.inter.ISignalAInter;
 import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.util.StringEqualUtil;
+import com.pda.carmanager.view.activity.ContentActivity;
 import com.pda.carmanager.view.activity.MainActivity;
 import com.pda.carmanager.view.activity.MyParkActivity;
 import com.pda.carmanager.view.activity.PaySuccessActivity;
@@ -125,14 +126,14 @@ public class SignalAService extends Service {
                 msgBean.setId(args.opt(0).toString());
                 msgBean.setMsg_title(args.opt(2).toString());
                 if (StringEqualUtil.stringNull(args.opt(3).toString())) {
-                    msgBean.setMsg_titleColor( args.opt(3).toString());
-                }else {
+                    msgBean.setMsg_titleColor(args.opt(3).toString());
+                } else {
                     msgBean.setMsg_titleColor("#000000");
                 }
                 msgBean.setMsg_content(args.opt(4).toString());
                 msgBean.setMsg_time(args.opt(5).toString());
                 newsObservable.notifyChanged(msgBean);
-                MsgNotifiContent("通知公告", args.opt(2).toString());
+                MsgNotifiContent(args.opt(0).toString(), args.opt(2).toString(), args.opt(2).toString(), msgBean.getMsg_titleColor());
             }
         });
         hub.On("callBack_Pay", new HubOnDataCallback() {
@@ -219,7 +220,7 @@ public class SignalAService extends Service {
         manage.notify(1, headsUp);
     }
 
-    private void MsgNotifiContent(final String title, String context) {
+    private void MsgNotifiContent(final String id, String context, final String title, final String titleColer) {
 
         Intent notificationIntent = new Intent(this, MainActivity.class);
         notificationIntent.addFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_SINGLE_TOP);
@@ -229,19 +230,23 @@ public class SignalAService extends Service {
         View view = inflater.inflate(R.layout.custom_notification, null);
         TextView notiTitle = (TextView) view.findViewById(R.id.notifi_title);
         TextView notiContext = (TextView) view.findViewById(R.id.notifi_context);
-        notiTitle.setText(title+"");
-        notiContext.setText(context+"");
+        notiTitle.setText("通知公告");
+        notiContext.setText(context + "");
         view.findViewById(R.id.openSource).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SignalAService.this, MainActivity.class);
+                Intent intent = new Intent(SignalAService.this, ContentActivity.class);
                 intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_SINGLE_TOP);
+                intent.putExtra("Id", id);
+                intent.putExtra("Title", title);
+                intent.putExtra("TitleColor", titleColer);
                 startActivity(intent);
                 manage1.cancel();
             }
         });
 
         HeadsUp headsUp1 = new HeadsUp.Builder(this)
+                .setContentTitle(title).setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS)
                 .setContentTitle("通知公告")
                 //要显示通知栏通知,这个一定要设置
                 .setSmallIcon(R.mipmap.logo)

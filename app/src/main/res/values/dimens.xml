@@ -11,11 +11,11 @@
     <dimen name="line_height">44dp</dimen>
     <dimen name="common_margin">16dp</dimen>
 
-    <dimen name="text_size">16sp</dimen>
-    <dimen name="textblue_size">14sp</dimen>
-    <dimen name="text_smallSize">10sp</dimen>
-    <dimen name="text_bigSize">20sp</dimen>
-    <dimen name="texttitle_size">18sp</dimen>
+    <dimen name="text_size">20sp</dimen>
+    <dimen name="textblue_size">18sp</dimen>
+    <dimen name="text_smallSize">14sp</dimen>
+    <dimen name="text_bigSize">24sp</dimen>
+    <dimen name="texttitle_size">22sp</dimen>
 
 
     <dimen name="textpay_size">24sp</dimen>

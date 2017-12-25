@@ -156,6 +156,7 @@
         </service>
         <service android:name="com.pda.carmanager.service.SignalAService"
             android:enabled="true"
+            android:launchMode="singleTask"
             />
     </application>
 

@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
+import com.pda.carmanager.service.SignalAService;
+import com.pda.carmanager.util.AppUtils;
 import com.pda.carmanager.view.fragment.ManagementFragment;
 import com.pda.carmanager.view.fragment.MessageFragment;
 import com.pda.carmanager.view.fragment.MineFragment;
@@ -197,5 +199,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 return true;
         }
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!AppUtils.isServiceRunning(MainActivity.this,"SignalAService")) {
+            Intent intent=new Intent(MainActivity.this, SignalAService.class);
+            startService(intent);
+        }
     }
 }

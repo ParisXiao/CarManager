@@ -45,8 +45,8 @@ public class DakaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //            itemHolder.tvDot.setBackgroundResource(R.drawable.shape_timelline_dot_first);
         } else if (getItemViewType(position) == TYPE_NORMAL) {
 //            itemHolder.tvTopLine.setVisibility(View.VISIBLE);
-            itemHolder.dakaTime.setTextColor(0xff999999);
-            itemHolder.dakaAddress.setTextColor(0xff999999);
+            itemHolder.dakaTime.setTextColor(0xff555555);
+            itemHolder.dakaAddress.setTextColor(0xff555555);
 //            itemHolder.tvDot.setBackgroundResource(R.drawable.shape_timelline_dot_normal);
         }
 

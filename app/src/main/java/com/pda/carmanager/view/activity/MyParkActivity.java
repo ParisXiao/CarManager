@@ -179,8 +179,8 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
         pullRefresh_myPark.displayLastRefreshTime(true);
         //设置刷新回调
         pullRefresh_myPark.setPullToRefreshListener(this);
-        //主动触发下拉刷新操作
-        //pullRefresh_msg.onRefresh();
+//        主动触发下拉刷新操作
+//        pullRefresh_myPark.onRefresh();
 
     }
 

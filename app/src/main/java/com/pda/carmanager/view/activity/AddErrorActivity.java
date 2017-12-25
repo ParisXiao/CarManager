@@ -1,6 +1,7 @@
 package com.pda.carmanager.view.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -9,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -139,12 +141,20 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_left_btn:
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+                }
                 finish();
                 break;
             case R.id.add_error_sure:
                 submit();
                 break;
             case R.id.add_error_exit:
+                InputMethodManager imm1 = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm1 != null) {
+                    imm1.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+                }
                 finish();
                 break;
             case R.id.add_error_camera:
@@ -156,7 +166,10 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
 
     private void submit() {
         // validate
-
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+        }
         carnum = add_error_carnum.getText().toString().trim();
         if (TextUtils.isEmpty(carnum)) {
             Toast.makeText(this, "请输入车位编号", Toast.LENGTH_SHORT).show();

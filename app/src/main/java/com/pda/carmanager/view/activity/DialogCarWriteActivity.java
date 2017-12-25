@@ -30,7 +30,6 @@ import com.pda.carmanager.util.GZIPutil;
 import com.pda.carmanager.util.PhotoUtils;
 import com.pda.carmanager.util.UserInfoClearUtil;
 import com.pda.carmanager.view.inter.IPostParkViewInter;
-import com.pda.carmanager.view.widght.CustomerCarDialog;
 import com.pda.carmanager.view.widght.LicenseKeyboardUtil;
 import com.pda.carmanager.view.widght.PhotoShowDialog;
 import com.suke.widget.SwitchButton;
@@ -56,7 +55,6 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
     private ImageView camera_2;
     private Button pop1_exit;
     private Button pop1_next;
-    private CustomerCarDialog areaDialog;
     private Button pop_choose_small;
     private Button pop_choose_big;
     private SwitchButton btn_catType_new;
@@ -158,7 +156,6 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
         postParkPresenter=new PostParkPresenter(this,this);
         ParkId=getIntent().getStringExtra("ParkId");
         IMG_PATH = PhotoUtils.getSDPath(this);
-        areaDialog = new CustomerCarDialog(this, "贵", "A");
         chooseNew.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
 
             @Override

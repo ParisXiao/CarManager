@@ -104,6 +104,7 @@ public class AddParkActivity extends BaseActivity implements View.OnClickListene
                 finish();
                 break;
             case R.id.add_park_sure:
+
                 submit();
                 break;
             case R.id.add_park_exit:
