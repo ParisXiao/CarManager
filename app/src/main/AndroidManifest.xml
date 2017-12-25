@@ -138,6 +138,7 @@
             android:theme="@style/AppThemeRed"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".view.test.JifeiTest" />
 
         <service
             android:name="com.baidu.location.f"
