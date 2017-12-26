@@ -3,17 +3,16 @@ package com.pda.carmanager.adapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.bean.MyParkBean;
-import com.pda.carmanager.inter.ParkItemOnInter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,32 +21,13 @@ import java.util.List;
  * Created by Administrator on 2017/12/9 0009.
  */
 
-public class MyParkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MyParkAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private Context context;
-    private ParkItemOnInter parkItemOnInter;
     private List<MyParkBean> parkBeanList = new ArrayList<>();
-
-    private OnItemClickListener onItemClickListener;
-    private OnLongItemClickListener onLongItemClickListener;
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
-    public void setOnLongItemClickListener(OnLongItemClickListener onLongItemClickListener) {
-        this.onLongItemClickListener = onLongItemClickListener;
-    }
-
-    public interface OnItemClickListener{
-        void onItemClick(View view, int position);
-    }
-    public interface OnLongItemClickListener{
-        void onLongItemClick(View view, int position);
-    }
-    public MyParkAdapter(Context context, List<MyParkBean> parkBeanList, ParkItemOnInter parkItemOnInter) {
+    public MyParkAdapter(Context context, List<MyParkBean> parkBeanList) {
         this.context = context;
         this.parkBeanList = parkBeanList;
-        this.parkItemOnInter=parkItemOnInter;
         mInflater = LayoutInflater.from(context);
 
 
@@ -55,107 +35,91 @@ public class MyParkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.item_mypark, parent, false);
-        return new MyViewHolder(view);
-
-    }
-
-    @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        ((MyViewHolder) holder).text_carType.setText(parkBeanList.get(position).getCarType());
-
-        if (parkBeanList.get(position).getParkType().equals("1")) {
-            ((MyViewHolder) holder).text_carType.setVisibility(View.INVISIBLE);
-            ((MyViewHolder) holder).img_parkType.setImageDrawable(context.getResources().getDrawable(R.drawable.kongxinchewei));
-            ((MyViewHolder) holder).text_carNum.setText("空");
-            ((MyViewHolder) holder).text_carNum.setTextColor(context.getResources().getColor(R.color.chenull));
-        } else if (parkBeanList.get(position).getParkType().equals("2")) {
-            ((MyViewHolder) holder).text_carNum.setText("有车");
-            ((MyViewHolder) holder).text_carNum.setTextColor(context.getResources().getColor(R.color.youche));
-            ((MyViewHolder) holder).img_parkType.setImageDrawable(context.getResources().getDrawable(R.drawable.youcheliang));
-            ((MyViewHolder) holder).text_carType.setVisibility(View.INVISIBLE);
-        } else if (parkBeanList.get(position).getParkType().equals("3")) {
-            ((MyViewHolder) holder).img_parkType.setImageDrawable(context.getResources().getDrawable(R.drawable.qianfei));
-            ((MyViewHolder) holder).text_carNum.setText(parkBeanList.get(position).getCarNum());
-            ((MyViewHolder) holder).text_carType.setVisibility(View.VISIBLE);
-            ((MyViewHolder) holder).text_carNum.setVisibility(View.VISIBLE);
-
-            ((MyViewHolder) holder).text_carNum.setTextColor(context.getResources().getColor(R.color.park_blue));
-            if (parkBeanList.get(position).getCarType().equals("货车")) {
-                Resources resources = context.getResources();
-                Drawable drawable1 = resources.getDrawable(R.drawable.shape_login_bigcar);
-                ((MyViewHolder) holder).text_carType.setBackground(drawable1);
-            } else {
-                Resources resources = context.getResources();
-                Drawable drawable2 = resources.getDrawable(R.drawable.shape_login_smallcar);
-                ((MyViewHolder) holder).text_carType.setBackground(drawable2);
-            }
-        } else if (parkBeanList.get(position).getParkType().equals("4")) {
-            ((MyViewHolder) holder).img_parkType.setImageDrawable(context.getResources().getDrawable(R.drawable.boxunpark));
-            ((MyViewHolder) holder).text_carNum.setText(parkBeanList.get(position).getCarNum());
-            ((MyViewHolder) holder).text_carType.setVisibility(View.VISIBLE);
-            ((MyViewHolder) holder).text_carNum.setVisibility(View.VISIBLE);
-            ((MyViewHolder) holder).text_carNum.setTextColor(context.getResources().getColor(R.color.park_blue));
-            if (parkBeanList.get(position).getCarType().equals("货车")) {
-                Resources resources = context.getResources();
-                Drawable drawable1 = resources.getDrawable(R.drawable.shape_login_bigcar);
-                ((MyViewHolder) holder).text_carType.setBackground(drawable1);
-            } else {
-                Resources resources = context.getResources();
-                Drawable drawable2 = resources.getDrawable(R.drawable.shape_login_smallcar);
-                ((MyViewHolder) holder).text_carType.setBackground(drawable2);
-            }
-        }
-
-        ((MyViewHolder) holder).text_parkNum.setText(parkBeanList.get(position).getParkNum());
-        ((MyViewHolder) holder).item_mypark_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (parkBeanList.get(position).getParkType()){
-                    case "2":
-                        parkItemOnInter.writeCarNum(parkBeanList.get(position).getParkingrecordid());
-                        break;
-                    case "3":
-                        parkItemOnInter.payCar(parkBeanList.get(position).getParkingrecordid());
-                        break;
-                    case "4":
-                        parkItemOnInter.AutoPayCar(parkBeanList.get(position).getCarNum(),parkBeanList.get(position).getParkingrecordid());
-                        break;
-                }
-            }
-        });
-        ((MyViewHolder) holder).item_mypark_btn.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (parkBeanList.get(position).getParkType().equals("3")) {
-                    parkItemOnInter.LongOnItem(false,parkBeanList.get(position).getParkingrecordid());
-                }
-                return true;
-            }
-        });
-    }
-
-    @Override
-    public int getItemCount() {
+    public int getCount() {
         return parkBeanList.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public Object getItem(int position) {
+        return getItem(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        MyViewHolder viewHolder=null;
+        if (viewHolder==null){
+            viewHolder=new MyViewHolder();
+            convertView=mInflater.inflate(R.layout.item_mypark, parent, false);
+           viewHolder. item_mypark_btn = (RelativeLayout) convertView.findViewById(R.id.item_mypark_btn);
+            viewHolder. text_carType = (TextView) convertView.findViewById(R.id.park_carType);
+            viewHolder. img_parkType = (ImageView) convertView.findViewById(R.id.img_park);
+            viewHolder. text_carNum = (TextView) convertView.findViewById(R.id.park_carnum);
+            viewHolder. text_parkNum = (TextView) convertView.findViewById(R.id.park_No);
+            convertView.setTag(viewHolder);
+        }else {
+           viewHolder= (MyViewHolder) convertView.getTag();
+        }
+        viewHolder.text_carType.setText(parkBeanList.get(position).getCarType());
+
+        if (parkBeanList.get(position).getParkType().equals("1")) {
+            viewHolder.text_carType.setVisibility(View.INVISIBLE);
+            viewHolder.img_parkType.setImageDrawable(context.getResources().getDrawable(R.drawable.kongxinchewei));
+            viewHolder.text_carNum.setText("空");
+            viewHolder.text_carNum.setTextColor(context.getResources().getColor(R.color.chenull));
+        } else if (parkBeanList.get(position).getParkType().equals("2")) {
+            viewHolder.text_carNum.setText("有车");
+            viewHolder.text_carNum.setTextColor(context.getResources().getColor(R.color.youche));
+            viewHolder.img_parkType.setImageDrawable(context.getResources().getDrawable(R.drawable.youcheliang));
+            viewHolder.text_carType.setVisibility(View.INVISIBLE);
+        } else if (parkBeanList.get(position).getParkType().equals("3")) {
+            viewHolder.img_parkType.setImageDrawable(context.getResources().getDrawable(R.drawable.qianfei));
+            viewHolder.text_carNum.setText(parkBeanList.get(position).getCarNum());
+            viewHolder.text_carType.setVisibility(View.VISIBLE);
+            viewHolder.text_carNum.setVisibility(View.VISIBLE);
+
+            viewHolder.text_carNum.setTextColor(context.getResources().getColor(R.color.park_blue));
+            if (parkBeanList.get(position).getCarType().equals("货车")) {
+                Resources resources = context.getResources();
+                Drawable drawable1 = resources.getDrawable(R.drawable.shape_login_bigcar);
+                viewHolder.text_carType.setBackground(drawable1);
+            } else {
+                Resources resources = context.getResources();
+                Drawable drawable2 = resources.getDrawable(R.drawable.shape_login_smallcar);
+                viewHolder.text_carType.setBackground(drawable2);
+            }
+        } else if (parkBeanList.get(position).getParkType().equals("4")) {
+            viewHolder.img_parkType.setImageDrawable(context.getResources().getDrawable(R.drawable.boxunpark));
+            viewHolder.text_carNum.setText(parkBeanList.get(position).getCarNum());
+            viewHolder.text_carType.setVisibility(View.VISIBLE);
+            viewHolder.text_carNum.setVisibility(View.VISIBLE);
+            viewHolder.text_carNum.setTextColor(context.getResources().getColor(R.color.park_blue));
+            if (parkBeanList.get(position).getCarType().equals("货车")) {
+                Resources resources = context.getResources();
+                Drawable drawable1 = resources.getDrawable(R.drawable.shape_login_bigcar);
+                viewHolder.text_carType.setBackground(drawable1);
+            } else {
+                Resources resources = context.getResources();
+                Drawable drawable2 = resources.getDrawable(R.drawable.shape_login_smallcar);
+                viewHolder.text_carType.setBackground(drawable2);
+            }
+        }
+
+        viewHolder.text_parkNum.setText(parkBeanList.get(position).getParkNum());
+        return convertView;
+    }
+
+    class MyViewHolder  {
         RelativeLayout item_mypark_btn;
         TextView text_carType;
         ImageView img_parkType;
         TextView text_carNum;
         TextView text_parkNum;
 
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            item_mypark_btn = (RelativeLayout) itemView.findViewById(R.id.item_mypark_btn);
-            text_carType = (TextView) itemView.findViewById(R.id.park_carType);
-            img_parkType = (ImageView) itemView.findViewById(R.id.img_park);
-            text_carNum = (TextView) itemView.findViewById(R.id.park_carnum);
-            text_parkNum = (TextView) itemView.findViewById(R.id.park_No);
-        }
     }
 
 }

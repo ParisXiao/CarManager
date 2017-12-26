@@ -59,8 +59,8 @@ public class ParkModel implements IParkInter {
                     parkBeans.clear();
                     String[] key = new String[]{"departmentid", "pageindex", "pagerows"};
                     Map map = new HashMap();
-                    map.put("pageindex", pageIndex);
-                    map.put("pagerows", "10");
+//                    map.put("pageindex", pageIndex);
+//                    map.put("pagerows", "10");
                     map.put("departmentid", PreferenceUtils.getInstance(context).getString(AccountConfig.Departmentid));
                     String Http = OKHttpUtil.GetMessage(context, UrlConfig.ParkPost, key, map);
                     if (Http != null) {
@@ -71,9 +71,7 @@ public class ParkModel implements IParkInter {
                             String code = jsonObject.getString("code");
                             desc = jsonObject.getString("desc");
                             if (code.equals("0")) {
-                                JSONObject jsonObject1 = new JSONObject(jsonObject.getString("result"));
-                                pages = jsonObject1.getString("pages");
-                                JSONArray jsonArray = new JSONArray(jsonObject1.getString("items"));
+                                JSONArray jsonArray = new JSONArray(jsonObject.getString("result"));
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     MyParkBean myParkBean = new MyParkBean();
                                     JSONObject temp = (JSONObject) jsonArray.get(i);

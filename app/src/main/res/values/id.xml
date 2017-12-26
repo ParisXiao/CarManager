@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="dgv_wobble_tag" type="id"/>
+    <item name="gridview" type="id" />
+    <!-- 上拉加载  下拉刷新 -->
+    <item type="id" name="webview" />
+    <item type="id" name="scrollview" />
+</resources>

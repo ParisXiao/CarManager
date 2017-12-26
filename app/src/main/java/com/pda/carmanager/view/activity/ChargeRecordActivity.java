@@ -3,24 +3,23 @@ package com.pda.carmanager.view.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import com.androidkun.PullToRefreshRecyclerView;
-import com.androidkun.callback.PullToRefreshListener;
 import com.pda.carmanager.R;
 import com.pda.carmanager.adapter.ChargeAdapter;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.bean.ChargeBean;
 import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.presenter.ChargePresenter;
-import com.pda.carmanager.pullrefresh.SpacesItemDecoration;
+import com.pda.carmanager.pulltorefresh.PullToRefreshBase;
+import com.pda.carmanager.pulltorefresh.PullToRefreshListView;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.util.UserInfoClearUtil;
@@ -33,9 +32,9 @@ import java.util.List;
  * Created by Administrator on 2017/12/8 0008.
  */
 
-public class ChargeRecordActivity extends BaseActivity implements View.OnClickListener, PullToRefreshListener,IChargeViewInter {
+public class ChargeRecordActivity extends BaseActivity implements View.OnClickListener,IChargeViewInter {
 
-    private PullToRefreshRecyclerView pullRefresh_Charge;
+    private PullToRefreshListView pullRefresh_Charge;
     private ChargeAdapter chargeAdapter=null;
     private List<ChargeBean> chargeBeanList = null;
     private List<ChargeBean> chargeBeanListShow = new ArrayList<>();
@@ -75,20 +74,11 @@ public class ChargeRecordActivity extends BaseActivity implements View.OnClickLi
                     }
                     isRefreah = false;
                     reFreshNext = false;
-                    if (load == 1) {
-                        pullRefresh_Charge.setRefreshComplete();
-                    } else if (load == 2) {
-                        pullRefresh_Charge.setLoadMoreComplete();
-                    }
                     pullRefresh_Charge.setEmptyView(emptyView);
-
+                    pullRefresh_Charge.onRefreshComplete();
                     break;
                 case 1:
-                    if (load == 1) {
-                        pullRefresh_Charge.setRefreshComplete();
-                    } else if (load == 2) {
-                        pullRefresh_Charge .setLoadMoreComplete();
-                    }
+                    pullRefresh_Charge.onRefreshComplete();
                     break;
 
             }
@@ -106,7 +96,7 @@ public class ChargeRecordActivity extends BaseActivity implements View.OnClickLi
 
     private void initView() {
 
-        pullRefresh_Charge = (PullToRefreshRecyclerView) findViewById(R.id.pullRefresh_Charge);
+        pullRefresh_Charge = (PullToRefreshListView) findViewById(R.id.pullRefresh_Charge);
         emptyView = View.inflate(this, R.layout.layout_empty_view, null);
         emptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
@@ -115,19 +105,6 @@ public class ChargeRecordActivity extends BaseActivity implements View.OnClickLi
         empty_img.setImageDrawable(getResources().getDrawable(R.drawable.shoufeijilu_no));
         empty_text.setText(R.string.empty_charge_view);
 
-        pullRefresh_Charge.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        pullRefresh_Charge.addItemDecoration(new SpacesItemDecoration(getResources().getDimensionPixelSize(R.dimen.padding_middle)));
-        pullRefresh_Charge.setHasFixedSize(true);
-//设置是否开启上拉加载
-        pullRefresh_Charge.setLoadingMoreEnabled(true);
-        //设置是否开启下拉刷新
-        pullRefresh_Charge.setPullRefreshEnabled(true);
-        //设置是否显示上次刷新的时间
-        pullRefresh_Charge.displayLastRefreshTime(true);
-        //设置刷新回调
-        pullRefresh_Charge.setPullToRefreshListener(this);
-        //主动触发下拉刷新操作
-        //pullRefresh_msg.onRefresh();
         toolbar_mid = (TextView) findViewById(R.id.toolbar_mid);
         toolbar_mid.setOnClickListener(this);
         toolbar_left_btn = (ImageButton) findViewById(R.id.toolbar_left_btn);
@@ -137,7 +114,41 @@ public class ChargeRecordActivity extends BaseActivity implements View.OnClickLi
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar_left_btn.setVisibility(View.VISIBLE);
+        pullRefresh_Charge.setMode(PullToRefreshBase.Mode.BOTH);
+        PullToRefreshBase.OnRefreshListener2<ListView> pullListener = new PullToRefreshBase.OnRefreshListener2<ListView>() {
 
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                load = 1;
+                if (!isRefreah) {
+                    isRefreah = true;
+                    if (!reFreshNext) {
+                        page = 1;
+                    }
+                    chargePresenter .getCharge(PreferenceUtils.getInstance(ChargeRecordActivity.this).getString(AccountConfig.Departmentid),page+"",chargeBeanList);
+
+                }
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                load = 2;
+                if (hasNext) {
+                    page += 1;
+                    reFreshNext = true;
+                    if (!isRefreah) {
+                        isRefreah = true;
+                        if (!reFreshNext) {
+                            page = 1;
+                        }
+                        chargePresenter .getCharge(PreferenceUtils.getInstance(ChargeRecordActivity.this).getString(AccountConfig.Departmentid),page+"",chargeBeanList);
+                    }
+                } else {
+                    handler.sendEmptyMessageDelayed(1, 1000);
+                }
+            }
+        };
+        pullRefresh_Charge.setOnRefreshListener(pullListener);
     }
 
     private void initData() {
@@ -159,36 +170,6 @@ public class ChargeRecordActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
-    @Override
-    public void onRefresh() {
-        load = 1;
-        if (!isRefreah) {
-            isRefreah = true;
-            if (!reFreshNext) {
-                page = 1;
-            }
-            chargePresenter .getCharge(PreferenceUtils.getInstance(ChargeRecordActivity.this).getString(AccountConfig.Departmentid),page+"",chargeBeanList);
-        }
-    }
-
-    @Override
-    public void onLoadMore() {
-        load = 2;
-        if (hasNext) {
-            page += 1;
-            reFreshNext = true;
-            if (!isRefreah) {
-                isRefreah = true;
-                if (!reFreshNext) {
-                    page = 1;
-                }
-                chargePresenter .getCharge(PreferenceUtils.getInstance(ChargeRecordActivity.this).getString(AccountConfig.Departmentid),page+"",chargeBeanList);
-
-            }
-        } else {
-            handler.sendEmptyMessageDelayed(1, 1000);
-        }
-    }
 
     @Override
     public void getSuccess(String pages) {

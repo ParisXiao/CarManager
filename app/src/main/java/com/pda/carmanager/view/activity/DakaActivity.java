@@ -30,7 +30,7 @@ import com.pda.carmanager.adapter.DakaListAdapter;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.bean.DakaBean;
 import com.pda.carmanager.presenter.DakaPresenter;
-import com.pda.carmanager.pullrefresh.SpacesItemDecoration;
+import com.pda.carmanager.pulltorefresh.SpacesItemDecoration;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DateUtil;
 import com.pda.carmanager.util.DialogUtil;
@@ -324,11 +324,11 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
         pullRefresh_Daka.setHasFixedSize(true);
 
         //设置是否开启上拉加载
-        pullRefresh_Daka.setLoadingMoreEnabled(true);
+        pullRefresh_Daka.setLoadingMoreEnabled(false);
         //设置是否开启下拉刷新
-        pullRefresh_Daka.setPullRefreshEnabled(true);
+        pullRefresh_Daka.setPullRefreshEnabled(false);
         //设置是否显示上次刷新的时间
-        pullRefresh_Daka.displayLastRefreshTime(true);
+        pullRefresh_Daka.displayLastRefreshTime(false);
         //设置刷新回调
         pullRefresh_Daka.setPullToRefreshListener(this);
         //主动触发下拉刷新操作

@@ -9,8 +9,8 @@ public class UrlConfig {
      * 接口配置
      */
     public static String HttpIpPost="http://www.bianlile.cc:89/" ;
-//        public static String HttpIpPost="http://192.168.43.249:8001/" ;
-//    public static String HttpIpPost="http://192.168.1.232:8001/" ;
+//        public static String HttpIpPost="http://192.168.43.249:8t001/" ;
+//    public static String HttpIpPost="http://192.168.43.79:8008/" ;
 
 
     public static String LoginPost=HttpIpPost+"api/Login/CheckLogin";//登录

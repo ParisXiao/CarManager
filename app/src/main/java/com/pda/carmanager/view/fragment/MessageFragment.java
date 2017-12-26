@@ -10,21 +10,20 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import com.androidkun.PullToRefreshRecyclerView;
-import com.androidkun.callback.PullToRefreshListener;
 import com.pda.carmanager.R;
 import com.pda.carmanager.adapter.MessageAdapter;
 import com.pda.carmanager.bean.MsgBean;
 import com.pda.carmanager.presenter.MsgPresenter;
-import com.pda.carmanager.pullrefresh.SpacesItemDecoration;
+import com.pda.carmanager.pulltorefresh.PullToRefreshBase;
+import com.pda.carmanager.pulltorefresh.PullToRefreshListView;
 import com.pda.carmanager.service.SignalAService;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.UserInfoClearUtil;
@@ -43,9 +42,9 @@ import static android.content.Context.BIND_AUTO_CREATE;
  * Created by Admin on 2017/11/29.
  */
 
-public class MessageFragment extends Fragment implements PullToRefreshListener, IMsgViewInter {
+public class MessageFragment extends Fragment implements IMsgViewInter {
     private Activity context;
-    private PullToRefreshRecyclerView pullRefresh_msg;
+    private PullToRefreshListView pullRefresh_msg;
     private List<MsgBean> msgBeanList = null;
     private List<MsgBean> msgBeanListShow = new ArrayList<>();
     private MessageAdapter messageAdapter;
@@ -82,20 +81,11 @@ public class MessageFragment extends Fragment implements PullToRefreshListener, 
                     }
                     isRefreah = false;
                     reFreshNext = false;
-                    if (load == 1) {
-                        pullRefresh_msg.setRefreshComplete();
-                    } else if (load == 2) {
-                        pullRefresh_msg.setLoadMoreComplete();
-                    }
                     pullRefresh_msg.setEmptyView(emptyView);
-
+                    pullRefresh_msg.onRefreshComplete();
                     break;
                 case 1:
-                    if (load == 1) {
-                        pullRefresh_msg.setRefreshComplete();
-                    } else if (load == 2) {
-                        pullRefresh_msg.setLoadMoreComplete();
-                    }
+                    pullRefresh_msg.onRefreshComplete();
                     break;
             }
         }
@@ -146,23 +136,44 @@ public class MessageFragment extends Fragment implements PullToRefreshListener, 
 
     private void initView(View view) {
         context = getActivity();
-        pullRefresh_msg = (PullToRefreshRecyclerView) view.findViewById(R.id.pullRefresh_msg);
+        pullRefresh_msg = (PullToRefreshListView) view.findViewById(R.id.pullRefresh_msg);
+        pullRefresh_msg.setMode(PullToRefreshBase.Mode.BOTH);
+        PullToRefreshBase.OnRefreshListener2<ListView> pullListener = new PullToRefreshBase.OnRefreshListener2<ListView>() {
+
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                load = 1;
+                if (!isRefreah) {
+                    isRefreah = true;
+                    if (!reFreshNext) {
+                        page = 1;
+                    }
+                    msgPresenter.getMsg(page + "", msgBeanList);
+                }
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                load = 2;
+                if (hasNext) {
+                    page += 1;
+                    reFreshNext = true;
+                    if (!isRefreah) {
+                        isRefreah = true;
+                        if (!reFreshNext) {
+                            page = 1;
+                        }
+                        msgPresenter.getMsg(page + "", msgBeanList);
+                    }
+                } else {
+                    handler.sendEmptyMessageDelayed(1, 1000);
+                }
+            }
+        };
+        pullRefresh_msg.setOnRefreshListener(pullListener);
         emptyView = View.inflate(context, R.layout.layout_empty_view, null);
         emptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
-        pullRefresh_msg.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        pullRefresh_msg.addItemDecoration(new SpacesItemDecoration(getResources().getDimensionPixelSize(R.dimen.padding_middle)));
-        pullRefresh_msg.setHasFixedSize(true);
-        //设置是否开启上拉加载
-        pullRefresh_msg.setLoadingMoreEnabled(true);
-        //设置是否开启下拉刷新
-        pullRefresh_msg.setPullRefreshEnabled(true);
-        //设置是否显示上次刷新的时间
-        pullRefresh_msg.displayLastRefreshTime(true);
-        //设置刷新回调
-        pullRefresh_msg.setPullToRefreshListener(this);
-        //主动触发下拉刷新操作
-        //pullRefresh_msg.onRefresh();
         msgBeanList = new ArrayList<>();
         msgPresenter = new MsgPresenter(context, this);
         messageAdapter = new MessageAdapter(context, msgBeanListShow);
@@ -184,35 +195,6 @@ public class MessageFragment extends Fragment implements PullToRefreshListener, 
         context.unbindService(conn);
     }
 
-    @Override
-    public void onRefresh() {
-        load = 1;
-        if (!isRefreah) {
-            isRefreah = true;
-            if (!reFreshNext) {
-                page = 1;
-            }
-            msgPresenter.getMsg(page + "", msgBeanList);
-        }
-    }
-
-    @Override
-    public void onLoadMore() {
-        load = 2;
-        if (hasNext) {
-            page += 1;
-            reFreshNext = true;
-            if (!isRefreah) {
-                isRefreah = true;
-                if (!reFreshNext) {
-                    page = 1;
-                }
-                msgPresenter.getMsg(page + "", msgBeanList);
-            }
-        } else {
-            handler.sendEmptyMessageDelayed(1, 1000);
-        }
-    }
 
     @Override
     public void getSuccess(String pages) {

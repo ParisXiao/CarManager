@@ -6,8 +6,14 @@
 <include
     layout="@layout/layout_toolbar_common"
     />
-        <com.androidkun.PullToRefreshRecyclerView
+        <GridView
             android:id="@+id/pullRefresh_myPark"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:numColumns="2"
+            android:fadeScrollbars="true"
+            android:background="@color/bg_color"
+            android:verticalSpacing="10dp"
+            android:horizontalSpacing="10dp"
+            />
 </LinearLayout>

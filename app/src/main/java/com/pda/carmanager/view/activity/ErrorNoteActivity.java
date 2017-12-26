@@ -22,7 +22,7 @@ import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.bean.ErrorBean;
 import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.presenter.ErrorNotesPresenter;
-import com.pda.carmanager.pullrefresh.SpacesItemDecoration;
+import com.pda.carmanager.pulltorefresh.SpacesItemDecoration;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.util.UserInfoClearUtil;

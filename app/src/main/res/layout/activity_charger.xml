@@ -6,9 +6,11 @@
 <include
     layout="@layout/layout_toolbar_common"
     />
-    <com.androidkun.PullToRefreshRecyclerView
+    <com.pda.carmanager.pulltorefresh.PullToRefreshListView
         android:id="@+id/pullRefresh_Charge"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:divider="@color/bg_color"
+        android:dividerHeight="10dp"
         android:layoutAnimation="@anim/anim_listview_item"/>
 </LinearLayout>

@@ -1,11 +1,11 @@
 package com.pda.carmanager.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,7 +21,7 @@ import java.util.List;
  * Created by Administrator on 2017/12/9 0009.
  */
 
-public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MessageAdapter extends BaseAdapter {
     private static final int VIEW_TYPE = -1;
     private LayoutInflater mInflater;
     private Context context;
@@ -31,54 +31,52 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public MessageAdapter(Context context, List<MsgBean> msgBeenList) {
         this.context = context;
         this.msgBeenList = msgBeenList;
-        this.mInflater = LayoutInflater.from(context);
+        mInflater = LayoutInflater.from(context);
 
     }
 
 
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view;
-        LayoutInflater inflater = LayoutInflater.from(context);
-//        if (VIEW_TYPE == viewType) {
-//            view = inflater.inflate(R.layout.item_empty, viewGroup, false);
-//
-//            return new MyEmptyHolder(view);
-//        }
-        view = inflater.inflate(R.layout.item_message, parent, false);
-        return new MyViewHolder(view);
 
-    }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        long date = DateUtil.getStringToDate(msgBeenList.get(position).getMsg_time());
-        ((MyViewHolder) holder).msg_day.setText(DateUtil.getDateToString(date));
-        ((MyViewHolder) holder).msg_hour.setText(DateUtil.getDateToStringHour(date));
-        ((MyViewHolder) holder).msg_title.setText(msgBeenList.get(position).getMsg_title());
-        ((MyViewHolder) holder).msg_content.setText(HtmlUtil.delHTMLTag(Html.fromHtml(msgBeenList.get(position).getMsg_content()).toString()));
-//       ((MyViewHolder) holder).msg_item.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent=new Intent(context, ContentActivity.class);
-//                Bundle bundle=new Bundle();
-//                bundle.putString("Title",msgBeenList.get(position).getMsg_title());
-//                bundle.putString("Id",msgBeenList.get(position).getId());
-//                bundle.putString("TitleColor",msgBeenList.get(position).getMsg_titleColor());
-//                bundle.putString("Content",msgBeenList.get(position).getMsg_content());
-//                intent.putExtras(bundle);
-//                context.startActivity(intent);
-//            }
-//        });
-
-    }
-
-    @Override
-    public int getItemCount() {
+    public int getCount() {
         return msgBeenList.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public Object getItem(int position) {
+        return getItem(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        MyViewHolder viewHolder=null;
+        if (viewHolder==null){
+            viewHolder=new MyViewHolder();
+            convertView= mInflater.inflate(R.layout.item_message, parent, false);
+           viewHolder.msg_day = (TextView) convertView.findViewById(R.id.text_item_time);
+            viewHolder.msg_hour = (TextView) convertView.findViewById(R.id.text_msg_itemmin);
+            viewHolder.msg_title = (TextView) convertView.findViewById(R.id.text_msg_itemtitle);
+            viewHolder.msg_content = (TextView) convertView.findViewById(R.id.item_content);
+            viewHolder.msg_item = (RelativeLayout) convertView.findViewById(R.id.rel_item);
+            convertView.setTag(viewHolder);
+        }else {
+            viewHolder= (MyViewHolder) convertView.getTag();
+        }
+        long date = DateUtil.getStringToDate(msgBeenList.get(position).getMsg_time());
+        viewHolder.msg_day.setText(DateUtil.getDateToString(date));
+        viewHolder.msg_hour.setText(DateUtil.getDateToStringHour(date));
+        viewHolder.msg_title.setText(msgBeenList.get(position).getMsg_title());
+        viewHolder.msg_content.setText(HtmlUtil.delHTMLTag(Html.fromHtml(msgBeenList.get(position).getMsg_content()).toString()));
+        return convertView;
+    }
+
+    class MyViewHolder  {
 
         TextView msg_day;
         TextView msg_hour;
@@ -86,14 +84,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         TextView msg_content;
         RelativeLayout msg_item;
 
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            msg_day = (TextView) itemView.findViewById(R.id.text_item_time);
-            msg_hour = (TextView) itemView.findViewById(R.id.text_msg_itemmin);
-            msg_title = (TextView) itemView.findViewById(R.id.text_msg_itemtitle);
-            msg_content = (TextView) itemView.findViewById(R.id.item_content);
-            msg_item = (RelativeLayout) itemView.findViewById(R.id.rel_item);
-        }
     }
 
 }

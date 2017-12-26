@@ -12,12 +12,9 @@ import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.posapi.PosApi;
 import android.posapi.PrintQueue;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,15 +22,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.androidkun.PullToRefreshRecyclerView;
-import com.androidkun.callback.PullToRefreshListener;
 import com.pda.carmanager.R;
 import com.pda.carmanager.adapter.MyParkAdapter;
 import com.pda.carmanager.base.BaseActivity;
@@ -41,9 +37,7 @@ import com.pda.carmanager.base.BaseApplication;
 import com.pda.carmanager.bean.MyParkBean;
 import com.pda.carmanager.bean.PrintBean;
 import com.pda.carmanager.config.AccountConfig;
-import com.pda.carmanager.inter.ParkItemOnInter;
 import com.pda.carmanager.presenter.ParkPresenter;
-import com.pda.carmanager.pullrefresh.GridSpacingItemDecoration;
 import com.pda.carmanager.service.ScanService;
 import com.pda.carmanager.service.SignalAService;
 import com.pda.carmanager.util.AMUtil;
@@ -65,22 +59,14 @@ import java.util.Observer;
  * Created by Administrator on 2017/12/9 0009.
  */
 
-public class MyParkActivity extends BaseActivity implements Observer,View.OnClickListener, ParkItemOnInter, PullToRefreshListener, IParkViewInter {
+public class MyParkActivity extends BaseActivity implements Observer,View.OnClickListener, IParkViewInter {
     private TextView toolbar_mid;
     private ImageButton toolbar_left_btn;
     private Toolbar toolbar;
-    private PullToRefreshRecyclerView pullRefresh_myPark;
+    private GridView pullRefresh_myPark;
     private MyParkAdapter myParkAdapter;
     private List<MyParkBean> parkBeanList = null;
-    private List<MyParkBean> parkBeanListshow = new ArrayList<>();
-    private PopupWindow popupWindow1;
     private ParkPresenter parkPresenter;
-    private int page = 1;
-    private int Pages = 0;
-    private boolean reFreshNext;
-    private boolean hasNext;
-    private boolean isRefreah;
-    private int list = 10;
     private static final int RequsetPark = 0x12;
     public int level_battry = 50;
     private View emptyView;
@@ -95,51 +81,10 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
     private Bitmap mBitmap = null;
     PrintBean printBean;
     private String CarNum;
-    private int load = 0;
 
     private SignalAService mService;
     private CarServiceConn conn;
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 0:
-                    if (!reFreshNext) {
-                        parkBeanListshow.clear();
-                    }
-                    if (parkBeanList != null && parkBeanList.size() > 0) {
-                        Log.e("list", list + "");
-                        int s = parkBeanList.size() < list ? parkBeanList.size() : list;
-                        for (int i = 0; i < s; i++) {
-                            parkBeanListshow.add(parkBeanList.get(i));
-                        }
-                        myParkAdapter.notifyDataSetChanged();
-                    } else {
-                        parkBeanListshow.clear();
-                        myParkAdapter.notifyDataSetChanged();
-                    }
-                    isRefreah = false;
-                    reFreshNext = false;
-                    if (load == 1) {
-                        pullRefresh_myPark.setRefreshComplete();
-                    } else if (load == 2) {
-                        pullRefresh_myPark.setLoadMoreComplete();
-                    }
-                    pullRefresh_myPark.setEmptyView(emptyView);
-
-                    break;
-                case 1:
-                    if (load == 1) {
-                        pullRefresh_myPark.setRefreshComplete();
-                    } else if (load == 2) {
-                        pullRefresh_myPark.setLoadMoreComplete();
-                    }
-                    break;
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,7 +107,7 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar_left_btn.setVisibility(View.VISIBLE);
 
-        pullRefresh_myPark = (PullToRefreshRecyclerView) findViewById(R.id.pullRefresh_myPark);
+        pullRefresh_myPark = (GridView) findViewById(R.id.pullRefresh_myPark);
         emptyView = View.inflate(this, R.layout.layout_empty_view, null);
         emptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
@@ -170,22 +115,6 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
         TextView empty_text = (TextView) emptyView.findViewById(R.id.empty_text);
         empty_img.setImageDrawable(getResources().getDrawable(R.drawable.chewei_null));
         empty_text.setText("您还没有可管理车位！");
-        pullRefresh_myPark.setLayoutManager(new GridLayoutManager(this, 2));
-        pullRefresh_myPark.addItemDecoration(new GridSpacingItemDecoration(getResources().getDimensionPixelSize(R.dimen.padding_middle), 2, true));
-        pullRefresh_myPark.setHasFixedSize(true);
-
-
-//       设置是否开启上拉加载
-        pullRefresh_myPark.setLoadingMoreEnabled(false);
-        //设置是否开启下拉刷新
-        pullRefresh_myPark.setPullRefreshEnabled(false);
-        //设置是否显示上次刷新的时间
-        pullRefresh_myPark.displayLastRefreshTime(false);
-        //设置刷新回调
-//        pullRefresh_myPark.setPullToRefreshListener(this);
-//        主动触发下拉刷新操作
-//        pullRefresh_myPark.onRefresh();
-
     }
 
     private void initData() {
@@ -193,19 +122,52 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
         DialogUtil.showMessage(this, getResources().getString(R.string.text_loading));
         parkPresenter = new ParkPresenter(this, this);
         parkBeanList = new ArrayList<>();
-        myParkAdapter = new MyParkAdapter(this, parkBeanListshow, this);
+        myParkAdapter = new MyParkAdapter(this, parkBeanList);
         pullRefresh_myPark.setAdapter(myParkAdapter);
         conn = new CarServiceConn();
         bindService(new Intent(this,SignalAService.class),conn,BIND_AUTO_CREATE);
+        pullRefresh_myPark.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (parkBeanList.get(position).getParkType()){
+                    case "2":
+                        Intent intent = new Intent(MyParkActivity.this, DialogCarWriteActivity.class);
+                        intent.putExtra("ParkId", parkBeanList.get(position).getParkingrecordid());
+                        startActivityForResult(intent, RequsetPark);
+                        break;
+                    case "3":
+                        Intent intent1 = new Intent(MyParkActivity.this, PayMessageActivity.class);
+                        intent1.putExtra("ID", id);
+                        startActivity(intent1);
+                        break;
+                    case "4":
+                        DialogUtil.showBoXunVIP(MyParkActivity.this, getResources().getString(R.string.text_dialog_vip1), 1);
+                        break;
+                }
+            }
+        });
+        pullRefresh_myPark.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                if (parkBeanList.get(position).getParkType().equals("3")) {
+                    if (BaseApplication.isPos) {
+                        DialogUtil.showMessage(MyParkActivity.this, getResources().getString(R.string.text_loading));
+                        parkPresenter.getPrintInfo(parkBeanList.get(position).getParkingrecordid());
+                    }else {
+                        DialogUtil.showBoXunVIP(MyParkActivity.this, "该终端无法进行打印", 1);
+                    }
+                }
+
+                return false;
+            }
+        });
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        page=1;
-        DialogUtil.showMessage(MyParkActivity.this,getResources().getString(R.string.text_loading));
-        parkPresenter.postParkList(page + "", "", parkBeanList);
+        parkPresenter.postParkList ("", "", parkBeanList);
     }
 
     @Override
@@ -228,24 +190,24 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
 
         MyParkBean myParkBean=(MyParkBean)arg;
         Log.d("HubOb",myParkBean.getParkingrecordid());
-        for (int i = 0; i < parkBeanListshow.size(); i++) {
-            if (myParkBean.getParkNum().equals(parkBeanListshow.get(i).getParkNum())){
-                parkBeanListshow.remove(i);
+        for (int i = 0; i < parkBeanList.size(); i++) {
+            if (myParkBean.getParkNum().equals(parkBeanList.get(i).getParkNum())){
+                parkBeanList.remove(i);
                 myParkAdapter.notifyDataSetChanged();
             }
         }
         if (myParkBean.isIn()){
             myParkBean.setParkType("2");
-            parkBeanListshow.add(0,myParkBean);
+            parkBeanList.add(0,myParkBean);
             myParkAdapter.notifyDataSetChanged();
         }
         if (myParkBean.isOut()){
             myParkBean.setParkType("1");
-            if (parkBeanListshow.size()>0){
-                parkBeanListshow.add(parkBeanListshow.size()-1,myParkBean);
+            if (parkBeanList.size()>0){
+                parkBeanList.add(parkBeanList.size()-1,myParkBean);
 
             }else {
-                parkBeanListshow.add(0,myParkBean);
+                parkBeanList.add(0,myParkBean);
 
             }
             myParkAdapter.notifyDataSetChanged();
@@ -269,34 +231,7 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
         }
     }
 
-    @Override
-    public void writeCarNum(String id) {
-        Intent intent = new Intent(MyParkActivity.this, DialogCarWriteActivity.class);
-        intent.putExtra("ParkId", id);
-        startActivityForResult(intent, RequsetPark);
-    }
 
-    @Override
-    public void payCar(String id) {
-        Intent intent = new Intent(MyParkActivity.this, PayMessageActivity.class);
-        intent.putExtra("ID", id);
-        startActivity(intent);
-    }
-
-    @Override
-    public void AutoPayCar(String carNum, String id) {
-        DialogUtil.showBoXunVIP(MyParkActivity.this, getResources().getString(R.string.text_dialog_vip1), 1);
-    }
-
-    @Override
-    public void LongOnItem(boolean print, String Id) {
-        if (BaseApplication.isPos) {
-            DialogUtil.showMessage(MyParkActivity.this, getResources().getString(R.string.text_loading));
-            parkPresenter.getPrintInfo(Id);
-        }else {
-            DialogUtil.showBoXunVIP(MyParkActivity.this, "该终端无法进行打印", 1);
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -326,35 +261,7 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
 
     }
 
-    @Override
-    public void onRefresh() {
-        load = 1;
-        if (!isRefreah) {
-            isRefreah = true;
-            if (!reFreshNext) {
-                page = 1;
-            }
-            parkPresenter.postParkList(page + "", "", parkBeanList);
-        }
-    }
 
-    @Override
-    public void onLoadMore() {
-        load = 2;
-        if (hasNext) {
-            page += 1;
-            reFreshNext = true;
-            if (!isRefreah) {
-                isRefreah = true;
-                if (!reFreshNext) {
-                    page = 1;
-                }
-                parkPresenter.postParkList(page + "", "", parkBeanList);
-            }
-        } else {
-            handler.sendEmptyMessageDelayed(1, 1000);
-        }
-    }
 
     @Override
     public void getPrintSuccess(PrintBean printBeanlong) {
@@ -365,18 +272,11 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
 
     @Override
     public void parkSuccess(String pages) {
-        this.Pages = Integer.valueOf(pages);
-        if (Pages <= page) {
-            hasNext = false;
-        } else {
-            hasNext = true;
-        }
-        handler.sendEmptyMessage(0);
+        myParkAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void parkFail(String msg) {
-        handler.sendEmptyMessage(1);
         if (msg.equals(getResources().getString(R.string.httpOut))) {
             UserInfoClearUtil.ClearUserInfo(MyParkActivity.this);
             AMUtil.actionStart(MyParkActivity.this, LoginActivity.class);
