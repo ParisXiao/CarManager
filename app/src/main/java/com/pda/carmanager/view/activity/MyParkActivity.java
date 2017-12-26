@@ -137,7 +137,7 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
                         break;
                     case "3":
                         Intent intent1 = new Intent(MyParkActivity.this, PayMessageActivity.class);
-                        intent1.putExtra("ID", id);
+                        intent1.putExtra("ID", parkBeanList.get(position).getParkingrecordid());
                         startActivity(intent1);
                         break;
                     case "4":
@@ -153,12 +153,14 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
                     if (BaseApplication.isPos) {
                         DialogUtil.showMessage(MyParkActivity.this, getResources().getString(R.string.text_loading));
                         parkPresenter.getPrintInfo(parkBeanList.get(position).getParkingrecordid());
+                        return true;
                     }else {
                         DialogUtil.showBoXunVIP(MyParkActivity.this, "该终端无法进行打印", 1);
+                        return true;
                     }
                 }
 
-                return false;
+                return true;
             }
         });
 
