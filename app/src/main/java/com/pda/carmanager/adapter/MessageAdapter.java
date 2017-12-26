@@ -22,7 +22,6 @@ import java.util.List;
  */
 
 public class MessageAdapter extends BaseAdapter {
-    private static final int VIEW_TYPE = -1;
     private LayoutInflater mInflater;
     private Context context;
     private List<MsgBean> msgBeenList = new ArrayList<>();

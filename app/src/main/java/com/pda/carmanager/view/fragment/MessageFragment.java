@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import com.pda.carmanager.pulltorefresh.PullToRefreshListView;
 import com.pda.carmanager.service.SignalAService;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.UserInfoClearUtil;
+import com.pda.carmanager.view.activity.ContentActivity;
 import com.pda.carmanager.view.activity.LoginActivity;
 import com.pda.carmanager.view.inter.IMsgViewInter;
 
@@ -171,6 +173,7 @@ public class MessageFragment extends Fragment implements IMsgViewInter {
             }
         };
         pullRefresh_msg.setOnRefreshListener(pullListener);
+
         emptyView = View.inflate(context, R.layout.layout_empty_view, null);
         emptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
@@ -178,6 +181,19 @@ public class MessageFragment extends Fragment implements IMsgViewInter {
         msgPresenter = new MsgPresenter(context, this);
         messageAdapter = new MessageAdapter(context, msgBeanListShow);
         pullRefresh_msg.setAdapter(messageAdapter);
+        pullRefresh_msg.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent=new Intent(context, ContentActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putString("Title",msgBeanListShow.get(position-1).getMsg_title());
+                bundle.putString("Id",msgBeanListShow.get(position-1).getId());
+                bundle.putString("TitleColor",msgBeanListShow.get(position-1).getMsg_titleColor());
+                bundle.putString("Content",msgBeanListShow.get(position-1).getMsg_content());
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            }
+        });
         conn = new NewsServiceConn();
         context.bindService(new Intent(context, SignalAService.class), conn, BIND_AUTO_CREATE);
     }
