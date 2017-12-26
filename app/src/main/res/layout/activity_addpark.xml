@@ -121,6 +121,7 @@
             android:paddingRight="10dp"
             android:text="地磁编号:"
             android:textColor="#000000"
+            android:maxEms="15"
             android:textSize="@dimen/text_size" />
 
         <RelativeLayout
@@ -181,6 +182,7 @@
                 android:hint="请输入车位编号"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
+                android:maxEms="10"
                 android:textColor="@color/black"
                 android:textColorHint="@color/text_msgtime"
                 android:singleLine="true"
