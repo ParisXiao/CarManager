@@ -47,7 +47,7 @@ public class PullToRefreshRecyclerView extends RecyclerView {
     /**
      * 摩擦力
      */
-    private static final int DRAG_RATE = 4;
+    private static final int DRAG_RATE = 3;
     private final AdapterDataObserver dataObserver = new DataObserver();
 
     private boolean pullRefreshEnabled = true;
@@ -268,7 +268,7 @@ public class PullToRefreshRecyclerView extends RecyclerView {
     }
 
     private float lastY = -1;
-    private boolean mIsVpDragger;
+
     @Override
     public boolean onTouchEvent(MotionEvent e) {
         switch (e.getAction()) {

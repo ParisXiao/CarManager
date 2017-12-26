@@ -156,6 +156,12 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
         toolbar_mid = (TextView) findViewById(R.id.toolbar_mid);
         toolbar_left_btn = (ImageButton) findViewById(R.id.toolbar_left_btn);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        toolbar_left_btn.setOnClickListener(this);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar_left_btn.setVisibility(View.VISIBLE);
+
         pullRefresh_myPark = (PullToRefreshRecyclerView) findViewById(R.id.pullRefresh_myPark);
         emptyView = View.inflate(this, R.layout.layout_empty_view, null);
         emptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -167,18 +173,16 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
         pullRefresh_myPark.setLayoutManager(new GridLayoutManager(this, 2));
         pullRefresh_myPark.addItemDecoration(new GridSpacingItemDecoration(getResources().getDimensionPixelSize(R.dimen.padding_middle), 2, true));
         pullRefresh_myPark.setHasFixedSize(true);
-        toolbar_left_btn.setOnClickListener(this);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar_left_btn.setVisibility(View.VISIBLE);
+
+
 //       设置是否开启上拉加载
-        pullRefresh_myPark.setLoadingMoreEnabled(true);
+        pullRefresh_myPark.setLoadingMoreEnabled(false);
         //设置是否开启下拉刷新
-        pullRefresh_myPark.setPullRefreshEnabled(true);
+        pullRefresh_myPark.setPullRefreshEnabled(false);
         //设置是否显示上次刷新的时间
-        pullRefresh_myPark.displayLastRefreshTime(true);
+        pullRefresh_myPark.displayLastRefreshTime(false);
         //设置刷新回调
-        pullRefresh_myPark.setPullToRefreshListener(this);
+//        pullRefresh_myPark.setPullToRefreshListener(this);
 //        主动触发下拉刷新操作
 //        pullRefresh_myPark.onRefresh();
 

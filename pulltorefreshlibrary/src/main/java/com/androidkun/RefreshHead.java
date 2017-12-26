@@ -45,8 +45,6 @@ public class RefreshHead extends LinearLayout {
     private ImageView imageRefreshing;
 
     private PullToRefreshListener pullToRefreshListener;
-
-
     /**
      * 上次刷新的时间
      */
@@ -64,7 +62,7 @@ public class RefreshHead extends LinearLayout {
 
     public RefreshHead(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        refreshLimitHeight = getScreenHeight() /8;
+        refreshLimitHeight = getScreenHeight() / 6;
 
         refreshContentView = LayoutInflater.from(getContext()).inflate(
                 R.layout.layout_refresh_head_view, null);

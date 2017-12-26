@@ -59,7 +59,7 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
     private Button pop_choose_big;
     private SwitchButton btn_catType_new;
     private SwitchButton btn_catType_stu;
-    private String IMG_PATH;
+    private String IMG_PATH="";
     private static final int PHOTO_CAPTURE = 0x11;// 拍照
     private List<Bitmap> maps = new ArrayList<Bitmap>();
     private int flage = 0;
@@ -79,17 +79,17 @@ public class DialogCarWriteActivity extends BaseActivity implements View.OnClick
     private String carType = "1";
     private String carNum = "";
     private static final int RequsetInput = 110;
-    private String area1;
-    private String area2;
-    private String key1;
-    private String key2;
-    private String key3;
-    private String key4;
-    private String key5;
-    private String key6;
+    private String area1="";
+    private String area2="";
+    private String key1="";
+    private String key2="";
+    private String key3="";
+    private String key4="";
+    private String key5="";
+    private String key6="";
     private boolean flag=false;
     private PostParkPresenter postParkPresenter;
-    private String ParkId;
+    private String ParkId="";
 
 
     @Override

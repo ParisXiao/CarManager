@@ -28,27 +28,31 @@ public class MyParkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private ParkItemOnInter parkItemOnInter;
     private List<MyParkBean> parkBeanList = new ArrayList<>();
 
+    private OnItemClickListener onItemClickListener;
+    private OnLongItemClickListener onLongItemClickListener;
 
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+    public void setOnLongItemClickListener(OnLongItemClickListener onLongItemClickListener) {
+        this.onLongItemClickListener = onLongItemClickListener;
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(View view, int position);
+    }
+    public interface OnLongItemClickListener{
+        void onLongItemClick(View view, int position);
+    }
     public MyParkAdapter(Context context, List<MyParkBean> parkBeanList, ParkItemOnInter parkItemOnInter) {
         this.context = context;
         this.parkBeanList = parkBeanList;
         this.parkItemOnInter=parkItemOnInter;
-        this.mInflater = LayoutInflater.from(context);
+        mInflater = LayoutInflater.from(context);
 
 
     }
 
-//    @Override
-//    public int getItemViewType(int position) {
-//
-//        if (position % 2 == 0) {
-//            return 1;
-//        } else if (position % 3 == 0) {
-//            return 2;
-//        } else {
-//            return 3;
-//        }
-//    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

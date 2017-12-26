@@ -1,8 +1,6 @@
 package com.pda.carmanager.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -15,7 +13,6 @@ import com.pda.carmanager.R;
 import com.pda.carmanager.bean.MsgBean;
 import com.pda.carmanager.util.DateUtil;
 import com.pda.carmanager.util.HtmlUtil;
-import com.pda.carmanager.view.activity.ContentActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,21 +35,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     }
 
-//    @Override
-//    public int getItemViewType(int position) {
-//
-////        if (position % 2 == 0) {
-////            return 1;
-////        } else if (position % 3 == 0) {
-////            return 2;
-////        } else {
-////            return 3;
-////        }
-//        if (msgBeenList.size() <= 0) {
-//            return position;
-//        }
-//        return super.getItemViewType(position);
-//    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -75,19 +57,19 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         ((MyViewHolder) holder).msg_hour.setText(DateUtil.getDateToStringHour(date));
         ((MyViewHolder) holder).msg_title.setText(msgBeenList.get(position).getMsg_title());
         ((MyViewHolder) holder).msg_content.setText(HtmlUtil.delHTMLTag(Html.fromHtml(msgBeenList.get(position).getMsg_content()).toString()));
-        ((MyViewHolder) holder).msg_item.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(context, ContentActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putString("Title",msgBeenList.get(position).getMsg_title());
-                bundle.putString("Id",msgBeenList.get(position).getId());
-                bundle.putString("TitleColor",msgBeenList.get(position).getMsg_titleColor());
-                bundle.putString("Content",msgBeenList.get(position).getMsg_content());
-                intent.putExtras(bundle);
-                context.startActivity(intent);
-            }
-        });
+//       ((MyViewHolder) holder).msg_item.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent=new Intent(context, ContentActivity.class);
+//                Bundle bundle=new Bundle();
+//                bundle.putString("Title",msgBeenList.get(position).getMsg_title());
+//                bundle.putString("Id",msgBeenList.get(position).getId());
+//                bundle.putString("TitleColor",msgBeenList.get(position).getMsg_titleColor());
+//                bundle.putString("Content",msgBeenList.get(position).getMsg_content());
+//                intent.putExtras(bundle);
+//                context.startActivity(intent);
+//            }
+//        });
 
     }
 
