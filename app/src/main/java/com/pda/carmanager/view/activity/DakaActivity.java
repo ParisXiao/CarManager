@@ -34,7 +34,6 @@ import com.pda.carmanager.pullrefresh.SpacesItemDecoration;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DateUtil;
 import com.pda.carmanager.util.DialogUtil;
-import com.pda.carmanager.util.StringEqualUtil;
 import com.pda.carmanager.util.UserInfoClearUtil;
 import com.pda.carmanager.view.inter.IDakaViewInter;
 
@@ -84,13 +83,13 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
             switch (msg.what) {
                 case 0:
                     if (DakaType.equals("2")){
-                        if (StringEqualUtil.stringNull(dakaBeanList.get(1).getDakaTime())){
+                        if (!dakaBeanList.get(1).getDakaTime().contains("日期")){
                             daka_text.setText("下班已打卡");
                             linear_sbdk_btn.setEnabled(false);
                         }
                     }
                     if (DakaType.equals("1")){
-                        if (StringEqualUtil.stringNull(dakaBeanList.get(0).getDakaTime())){
+                        if (!dakaBeanList.get(0).getDakaTime().contains("日期")){
                             daka_text.setText("上班已打卡");
                             linear_sbdk_btn.setEnabled(false);
                         }

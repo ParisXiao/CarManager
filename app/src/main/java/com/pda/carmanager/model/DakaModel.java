@@ -53,34 +53,35 @@ public class DakaModel implements IDakaInter {
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
-                if (OKHttpUtil.isConllection(context)){
-                String[] key = new String[]{"addaddr", "kqtype","jddid"};
-                Map map = new HashMap();
-                map.put("addaddr", address);
-                map.put("kqtype", DakaType);
-                map.put("jddid", PreferenceUtils.getInstance(context).getString(AccountConfig.Departmentid));
-                String Http = OKHttpUtil.GetMessage(context, UrlConfig.DakaPost, key, map);
-                if (Http != null) {
-                    JSONObject jsonObject;
-                    try {
-                        jsonObject = new JSONObject(Http);
+                if (OKHttpUtil.isConllection(context)) {
+                    String[] key = new String[]{"addaddr", "kqtype", "jddid"};
+                    Map map = new HashMap();
+                    map.put("addaddr", address);
+                    map.put("kqtype", DakaType);
+                    map.put("jddid", PreferenceUtils.getInstance(context).getString(AccountConfig.Departmentid));
+                    String Http = OKHttpUtil.GetMessage(context, UrlConfig.DakaPost, key, map);
+                    if (Http != null) {
+                        JSONObject jsonObject;
+                        try {
+                            jsonObject = new JSONObject(Http);
 
-                        String code = jsonObject.getString("code");
-                        desc = jsonObject.getString("desc");
+                            String code = jsonObject.getString("code");
+                            desc = jsonObject.getString("desc");
 
-                        if (code.equals("0")) {
-                            e.onNext(0);
-                        } else if (code.equals("1")) {
-                            e.onNext(1);
-                        } else {
-                            e.onNext(2);
+                            if (code.equals("0")) {
+                                e.onNext(0);
+                            } else if (code.equals("1")) {
+                                e.onNext(1);
+                            } else {
+                                e.onNext(2);
+                            }
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
                         }
-                    } catch (JSONException e1) {
-                        e1.printStackTrace();
+                    } else {
+                        e.onNext(3);
                     }
                 } else {
-                    e.onNext(3);
-                }}else {
                     e.onNext(4);
                 }
                 e.onComplete();
@@ -118,7 +119,7 @@ public class DakaModel implements IDakaInter {
                     case 4:
                         DialogUtil.dismise();
                         DialogUtil.showSetMessage(context);
-                        DakaActivity.flag=false;
+                        DakaActivity.flag = false;
                         break;
                 }
             }
@@ -158,27 +159,38 @@ public class DakaModel implements IDakaInter {
                             if (code.equals("0")) {
                                 JSONObject jsonObject1 = new JSONObject(jsonObject.getString("result"));
                                 pages = jsonObject1.getString("pages");
-                                JSONArray jsonArray = new JSONArray(jsonObject1.getString("items"));
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    DakaBean dakaBean=new DakaBean();
-                                    DakaBean dakaBean1=new DakaBean();
-                                    JSONObject temp = (JSONObject) jsonArray.get(i);
-                                    if (StringEqualUtil.stringNull(temp.getString("addbegtime"))){
-                                        dakaBean.setDakaTime("上班签到时间："+temp.getString("addbegtime"));
-                                        dakaBean.setDakaAddress(temp.getString("begaddr"));
-                                    }else {
-                                        long today= DateUtil.getStringToDate(temp.getString("kqday"));
-                                        dakaBean.setDakaTime("上班未签到 日期："+ DateUtil.getDateToString(today));
-                                        dakaBean.setDakaAddress("");
+                                if (!jsonObject1.getString("records").equals("0")){
+                                    JSONArray jsonArray = new JSONArray(jsonObject1.getString("items"));
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        DakaBean dakaBean = new DakaBean();
+                                        DakaBean dakaBean1 = new DakaBean();
+                                        JSONObject temp = (JSONObject) jsonArray.get(i);
+                                        if (StringEqualUtil.stringNull(temp.getString("addbegtime"))) {
+                                            dakaBean.setDakaTime("上班打卡时间：" + temp.getString("addbegtime"));
+                                            dakaBean.setDakaAddress(temp.getString("begaddr"));
+                                        } else {
+                                            long today = DateUtil.getStringToDate(temp.getString("kqday"));
+                                            dakaBean.setDakaTime("上班未打卡 日期：" + DateUtil.getDateToString(today));
+                                            dakaBean.setDakaAddress("");
+                                        }
+                                        if (StringEqualUtil.stringNull(temp.getString("addendtime"))) {
+                                            dakaBean1.setDakaTime("下班打卡时间：" + temp.getString("addendtime"));
+                                            dakaBean1.setDakaAddress(temp.getString("endaddr"));
+                                        } else {
+                                            long today = DateUtil.getStringToDate(temp.getString("kqday"));
+                                            dakaBean1.setDakaTime("下班未打卡 日期：" + DateUtil.getDateToString(today));
+                                            dakaBean1.setDakaAddress("");
+                                        }
+                                        dakaBeanList.add(dakaBean);
+                                        dakaBeanList.add(dakaBean1);
                                     }
-                                    if (StringEqualUtil.stringNull(temp.getString("addendtime"))){
-                                        dakaBean1.setDakaTime("下班签到时间："+temp.getString("addendtime"));
-                                        dakaBean1.setDakaAddress(temp.getString("endaddr"));
-                                    }else {
-                                        long today= DateUtil.getStringToDate(temp.getString("kqday"));
-                                        dakaBean1.setDakaTime("下班未签到 日期："+ DateUtil.getDateToString(today));
-                                        dakaBean1.setDakaAddress("");
-                                    }
+                                }else {
+                                    DakaBean dakaBean = new DakaBean();
+                                    DakaBean dakaBean1 = new DakaBean();
+                                    dakaBean.setDakaTime("上班未打卡 日期：" + kqdate);
+                                    dakaBean.setDakaAddress("");
+                                    dakaBean1.setDakaTime("下班未打卡 日期：" + kqdate);
+                                    dakaBean1.setDakaAddress("");
                                     dakaBeanList.add(dakaBean);
                                     dakaBeanList.add(dakaBean1);
                                 }
@@ -199,7 +211,7 @@ public class DakaModel implements IDakaInter {
                     {
                         e.onNext(3);
                     }
-                }else {
+                } else {
                     e.onNext(4);
                 }
                 e.onComplete();

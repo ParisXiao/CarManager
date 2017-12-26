@@ -3,8 +3,11 @@ package com.pda.carmanager.service;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -38,7 +41,9 @@ import com.zsoft.signala.transport.longpolling.LongPollingTransport;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -59,6 +64,10 @@ public class SignalAService extends Service {
     private CarObservable carObservable;
     private NewsObservable newsObservable;
     private PayObservable payObservable;
+    private SoundPool sp;//声明一个SoundPool
+    private boolean loaded = false;
+    private boolean isSpeaking = false;
+    private Map<Integer, Integer> sounddata;//
 
     public final class LocalBinder extends Binder {
         public SignalAService getService() {
@@ -80,8 +89,38 @@ public class SignalAService extends Service {
         newsObservable = new NewsObservable();
         payObservable = new PayObservable();
         beginConnect();
+        InitSound();
+    }
+    //初始化声音
+    public void InitSound() {
+        sp = new SoundPool(3, AudioManager.STREAM_MUSIC, 0);
+        sounddata = new HashMap<Integer, Integer>();
+        sounddata.put(1, sp.load(this, R.raw.car_come, 1));
+        sounddata.put(2, sp.load(this, R.raw.car_go, 1));
+        sounddata.put(3, sp.load(this, R.raw.message_come, 1));
+        sp.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+            @Override
+            public void onLoadComplete(SoundPool sound, int sampleId, int status) {
+                loaded = true;
+            }
+        });
     }
 
+
+    public void playSound(int sound, int number) {
+        AudioManager am = (AudioManager) this
+                .getSystemService(Context.AUDIO_SERVICE);
+        float audioMaxVolumn = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        float volumnCurrent = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+        float volumnRatio = volumnCurrent / audioMaxVolumn;
+
+        sp.play(sounddata.get(sound),
+                1,// 左声道音量
+                1,// 右声道音量
+                1, // 优先级
+                0,// 循环播放次数
+                1);// 回放速度，该值在0.5-2.0之间 1为正常速度
+    }
     /**
      * 开启推送服务 panderman 2013-10-25
      */
@@ -100,6 +139,7 @@ public class SignalAService extends Service {
                 myParkBeen.setIn(true);
                 carObservable.notifyChanged(myParkBeen);
                 CarNotifiContent("有车停靠，请前往录入！", args.opt(1).toString());
+                playSound(1,1);
             }
         });
         hub.On("callBack_Login", new HubOnDataCallback() {
@@ -117,6 +157,7 @@ public class SignalAService extends Service {
                 myParkBeen.setOut(true);
                 carObservable.notifyChanged(myParkBeen);
                 CarNotifiContent("有车离开，请前往收费！", args.opt(1).toString());
+                playSound(2,1);
             }
         });
         hub.On("callBack_PublishNews", new HubOnDataCallback() {
@@ -134,6 +175,7 @@ public class SignalAService extends Service {
                 msgBean.setMsg_time(args.opt(5).toString());
                 newsObservable.notifyChanged(msgBean);
                 MsgNotifiContent(args.opt(0).toString(), args.opt(2).toString(), args.opt(2).toString(), msgBean.getMsg_titleColor());
+                playSound(3,1);
             }
         });
         hub.On("callBack_Pay", new HubOnDataCallback() {
