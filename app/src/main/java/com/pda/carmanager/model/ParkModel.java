@@ -76,7 +76,7 @@ public class ParkModel implements IParkInter {
                                     MyParkBean myParkBean = new MyParkBean();
                                     JSONObject temp = (JSONObject) jsonArray.get(i);
                                     myParkBean.setParkNum(temp.getString("cwbh"));
-                                    if (temp.getString("status").equals("1")) {
+                                    if (temp.getString("status").equals("1")&&StringEqualUtil.stringNull(temp.getString("parkingrecordid"))) {
                                         myParkBean.setStartTime(temp.getString("starttime"));
                                         if (!temp.getString("parkingrecordid").equals("null")) {
                                             myParkBean.setParkingrecordid(temp.getString("parkingrecordid"));
