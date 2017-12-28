@@ -268,7 +268,7 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
     @Override
     public void getPrintSuccess(PrintBean printBeanlong) {
             Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
-            Bitmap bitmap = EncodingUtils.createQRCode(printBeanlong.getUrl(), 400, 400, logoBitmap);
+            Bitmap bitmap = EncodingUtils.createQRCode(printBeanlong.getUrl(), 384, 384, logoBitmap);
             showChooseMessage(this,printBeanlong,bitmap, printBeanlong.getCarNum(), "是否打印小票");
     }
 

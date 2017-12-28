@@ -74,7 +74,7 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
     private boolean isRefreah;
     private int list = 10;
     private int load = 0;
-    public static   boolean flag=false;
+    public static boolean flag=false;
     String day;
     private Handler handler = new Handler() {
         @Override
@@ -221,7 +221,7 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onResume() {
         super.onResume();
-
+        flag=false;
     }
     private void showChooseMessage(final Context context, String text, final String textContent) {
         final AlertDialog progressDialog = new AlertDialog.Builder(context).create();

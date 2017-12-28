@@ -5,24 +5,17 @@ import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.bean.PayInfoBean;
-import com.pda.carmanager.bean.PrintBean;
 import com.pda.carmanager.config.UrlConfig;
 import com.pda.carmanager.model.inter.IPayInfoInter;
 import com.pda.carmanager.presenter.inter.IPayInfoPreInter;
-import com.pda.carmanager.presenter.inter.IPostParkPreInter;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.IPUtil;
 import com.pda.carmanager.util.OKHttpUtil;
-import com.pda.carmanager.util.StringEqualUtil;
-import com.pda.carmanager.view.activity.PayMessageActivity;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
@@ -105,8 +98,8 @@ public class PayInfoModel implements IPayInfoInter {
             public void onNext(@NonNull Integer integer) {
                 switch (integer) {
                     case 0:
-                        DialogUtil.dismise();
                         iPayInfoPreInter.getSuccess(payInfoBean);
+                        DialogUtil.dismise();
                         break;
                     case 1:
                         DialogUtil.dismise();
