@@ -202,8 +202,8 @@ public class ParkModel implements IParkInter {
                                 JSONObject jsonObject1 = new JSONObject(jsonObject.getString("result"));
                                 printBean.setCarNo(jsonObject1.getString("MyCarNo"));
                                 printBean.setStartTime(jsonObject1.getString("StartTime"));
-                                if (StringEqualUtil.stringNull(jsonObject1.getString("MemberNo"))) {
-                                    printBean.setMemberNo(jsonObject1.getString("MemberNo"));
+                                if (StringEqualUtil.stringNull(jsonObject1.getString("CarNum"))) {
+                                    printBean.setMemberNo(jsonObject1.getString("CarNum"));
                                 }
                                 printBean.setUrl(jsonObject1.getString("Url"));
                                 List<PrintBean.IsQFModel> isQFModels = new ArrayList<PrintBean.IsQFModel>();

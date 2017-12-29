@@ -150,7 +150,7 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 if (parkBeanList.get(position).getParkType().equals("3")) {
-                    if (BaseApplication.isPos) {
+                    if (!BaseApplication.isPos) {
                         DialogUtil.showMessage(MyParkActivity.this, getResources().getString(R.string.text_loading));
                         parkPresenter.getPrintInfo(parkBeanList.get(position).getParkingrecordid());
                         return true;
@@ -249,6 +249,7 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
                         if (BaseApplication.getInstance().isPosApi()) {
                             Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
                             Bitmap bitmap = EncodingUtils.createQRCode(printBean.getUrl(),400,400, null);
+                            Log.d("bitmapUri",printBean.getUrl());
                             showChooseMessage(this,printBean, bitmap,printBean.getCarNum(), "是否打印小票");
                         }else {
                             DialogUtil.showBoXunVIP(MyParkActivity.this, "该终端无法进行打印", 1);
@@ -269,6 +270,7 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
     public void getPrintSuccess(PrintBean printBeanlong) {
             Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
             Bitmap bitmap = EncodingUtils.createQRCode(printBeanlong.getUrl(),400,400, null);
+            Log.d("bitmapUri",printBeanlong.getUrl());
             showChooseMessage(this,printBeanlong,bitmap, printBeanlong.getCarNum(), "是否打印小票");
     }
 
