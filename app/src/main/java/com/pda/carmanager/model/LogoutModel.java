@@ -9,6 +9,7 @@ import com.pda.carmanager.model.inter.ILogoutInter;
 import com.pda.carmanager.presenter.inter.ILogoutPreInter;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
+import com.pda.carmanager.util.StringEqualUtil;
 import com.pda.carmanager.util.UserInfoClearUtil;
 import com.pda.carmanager.view.fragment.MineFragment;
 
@@ -51,7 +52,7 @@ public class LogoutModel implements ILogoutInter {
                     String[] key = new String[]{};
                     Map map = new HashMap();
                     String Http = OKHttpUtil.GetMessage(context, UrlConfig.LogoutPost, key, map);
-                    if (Http != null) {
+                    if (StringEqualUtil.stringNull(Http)) {
                         JSONObject jsonObject;
                         try {
                             jsonObject = new JSONObject(Http);
@@ -130,7 +131,7 @@ public class LogoutModel implements ILogoutInter {
                     String[] key = new String[]{};
                     Map map = new HashMap();
                     String Http = OKHttpUtil.GetMessage(context, UrlConfig.TotalMoneyPost, key, map);
-                    if (Http != null) {
+                    if (StringEqualUtil.stringNull(Http)) {
                         JSONObject jsonObject;
                         try {
                             jsonObject = new JSONObject(Http);

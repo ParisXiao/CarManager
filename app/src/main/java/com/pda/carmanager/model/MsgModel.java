@@ -10,6 +10,7 @@ import com.pda.carmanager.model.inter.IMsgInter;
 import com.pda.carmanager.presenter.inter.IMsgPreInter;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
+import com.pda.carmanager.util.StringEqualUtil;
 import com.pda.carmanager.view.activity.PayMessageActivity;
 
 import org.json.JSONArray;
@@ -55,7 +56,7 @@ public class MsgModel implements IMsgInter {
                     map.put("pageindex", page);
                     map.put("pagerows", "10");
                     String Http = OKHttpUtil.GetMessage(context, UrlConfig.MsgPost, key, map);
-                    if (Http != null) {
+                    if (StringEqualUtil.stringNull(Http)) {
                         JSONObject jsonObject;
                         try {
                             jsonObject = new JSONObject(Http);

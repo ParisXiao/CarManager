@@ -57,7 +57,7 @@ public class SplashModel implements ISplashInter {
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
                 if (OKHttpUtil.isConllection(context)) {
                     String Http = OKHttpUtil.updataPost(UrlConfig.UpdataApp);
-                    if (Http != null) {
+                    if (StringEqualUtil.stringNull(Http)) {
                         JSONObject jsonObject;
                         try {
                             jsonObject = new JSONObject(Http);
@@ -152,7 +152,7 @@ public class SplashModel implements ISplashInter {
                         map.put("companycode", PreferenceUtils.getInstance(context).getString(AccountConfig.CommenyCode));
                         map.put("platform", "PDA");
                         String Http = OKHttpUtil.GetLoginMessage(context, UrlConfig.LoginPost, key, map);
-                        if (Http != null) {
+                        if (StringEqualUtil.stringNull(Http)) {
                             JSONObject jsonObject;
                             try {
                                 jsonObject = new JSONObject(Http);

@@ -11,6 +11,7 @@ import com.pda.carmanager.presenter.inter.IPayInfoPreInter;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.IPUtil;
 import com.pda.carmanager.util.OKHttpUtil;
+import com.pda.carmanager.util.StringEqualUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,7 +54,7 @@ public class PayInfoModel implements IPayInfoInter {
                     Map map = new HashMap();
                     map.put("parkingrecordid", id);
                     String Http = OKHttpUtil.GetMessage(context, UrlConfig.PayInfoPost, key, map);
-                    if (Http != null) {
+                    if (StringEqualUtil.stringNull(Http)) {
                         JSONObject jsonObject;
                         try {
                             jsonObject = new JSONObject(Http);
@@ -150,7 +151,7 @@ public class PayInfoModel implements IPayInfoInter {
                     map.put("ip", IPUtil.getIPAddress(context));
                     map.put("auth_code", auth_code);
                     String Http = OKHttpUtil.GetMessage(context, UrlConfig.PayPost, key, map);
-                    if (Http != null) {
+                    if (StringEqualUtil.stringNull(Http)) {
                         JSONObject jsonObject;
                         try {
                             jsonObject = new JSONObject(Http);

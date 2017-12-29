@@ -13,6 +13,7 @@ import com.pda.carmanager.presenter.inter.IAddParkPreInter;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
+import com.pda.carmanager.util.StringEqualUtil;
 import com.pda.carmanager.view.activity.AddParkActivity;
 
 import org.json.JSONArray;
@@ -57,7 +58,7 @@ public class AddParkModel implements AddParkInter {
                 Map map = new HashMap();
                 map.put("companyid", PreferenceUtils.getInstance(context).getString(AccountConfig.Organizeid));
                 String Http = OKHttpUtil.GetMessage(context, UrlConfig.SweetPost, key, map);
-                if (Http != null) {
+                if (StringEqualUtil.stringNull(Http)) {
                     JSONObject jsonObject;
                     try {
                         jsonObject = new JSONObject(Http);
@@ -159,7 +160,7 @@ public class AddParkModel implements AddParkInter {
                 Map map = new HashMap();
                 map.put("jdid", jdid);
                 String Http = OKHttpUtil.GetMessage(context, UrlConfig.SweetDuanPost, key, map);
-                if (Http != null) {
+                if (StringEqualUtil.stringNull(Http)) {
                     JSONObject jsonObject;
                     try {
                         jsonObject = new JSONObject(Http);
@@ -246,7 +247,7 @@ public class AddParkModel implements AddParkInter {
                 map.put("dcbh", dcbh);
                 map.put("cwbh", cwbh);
                 String Http = OKHttpUtil.GetMessage(context, UrlConfig.AddParkPost, key, map);
-                if (Http != null) {
+                if (StringEqualUtil.stringNull(Http)) {
                     JSONObject jsonObject;
                     try {
                         jsonObject = new JSONObject(Http);

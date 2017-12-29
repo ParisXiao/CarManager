@@ -189,7 +189,7 @@ public class ParkModel implements IParkInter {
                     Map map = new HashMap();
                     map.put("id", id);
                     String Http = OKHttpUtil.GetMessage(context, UrlConfig.PrintPost, key, map);
-                    if (Http != null) {
+                    if (StringEqualUtil.stringNull(Http)) {
                         JSONObject jsonObject;
                         try {
                             jsonObject = new JSONObject(Http);

@@ -60,7 +60,7 @@ public class DakaModel implements IDakaInter {
                     map.put("kqtype", DakaType);
                     map.put("jddid", PreferenceUtils.getInstance(context).getString(AccountConfig.Departmentid));
                     String Http = OKHttpUtil.GetMessage(context, UrlConfig.DakaPost, key, map);
-                    if (Http != null) {
+                    if (StringEqualUtil.stringNull(Http)) {
                         JSONObject jsonObject;
                         try {
                             jsonObject = new JSONObject(Http);
@@ -149,7 +149,7 @@ public class DakaModel implements IDakaInter {
                     map.put("pageindex", page);
                     map.put("pagerows", "10");
                     String Http = OKHttpUtil.GetMessage(context, UrlConfig.GetDakaPost, key, map);
-                    if (Http != null) {
+                    if (StringEqualUtil.stringNull(Http)) {
                         JSONObject jsonObject;
                         try {
                             jsonObject = new JSONObject(Http);

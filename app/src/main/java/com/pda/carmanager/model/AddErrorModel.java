@@ -11,6 +11,7 @@ import com.pda.carmanager.presenter.inter.IAddErrorPreInter;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
+import com.pda.carmanager.util.StringEqualUtil;
 import com.pda.carmanager.view.activity.AddErrorActivity;
 
 import org.json.JSONArray;
@@ -54,7 +55,7 @@ public class AddErrorModel implements IAddErrorInter {
                     Map map = new HashMap();
                     map.put("departmentid", PreferenceUtils.getInstance(context).getString(AccountConfig.Departmentid));
                     String Http = OKHttpUtil.GetMessage(context, UrlConfig.ParkNumPost, key, map);
-                    if (Http != null) {
+                    if (StringEqualUtil.stringNull(Http)) {
                         JSONObject jsonObject;
                         try {
                             jsonObject = new JSONObject(Http);
@@ -148,7 +149,7 @@ public class AddErrorModel implements IAddErrorInter {
                     map.put("jddid", PreferenceUtils.getInstance(context).getString(AccountConfig.Departmentid));
 
                     String Http = OKHttpUtil.GetMessage(context, UrlConfig.DualCatchPost, key, map);
-                    if (Http != null) {
+                    if (StringEqualUtil.stringNull(Http)) {
                         JSONObject jsonObject;
                         try {
                             jsonObject = new JSONObject(Http);

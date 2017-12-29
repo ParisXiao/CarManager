@@ -57,7 +57,7 @@ public class ChargeModel implements IChargeInter {
                     map.put("pageindex", page);
                     map.put("pagerows", "10");
                     String Http = OKHttpUtil.GetMessage(context, UrlConfig.ChargePost, key, map);
-                    if (Http != null) {
+                    if (StringEqualUtil.stringNull(Http)) {
                         JSONObject jsonObject;
                         try {
                             jsonObject = new JSONObject(Http);

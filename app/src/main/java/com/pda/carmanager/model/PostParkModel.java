@@ -60,7 +60,7 @@ public class PostParkModel implements IPostParkInter {
                     map.put("img2", img2);
 
                     String Http = OKHttpUtil.GetMessage(context, UrlConfig.PostParkPost, key, map);
-                    if (Http != null) {
+                    if (StringEqualUtil.stringNull(Http)) {
                         JSONObject jsonObject;
                         try {
                             jsonObject = new JSONObject(Http);

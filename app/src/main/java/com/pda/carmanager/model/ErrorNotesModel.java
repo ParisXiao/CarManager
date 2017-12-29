@@ -12,6 +12,7 @@ import com.pda.carmanager.presenter.inter.IErrorNotesPreInter;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
+import com.pda.carmanager.util.StringEqualUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,7 +59,7 @@ public class ErrorNotesModel implements IErrorNotesInter {
                     map.put("pageindex", pageIndex);
                     map.put("pagerows", "10");
                     String Http = OKHttpUtil.GetMessage(context, UrlConfig.SelCatchPost, key, map);
-                    if (Http != null) {
+                    if (StringEqualUtil.stringNull(Http)) {
                         JSONObject jsonObject;
                         try {
                             jsonObject = new JSONObject(Http);

@@ -13,6 +13,7 @@ import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.MD5util;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
+import com.pda.carmanager.util.StringEqualUtil;
 import com.pda.carmanager.view.activity.LoginActivity;
 
 import org.json.JSONException;
@@ -59,7 +60,7 @@ public class LoginModel implements LoginModelInter {
                     map.put("companycode", companycode);
                     map.put("platform", "PDA");
                     String Http = OKHttpUtil.GetLoginMessage(context, UrlConfig.LoginPost, key, map);
-                    if (Http != null) {
+                    if (StringEqualUtil.stringNull(Http)) {
                         JSONObject jsonObject;
                         try {
                             jsonObject = new JSONObject(Http);
