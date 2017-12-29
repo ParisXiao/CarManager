@@ -321,7 +321,7 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
                 DialogUtil.dismise();
                 Intent intent = new Intent(PayMessageActivity.this, ZXingImageActivity.class);
                 Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
-                Bitmap bitmap = EncodingUtils.createQRCode(url, 400, 400, logoBitmap);
+                Bitmap bitmap = EncodingUtils.createQRCode(url, 360, 360, logoBitmap);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
                 byte[] bitmapByte = baos.toByteArray();

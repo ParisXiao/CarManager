@@ -248,7 +248,7 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
                     if (StringEqualUtil.stringNull(printBean.getCarNum())) {
                         if (BaseApplication.getInstance().isPosApi()) {
                             Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
-                            Bitmap bitmap = EncodingUtils.createQRCode(printBean.getUrl(), 400, 400, logoBitmap);
+                            Bitmap bitmap = EncodingUtils.createQRCode(printBean.getUrl(),400,400, null);
                             showChooseMessage(this,printBean, bitmap,printBean.getCarNum(), "是否打印小票");
                         }else {
                             DialogUtil.showBoXunVIP(MyParkActivity.this, "该终端无法进行打印", 1);
@@ -268,7 +268,7 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
     @Override
     public void getPrintSuccess(PrintBean printBeanlong) {
             Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
-            Bitmap bitmap = EncodingUtils.createQRCode(printBeanlong.getUrl(), 400, 400, logoBitmap);
+            Bitmap bitmap = EncodingUtils.createQRCode(printBeanlong.getUrl(),400,400, null);
             showChooseMessage(this,printBeanlong,bitmap, printBeanlong.getCarNum(), "是否打印小票");
     }
 
@@ -371,7 +371,7 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
     private void printMix(PrintBean printBean1,Bitmap bitmap) {
 
         try {
-            int concentration = 35;
+            int concentration = 40;
             StringBuilder sb = new StringBuilder();
             byte[] text = null;
             sb.append("\n");
