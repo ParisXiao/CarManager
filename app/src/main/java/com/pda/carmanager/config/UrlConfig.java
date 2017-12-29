@@ -8,7 +8,7 @@ public class UrlConfig {
     /**
      * 接口配置
      */
-    public static String HttpIpPost="http://www.bianlile.cc:89/" ;
+    public static String HttpIpPost="http://120.77.32.49:8082/" ;
 //        public static String HttpIpPost="http://192.168.43.249:8t001/" ;
 //    public static String HttpIpPost="http://192.168.43.79:8008/" ;
 
@@ -36,9 +36,9 @@ public class UrlConfig {
     /**
      * PC端服务接口
      */
-    public static String PCHttpPost="http://www.bianlile.cc:88/";
+    public static String PCHttpPost="http://120.77.32.49:8081/";
 
-    public static String UpdataApp=PCHttpPost+"Update/GetUpdateEntity";//查询申诉进度
+    public static String UpdataApp=PCHttpPost+"Update/GetUpdateEntity";//app更新接口
 
     public static String SMSUrl="http://api.boxunpark.com/SMS/sendMsg";//短信验证接口
 
