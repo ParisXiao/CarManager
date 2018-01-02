@@ -42,7 +42,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private String usrid;
     private String password;
     private String commenyCode;
-    public static boolean flag = false;
+    private boolean flag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

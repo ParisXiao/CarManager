@@ -74,7 +74,7 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
     private boolean isRefreah;
     private int list = 10;
     private int load = 0;
-    public static boolean flag=false;
+    private boolean flag=false;
     String day;
     private Handler handler = new Handler() {
         @Override
@@ -146,6 +146,7 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
         mLocationClient.stop();
 
         dakaPresenter.getDaka(day,page+"",dakaBeanList);
+        flag=false;
     }
 
     @Override
@@ -163,6 +164,7 @@ public class DakaActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void dakaFail(String msg) {
+        flag=false;
         if (msg.equals(getResources().getString(R.string.httpOut))) {
             UserInfoClearUtil.ClearUserInfo(DakaActivity.this);
             AMUtil.actionStart(DakaActivity.this, LoginActivity.class);

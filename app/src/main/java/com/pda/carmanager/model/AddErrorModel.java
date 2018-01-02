@@ -12,7 +12,6 @@ import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
 import com.pda.carmanager.util.PreferenceUtils;
 import com.pda.carmanager.util.StringEqualUtil;
-import com.pda.carmanager.view.activity.AddErrorActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -121,7 +120,7 @@ public class AddErrorModel implements IAddErrorInter {
                     case 4:
                         DialogUtil.dismise();
                         DialogUtil.showSetMessage(context);
-                        AddErrorActivity.flag=false;
+                        iAddErrorPreInter.addFail(context.getResources().getString(R.string.httpNo));
                         break;
                 }
             }
@@ -220,7 +219,7 @@ public class AddErrorModel implements IAddErrorInter {
                     case 4:
                         DialogUtil.dismise();
                         DialogUtil.showSetMessage(context);
-                        AddErrorActivity.flag=false;
+                        iAddErrorPreInter.addFail(context.getResources().getString(R.string.httpNo));
                         break;
                 }
             }

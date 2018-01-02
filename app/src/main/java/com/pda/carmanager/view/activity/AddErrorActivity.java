@@ -63,7 +63,7 @@ public class AddErrorActivity extends BaseActivity implements View.OnClickListen
     private String district = "";    //获取区县
     private String street = "";   //获取街道信息
     private String address = "";   //获取详细信息
-    public static boolean flag = false;
+    private boolean flag = false;
     private List<String> parkNums = new ArrayList<>();
 
     @Override

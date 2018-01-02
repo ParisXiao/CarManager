@@ -69,7 +69,7 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
     private long firstTime = 0;
     private String money = "";
     private String payMoney = "";
-    public static boolean flags = false;
+   private boolean flags = false;
     private boolean aorw = false;
     private String Id;
     private SignalAService mService;
@@ -337,6 +337,7 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void getFail(String msg) {
+        flags=false;
         if (msg.equals(getResources().getString(R.string.httpOut))) {
             UserInfoClearUtil.ClearUserInfo(PayMessageActivity.this);
             AMUtil.actionStart(PayMessageActivity.this, LoginActivity.class);

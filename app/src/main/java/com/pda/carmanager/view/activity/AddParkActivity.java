@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 新增车位
  * Created by Administrator on 2017/12/12 0012.
  */
 
@@ -53,7 +54,7 @@ public class AddParkActivity extends BaseActivity implements View.OnClickListene
     private List<SweetDuanBean> sweetDuanBeen = new ArrayList<>();
     private String jd;
     private String jdd;
-    public static  boolean flag=false;
+    private   boolean flag=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,8 +142,6 @@ public class AddParkActivity extends BaseActivity implements View.OnClickListene
         }
     }
     private void submit() {
-        if (flag)return;
-
         // validate
         String edit = jiedaoNum_edit.getText().toString().trim();
         if (TextUtils.isEmpty(edit)) {
@@ -161,6 +160,7 @@ public class AddParkActivity extends BaseActivity implements View.OnClickListene
             Toast.makeText(this, "请输入车位编号", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (flag)return;
         flag=true;
         addParkPresenter.addPark(jd,jdd,edit1,edit3);
 
@@ -193,6 +193,7 @@ public class AddParkActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void getFail(String msg) {
+        flag=false;
         if (msg.equals(getResources().getString(R.string.httpOut))) {
             UserInfoClearUtil.ClearUserInfo(AddParkActivity.this);
             AMUtil.actionStart(AddParkActivity.this, LoginActivity.class);
@@ -233,11 +234,10 @@ public class AddParkActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void addFail(String msg) {
-        flag=true;
+        flag=false;
         if (msg.equals(getResources().getString(R.string.httpOut))) {
             UserInfoClearUtil.ClearUserInfo(AddParkActivity.this);
             AMUtil.actionStart(AddParkActivity.this, LoginActivity.class);
-
             finish();
         }
     }
