@@ -45,6 +45,10 @@ public class AddErrorModel implements IAddErrorInter {
         this.iAddErrorPreInter = iAddErrorPreInter;
     }
 
+    /**
+     * 获取部门相关车位编号进行模糊查询
+     * @param parks
+     */
     @Override
     public void getParkNum(final List<String> parks) {
         Observable.create(new ObservableOnSubscribe<Integer>() {
@@ -133,6 +137,13 @@ public class AddErrorModel implements IAddErrorInter {
             }
         });
     }
+
+    /**
+     * 新增申诉
+     * @param mycarno
+     * @param imgurl
+     * @param addr
+     */
 
     @Override
     public void addError(final String mycarno, final String imgurl, final String addr) {

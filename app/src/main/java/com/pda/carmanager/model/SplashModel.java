@@ -50,6 +50,9 @@ public class SplashModel implements ISplashInter {
         this.iSplashPreInter = iSplashPreInter;
     }
 
+    /**
+     * app强制更新接口
+     */
     @Override
     public void updata() {
         Observable.create(new ObservableOnSubscribe<Integer>() {
@@ -135,6 +138,9 @@ public class SplashModel implements ISplashInter {
         });
     }
 
+    /**
+     * 自动登录
+     */
     @Override
     public void splash() {
         Observable.create(new ObservableOnSubscribe<Integer>() {

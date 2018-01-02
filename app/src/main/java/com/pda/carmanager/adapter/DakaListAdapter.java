@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 上下班打卡记录适配器
  * Created by Administrator on 2017/12/8 0008.
  */
 

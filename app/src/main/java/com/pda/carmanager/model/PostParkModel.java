@@ -45,6 +45,14 @@ public class PostParkModel implements IPostParkInter {
         this.iPostParkPreInter = iPostParkPreInter;
     }
 
+    /**
+     * 申诉提交
+     * @param id
+     * @param carnum
+     * @param carType
+     * @param img1
+     * @param img2
+     */
     @Override
     public void postPark(final String id, final String carnum, final String carType, final String img1, final String img2) {
         Observable.create(new ObservableOnSubscribe<Integer>() {

@@ -48,6 +48,10 @@ public class AddParkModel implements AddParkInter {
         this.iAddParkPreInter = iAddParkPreInter;
     }
 
+    /**
+     * 根据公司获取相关街道信息
+     * @param sweetBeens
+     */
     @Override
     public void getSweetData(final List<SweetBean> sweetBeens) {
         Observable.create(new ObservableOnSubscribe<Integer>() {

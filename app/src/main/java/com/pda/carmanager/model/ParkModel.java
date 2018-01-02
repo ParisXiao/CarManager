@@ -49,6 +49,12 @@ public class ParkModel implements IParkInter {
         this.iParkPreInter = iParkPreInter;
     }
 
+    /**
+     * 分页查询车位列表
+     * @param pageIndex
+     * @param pagesortfield
+     * @param parkBeans
+     */
     @Override
     public void postParkList(final String pageIndex, String pagesortfield, final List<MyParkBean> parkBeans) {
 
@@ -179,6 +185,10 @@ public class ParkModel implements IParkInter {
                 });
     }
 
+    /**
+     * 根据停车记录id查询停车信息
+     * @param id
+     */
     @Override
     public void getPrintInfo(final String id) {
         Observable.create(new ObservableOnSubscribe<Integer>() {

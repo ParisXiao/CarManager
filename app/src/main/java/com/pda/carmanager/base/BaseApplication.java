@@ -12,7 +12,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
-import com.tencent.bugly.crashreport.CrashReport;
 
 import java.io.File;
 
@@ -25,6 +24,9 @@ public class BaseApplication extends Application {
     private String mCurDev = "";
 
     static BaseApplication instance = null;
+    /**
+     * PDA打印api
+     */
     //PosSDK mSDK = null;
     PosApi mPosApi = null;
     public static boolean isPos=true;
@@ -41,8 +43,10 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        CrashReport.initCrashReport(getApplicationContext(), "78fb42472e", false);
         initImagloader(getApplicationContext());
+        /**
+         * posapi进行型号匹配
+         */
         try {
             mPosApi = PosApi.getInstance(this);
             if (Build.MODEL.equalsIgnoreCase("3508")||Build.MODEL.equalsIgnoreCase("403")) {

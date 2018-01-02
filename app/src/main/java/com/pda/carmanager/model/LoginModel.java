@@ -45,6 +45,12 @@ public class LoginModel implements LoginModelInter {
         this.loginPreInter = loginPreInter;
     }
 
+    /**
+     * 提交登录信息
+     * @param username
+     * @param password
+     * @param companycode
+     */
     @Override
     public void getLoginInfo(final String username, final String password, final String companycode) {
 

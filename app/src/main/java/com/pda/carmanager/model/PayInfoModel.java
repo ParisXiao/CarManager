@@ -44,6 +44,10 @@ public class PayInfoModel implements IPayInfoInter {
         this.iPayInfoPreInter = iPayInfoPreInter;
     }
 
+    /**
+     * 根据停车id查询收费信息
+     * @param id
+     */
     @Override
     public void getPayInfo(final String id) {
         Observable.create(new ObservableOnSubscribe<Integer>() {
@@ -137,6 +141,13 @@ public class PayInfoModel implements IPayInfoInter {
         });
 
     }
+
+    /**
+     * 支付接口
+     * @param id
+     * @param type
+     * @param auth_code
+     */
 
     @Override
     public void Pay(final String id, final String type, final String auth_code) {

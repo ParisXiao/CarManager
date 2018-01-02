@@ -44,6 +44,11 @@ public class MsgModel implements IMsgInter {
         this.iMsgPreInter = iMsgPreInter;
     }
 
+    /**
+     * 获取信息列表
+     * @param page
+     * @param msgBeenList
+     */
     @Override
     public void getMsg(final String page, final List<MsgBean> msgBeenList) {
         Observable.create(new ObservableOnSubscribe<Integer>() {

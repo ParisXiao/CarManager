@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 车位适配器
  * Created by Administrator on 2017/12/9 0009.
  */
 

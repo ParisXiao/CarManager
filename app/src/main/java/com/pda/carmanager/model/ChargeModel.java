@@ -44,6 +44,12 @@ public class ChargeModel implements IChargeInter {
         this.iChargePreInter = iChargePreInter;
     }
 
+    /**
+     * 分页查询收费记录
+     * @param jddid
+     * @param page
+     * @param chargeBeanList
+     */
     @Override
     public void getCharge(final String jddid, final String page, final List<ChargeBean> chargeBeanList) {
         Observable.create(new ObservableOnSubscribe<Integer>() {

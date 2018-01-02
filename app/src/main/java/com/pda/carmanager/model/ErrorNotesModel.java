@@ -46,6 +46,13 @@ public class ErrorNotesModel implements IErrorNotesInter {
         this.iErrorNotesPreInter = iErrorNotesPreInter;
     }
 
+    /**
+     * 获取申诉记录
+     * @param pageIndex
+     * @param pagesortfield
+     * @param errorBeanList
+     */
+
     @Override
     public void getError(final String pageIndex, String pagesortfield, final List<ErrorBean> errorBeanList) {
         Observable.create(new ObservableOnSubscribe<Integer>() {

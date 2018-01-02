@@ -48,6 +48,11 @@ public class DakaModel implements IDakaInter {
         this.iDakaPreInter = iDakaPreInter;
     }
 
+    /**
+     * 提交车位信息
+     * @param address
+     * @param DakaType
+     */
     @Override
     public void postDaka(final String address, final String DakaType) {
         Observable.create(new ObservableOnSubscribe<Integer>() {
@@ -136,6 +141,12 @@ public class DakaModel implements IDakaInter {
         });
     }
 
+    /**
+     * 分页查询车位列表
+     * @param kqdate
+     * @param page
+     * @param dakaBeanList
+     */
     @Override
     public void getDaka(final String kqdate, final String page, final List<DakaBean> dakaBeanList) {
         Observable.create(new ObservableOnSubscribe<Integer>() {

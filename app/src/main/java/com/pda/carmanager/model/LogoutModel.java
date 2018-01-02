@@ -43,6 +43,9 @@ public class LogoutModel implements ILogoutInter {
         this.iLogoutPreInter = iLogoutPreInter;
     }
 
+    /**
+     * 注销接口
+     */
     @Override
     public void logout() {
         Observable.create(new ObservableOnSubscribe<Integer>() {
@@ -122,6 +125,9 @@ public class LogoutModel implements ILogoutInter {
         });
     }
 
+    /**
+     * 今天收费总额
+     */
     @Override
     public void getTodayPrice() {
         Observable.create(new ObservableOnSubscribe<Integer>() {
