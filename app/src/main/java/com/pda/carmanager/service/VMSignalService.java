@@ -97,12 +97,7 @@ public class VMSignalService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        isHub = true;
-        carObservable = new CarObservable();
-        newsObservable = new NewsObservable();
-        payObservable = new PayObservable();
-        beginConnect();
-        InitSound();
+
     }
     //初始化声音
     public void InitSound() {
@@ -389,7 +384,12 @@ public class VMSignalService extends Service {
             Intent innerIntent = new Intent(this, SignalAService.class);
             startService(innerIntent);
         }
-
+        isHub = true;
+        carObservable = new CarObservable();
+        newsObservable = new NewsObservable();
+        payObservable = new PayObservable();
+        beginConnect();
+        InitSound();
         // 发送唤醒广播来促使挂掉的UI进程重新启动起来
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent();
