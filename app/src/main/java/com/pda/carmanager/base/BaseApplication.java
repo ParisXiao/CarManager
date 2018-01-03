@@ -22,7 +22,7 @@ import java.io.File;
 
 public class BaseApplication extends Application {
     private String mCurDev = "";
-
+    private static Context context;
     static BaseApplication instance = null;
     /**
      * PDA打印api
@@ -40,9 +40,13 @@ public class BaseApplication extends Application {
         }
         return instance;
     }
+    public static Context getContext() {
+        return context;
+    }
     @Override
     public void onCreate() {
         super.onCreate();
+        context = this;
         initImagloader(getApplicationContext());
         /**
          * posapi进行型号匹配

@@ -1,5 +1,6 @@
 package com.pda.carmanager.service;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -9,6 +10,7 @@ import android.content.OperationApplicationException;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -49,12 +51,16 @@ import java.util.Observer;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
+import static com.pda.carmanager.shouhu.VMWakeReceiver.DAEMON_WAKE_ACTION;
 
 /**
- * Created by Admin on 2017/12/21.
+ * 守护进程
+ *
+ * Created by Admin on 2018/1/3.
  */
 
-public class SignalAService extends Service {
+public class VMSignalService extends Service {
+    private final static String TAG = VMSignalService.class.getSimpleName();
     private IHubProxy hub = null;
     private boolean isHub = true;
     private int code = 1;
@@ -70,15 +76,22 @@ public class SignalAService extends Service {
     private Map<Integer, Integer> sounddata;//
 
     public final class LocalBinder extends Binder {
-        public SignalAService getService() {
-            return SignalAService.this;
+        public VMSignalService getService() {
+            return VMSignalService.this;
         }
     }
+
+    // 定时唤醒的时间间隔，设置一分钟
+    private final static int ALARM_INTERVAL = 1 * 60 * 1000;
+    // 发送唤醒广播请求码
+    private final static int WAKE_REQUEST_CODE = 5121;
+    // 守护进程 Service ID
+    private final static int DAEMON_SERVICE_ID = -5121;
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return new LocalBinder();
+       return new LocalBinder();
     }
 
     @Override
@@ -185,7 +198,7 @@ public class SignalAService extends Service {
                 payCallBackBean.setStutas(args.opt(1).toString());
                 payCallBackBean.setMoney(args.opt(2).toString());
                 payObservable.notifyChanged(payCallBackBean);
-                Intent intent = new Intent(SignalAService.this, PaySuccessActivity.class);
+                Intent intent = new Intent(VMSignalService.this, PaySuccessActivity.class);
                 intent.putExtra("payStatus", payCallBackBean.getStutas());
                 intent.putExtra("payMoney", payCallBackBean.getMoney());
                 intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_SINGLE_TOP);
@@ -208,10 +221,10 @@ public class SignalAService extends Service {
             }
         };
         List<String> args = new ArrayList<String>();
-        args.add(PreferenceUtils.getInstance(SignalAService.this).getString(AccountConfig.AccountId));
-        args.add(PreferenceUtils.getInstance(SignalAService.this).getString(AccountConfig.Realname));
-        args.add(PreferenceUtils.getInstance(SignalAService.this).getString(AccountConfig.Departmentid));
-        args.add(PreferenceUtils.getInstance(SignalAService.this).getString(AccountConfig.Organizeid));
+        args.add(PreferenceUtils.getInstance(VMSignalService.this).getString(AccountConfig.AccountId));
+        args.add(PreferenceUtils.getInstance(VMSignalService.this).getString(AccountConfig.Realname));
+        args.add(PreferenceUtils.getInstance(VMSignalService.this).getString(AccountConfig.Departmentid));
+        args.add(PreferenceUtils.getInstance(VMSignalService.this).getString(AccountConfig.Organizeid));
         args.add("2");
         hub.Invoke("login", args, callback);
     }
@@ -236,7 +249,7 @@ public class SignalAService extends Service {
             Log.d("Hub", "OnStateChanged=" + oldState.getState() + " -> " + newState.getState());
             if (newState.getState().toString().equals("Connected")) {
                 login();
-            } else if (isHub && newState.getState().toString().equals("Disconnected")) {
+            } else if (isHub && newState.getState().toString().equals("Disconnected")||newState.getState().toString().equals("Reconnecting")) {
                 beginConnect();
             }
         }
@@ -277,7 +290,7 @@ public class SignalAService extends Service {
         view.findViewById(R.id.openSource).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SignalAService.this, ContentActivity.class);
+                Intent intent = new Intent(VMSignalService.this, ContentActivity.class);
                 intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_SINGLE_TOP);
                 intent.putExtra("Id", id);
                 intent.putExtra("Title", title);
@@ -364,6 +377,62 @@ public class SignalAService extends Service {
         public void notifyChanged(PayCallBackBean payCallBackBean) {
             this.setChanged();
             this.notifyObservers(payCallBackBean);
+        }
+    }
+
+    @Override public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.i(TAG, "VMService->onStartCommand");
+        // 利用 Android 漏洞提高进程优先级，
+        startForeground(DAEMON_SERVICE_ID, new Notification());
+        // 当 SDk 版本大于18时，需要通过内部 Service 类启动同样 id 的 Service
+        if (Build.VERSION.SDK_INT >= 18) {
+            Intent innerIntent = new Intent(this, SignalAService.class);
+            startService(innerIntent);
+        }
+
+        // 发送唤醒广播来促使挂掉的UI进程重新启动起来
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent alarmIntent = new Intent();
+            alarmIntent.setAction(DAEMON_WAKE_ACTION);
+
+        PendingIntent operation = PendingIntent.getBroadcast(this, WAKE_REQUEST_CODE, alarmIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
+                ALARM_INTERVAL, operation);
+
+        /**
+         * 这里返回值是使用系统 Service 的机制自动重新启动，不过这种方式以下两种方式不适用：
+         * 1.Service 第一次被异常杀死后会在5秒内重启，第二次被杀死会在10秒内重启，第三次会在20秒内重启，一旦在短时间内 Service 被杀死达到5次，则系统不再拉起。
+         * 2.进程被取得 Root 权限的管理工具或系统工具通过 forestop 停止掉，无法重启。
+         */
+        return START_STICKY;
+    }
+    public static class SignalAService extends Service {
+
+        @Nullable
+        @Override
+        public IBinder onBind(Intent intent) {
+            // TODO: Return the communication channel to the service.
+            throw new UnsupportedOperationException("onBind 未实现");
+        }
+
+        @Override
+        public void onCreate() {
+            super.onCreate();
+        }
+
+
+        @Override public int onStartCommand(Intent intent, int flags, int startId) {
+            Log.i(TAG, "Service -> onStartCommand");
+            startForeground(DAEMON_SERVICE_ID, new Notification());
+            stopSelf();
+            return super.onStartCommand(intent, flags, startId);
+        }
+
+        @Override public void onDestroy() {
+            Log.i(TAG, "Service -> onDestroy");
+            super.onDestroy();
         }
     }
 }

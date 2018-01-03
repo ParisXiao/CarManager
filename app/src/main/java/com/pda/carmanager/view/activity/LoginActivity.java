@@ -17,7 +17,7 @@ import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.presenter.LoginPresenter;
-import com.pda.carmanager.service.SignalAService;
+import com.pda.carmanager.service.VMSignalService;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.HideSoftKeyboardUtil;
@@ -158,7 +158,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void loginSuccess() {
         flag = false;
 //        启动signalA
-        Intent intent = new Intent(this, SignalAService.class);
+        Intent intent = new Intent(this, VMSignalService.class);
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         startService(intent);
         AMUtil.actionStart(LoginActivity.this, MainActivity.class);

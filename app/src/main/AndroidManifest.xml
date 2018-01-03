@@ -153,10 +153,47 @@
         <!-- 扫描服务 -->
         <service android:name="com.pda.carmanager.service.ScanService" >
         </service>
-        <service android:name="com.pda.carmanager.service.SignalAService"
+        <!--一像素守护 Activity-->
+        <activity
+            android:name=".shouhu.VMActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|navigation|keyboard"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:finishOnTaskLaunch="false"
+            android:launchMode="singleInstance"
+            android:theme="@style/AppTheme.Daemon"/>
+
+        <!--接收守护进程发送广播，用来唤醒核心进程的广播接收器-->
+        <receiver
+            android:name="com.pda.carmanager.shouhu.VMWakeReceiver"
             android:enabled="true"
-            android:launchMode="singleTask"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.pda.carmanager.wake"/>
+                <action android:name="android.intent.action.SCREEN_OFF"/>
+                <action android:name="android.intent.action.USER_PRESENT"/>
+            </intent-filter>
+        </receiver>
+        <!--守护进程-->
+        <service
+            android:name="com.pda.carmanager.service.VMSignalService"
+            android:enabled="true"
+            android:exported="false"
             />
+        <service
+            android:name="com.pda.carmanager.service.VMSignalService$SignalAService"
+            android:enabled="true"
+            android:exported="false"
+          />
+        <!--核心进程-->
+        <service
+            android:name="com.pda.carmanager.shouhu.VMCoreService"
+            android:enabled="true"
+            android:exported="false"/>
+        <service
+            android:name="com.pda.carmanager.shouhu.VMCoreService$CoreInnerService"
+            android:enabled="true"
+            android:exported="false"/>
     </application>
 
 </manifest>

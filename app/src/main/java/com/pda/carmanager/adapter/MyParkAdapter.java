@@ -17,6 +17,8 @@ import com.pda.carmanager.bean.MyParkBean;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.pda.carmanager.R.id.item_mypark_btn;
+
 /**
  * 车位适配器
  * Created by Administrator on 2017/12/9 0009.
@@ -56,11 +58,12 @@ public class MyParkAdapter extends BaseAdapter {
         if (viewHolder==null){
             viewHolder=new MyViewHolder();
             convertView=mInflater.inflate(R.layout.item_mypark, parent, false);
-           viewHolder. item_mypark_btn = (RelativeLayout) convertView.findViewById(R.id.item_mypark_btn);
+           viewHolder. item_mypark_btn = (RelativeLayout) convertView.findViewById(item_mypark_btn);
             viewHolder. text_carType = (TextView) convertView.findViewById(R.id.park_carType);
             viewHolder. img_parkType = (ImageView) convertView.findViewById(R.id.img_park);
             viewHolder. text_carNum = (TextView) convertView.findViewById(R.id.park_carnum);
             viewHolder. text_parkNum = (TextView) convertView.findViewById(R.id.park_No);
+            viewHolder. text_park = (TextView) convertView.findViewById(R.id.text_park);
             convertView.setTag(viewHolder);
         }else {
            viewHolder= (MyViewHolder) convertView.getTag();
@@ -78,7 +81,9 @@ public class MyParkAdapter extends BaseAdapter {
             viewHolder.img_parkType.setImageDrawable(context.getResources().getDrawable(R.drawable.youcheliang));
             viewHolder.text_carType.setVisibility(View.INVISIBLE);
         } else if (parkBeanList.get(position).getParkType().equals("3")) {
-            viewHolder.img_parkType.setImageDrawable(context.getResources().getDrawable(R.drawable.qianfei));
+            viewHolder.text_park.setVisibility(View.VISIBLE);
+            viewHolder.img_parkType.setVisibility(View.INVISIBLE);
+            viewHolder.item_mypark_btn.setBackground(context.getResources().getDrawable(R.drawable.theme_weijiao_griditem));
             viewHolder.text_carNum.setText(parkBeanList.get(position).getCarNum());
             viewHolder.text_carType.setVisibility(View.VISIBLE);
             viewHolder.text_carNum.setVisibility(View.VISIBLE);
@@ -120,6 +125,7 @@ public class MyParkAdapter extends BaseAdapter {
         ImageView img_parkType;
         TextView text_carNum;
         TextView text_parkNum;
+        TextView text_park;
 
     }
 

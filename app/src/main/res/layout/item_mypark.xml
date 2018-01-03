@@ -3,13 +3,13 @@
    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/item_mypark_btn"
-    android:layout_margin="10dp"
     android:background="@drawable/theme_button_griditem"
     >
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/linear_cartype">
+        android:id="@+id/linear_cartype"
+        >
         <TextView
             android:layout_width="60dp"
             android:layout_height="wrap_content"
@@ -20,11 +20,22 @@
             android:textColor="@color/white"
             android:visibility="invisible"
             android:id="@+id/park_carType" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size"
+            android:textColor="@color/red"
+            android:id="@+id/text_park"
+            android:text="未缴"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:visibility="gone"
+            />
         <ImageView
             android:id="@+id/img_park"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/kongxinchewei"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true" />
     </RelativeLayout>

@@ -69,4 +69,21 @@
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>   设置Activity出现方式
         <item name="android:backgroundDimEnabled">true</item>        背景是否模糊显示
     </style>
+    <style name="AppTheme.Daemon">
+        <!--设置背景透明-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <!--设置窗口框架为空-->
+        <item name="android:windowFrame">@null</item>
+        <!--设置没有 title-->
+        <item name="android:windowNoTitle">true</item>
+        <!--设置浮动-->
+        <item name="android:windowIsFloating">true</item>
+        <!--窗口动画为空-->
+        <item name="android:windowAnimationStyle">@null</item>
+        <!--不可预览-->
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:windowNoDisplay">false</item>
+    </style>
+
 </resources>

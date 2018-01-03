@@ -46,5 +46,5 @@ public class UrlConfig {
 
     //signalR+signalA
     public static String HUB_POST=HttpIpPost+"signalr/hubs";//
-    public static String NEWHTML_POST="http://www.bianlile.cc:88/Update/NoticeDetail?newsid=";
+    public static String NEWHTML_POST=PCHttpPost+"/Update/NoticeDetail?newsid=";//信息详情
 }

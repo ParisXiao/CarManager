@@ -39,7 +39,7 @@ import com.pda.carmanager.bean.PrintBean;
 import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.presenter.ParkPresenter;
 import com.pda.carmanager.service.ScanService;
-import com.pda.carmanager.service.SignalAService;
+import com.pda.carmanager.service.VMSignalService;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.BitmapTools;
 import com.pda.carmanager.util.DialogUtil;
@@ -82,7 +82,7 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
     PrintBean printBean;
     private String CarNum;
 
-    private SignalAService mService;
+    private VMSignalService mService;
     private CarServiceConn conn;
 
 
@@ -125,7 +125,7 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
         myParkAdapter = new MyParkAdapter(this, parkBeanList);
         pullRefresh_myPark.setAdapter(myParkAdapter);
         conn = new CarServiceConn();
-        bindService(new Intent(this,SignalAService.class),conn,BIND_AUTO_CREATE);
+        bindService(new Intent(this,VMSignalService.class),conn,BIND_AUTO_CREATE);
         pullRefresh_myPark.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -222,7 +222,7 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            mService = ((SignalAService.LocalBinder) iBinder).getService();
+            mService = ((VMSignalService.LocalBinder) iBinder).getService();
             //将当前Activity添加为观察者
             mService.addCarObservable(MyParkActivity.this);
         }
