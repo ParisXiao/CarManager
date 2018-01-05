@@ -27,7 +27,7 @@ import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.bean.PayCallBackBean;
 import com.pda.carmanager.bean.PayInfoBean;
 import com.pda.carmanager.presenter.PayInfoPresenter;
-import com.pda.carmanager.service.VMSignalService;
+import com.pda.carmanager.service.SignalAService;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.StringEqualUtil;
@@ -72,7 +72,7 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
    private boolean flags = false;
     private boolean aorw = false;
     private String Id;
-    private VMSignalService mService;
+    private SignalAService mService;
     private PayServiceConn conn;
 
     @Override
@@ -91,7 +91,7 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
         payInfoPresenter = new PayInfoPresenter(this, this);
         payInfoPresenter.getPayInfo(Id);
         conn = new PayServiceConn();
-        bindService(new Intent(this, VMSignalService.class), conn, BIND_AUTO_CREATE);
+        bindService(new Intent(this, SignalAService.class), conn, BIND_AUTO_CREATE);
     }
 
     private void initView() {
@@ -146,7 +146,7 @@ public class PayMessageActivity extends BaseActivity implements View.OnClickList
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            mService = ((VMSignalService.LocalBinder) iBinder).getService();
+            mService = ((SignalAService.LocalBinder) iBinder).getService();
             //将当前Activity添加为观察者
             mService.addPayObservable(PayMessageActivity.this);
         }

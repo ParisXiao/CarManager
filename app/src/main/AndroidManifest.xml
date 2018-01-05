@@ -176,12 +176,17 @@
         </receiver>
         <!--守护进程-->
         <service
-            android:name="com.pda.carmanager.service.VMSignalService"
+            android:name="com.pda.carmanager.service.SignalAService"
             android:enabled="true"
             android:exported="false"
             />
         <service
-            android:name="com.pda.carmanager.service.VMSignalService$SignalAService"
+            android:name="com.pda.carmanager.shouhu.VMSignalService"
+            android:enabled="true"
+            android:exported="false"
+            />
+        <service
+            android:name="com.pda.carmanager.shouhu.VMSignalService$SignalService"
             android:enabled="true"
             android:exported="false"
           />

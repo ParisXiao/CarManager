@@ -24,7 +24,7 @@ import com.pda.carmanager.bean.UpdataBean;
 import com.pda.carmanager.inter.UpdataApkInterface;
 import com.pda.carmanager.presenter.SplashPresenter;
 import com.pda.carmanager.service.ScanService;
-import com.pda.carmanager.service.VMSignalService;
+import com.pda.carmanager.service.SignalAService;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.view.inter.ISplashViewInter;
 import com.pda.carmanager.view.widght.LoopProgressBar;
@@ -317,8 +317,9 @@ public class SplashActivity extends BaseActivity implements ISplashViewInter {
         splash_status.setText(getResources().getString(R.string.text_splash_com));
         splashProgress.stop();
         //        启动signalA
-        Intent intent=new Intent(this, VMSignalService.class);
+        Intent intent=new Intent(this, SignalAService.class);
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+        intent.setAction("Connect");
         startService(intent);
         Intent intent1 = new Intent(SplashActivity.this,
                 MainActivity.class);

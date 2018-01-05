@@ -20,8 +20,7 @@ import android.widget.TextView;
 import com.pda.carmanager.R;
 import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.presenter.LogoutPresenter;
-import com.pda.carmanager.service.VMSignalService;
-import com.pda.carmanager.shouhu.VMCoreService;
+import com.pda.carmanager.service.SignalAService;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
@@ -107,7 +106,6 @@ public class MineFragment extends Fragment implements View.OnClickListener,ILogo
             case R.id.button_logout:
                 if (!flag1)
                     flag1=true;
-
                 showChooseMessage(context,"注销确认","是否确认注销并清空个人信息？");
                 break;
         }
@@ -148,10 +146,11 @@ public class MineFragment extends Fragment implements View.OnClickListener,ILogo
                         if (OKHttpUtil.isConllection(context))
                             DialogUtil.showMessage(context,"正在注销...");
                         logoutPresenter.logout();
-                        context.stopService(new Intent(context, VMCoreService.class));
-                        context.stopService(new Intent(context, VMSignalService.class));
-                        context.stopService(new Intent(context, VMSignalService.SignalAService.class));
+                        Intent intent=new Intent(context, SignalAService.class);
+                        intent.setAction("Disconnect");
+                        context.startService(intent);
                         progressDialog.dismiss();
+
 
                     }
                 });
@@ -171,6 +170,7 @@ public class MineFragment extends Fragment implements View.OnClickListener,ILogo
         flag=false;
         flag1=false;
         AMUtil.actionStart(context, LoginActivity.class);
+        context.finish();
     }
 
     @Override

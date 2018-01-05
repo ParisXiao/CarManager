@@ -15,9 +15,7 @@ import android.widget.Toast;
 
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
-import com.pda.carmanager.service.VMSignalService;
 import com.pda.carmanager.shouhu.VMCoreService;
-import com.pda.carmanager.util.AppUtils;
 import com.pda.carmanager.view.fragment.ManagementFragment;
 import com.pda.carmanager.view.fragment.MessageFragment;
 import com.pda.carmanager.view.fragment.MineFragment;
@@ -53,7 +51,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        startCoreProcess();
+//        startCoreProcess();
         initView();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.show(managementFragment);
@@ -206,10 +204,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!AppUtils.isServiceRunning(MainActivity.this,"VMSignalService")) {
-            Intent intent=new Intent(MainActivity.this, VMSignalService.class);
-            startService(intent);
-        }
     }
     /**
      * 启动核心进程

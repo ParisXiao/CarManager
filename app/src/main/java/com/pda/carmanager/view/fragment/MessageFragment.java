@@ -25,7 +25,7 @@ import com.pda.carmanager.bean.MsgBean;
 import com.pda.carmanager.presenter.MsgPresenter;
 import com.pda.carmanager.pulltorefresh.PullToRefreshBase;
 import com.pda.carmanager.pulltorefresh.PullToRefreshListView;
-import com.pda.carmanager.service.VMSignalService;
+import com.pda.carmanager.service.SignalAService;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.UserInfoClearUtil;
 import com.pda.carmanager.view.activity.ContentActivity;
@@ -94,7 +94,7 @@ public class MessageFragment extends Fragment implements IMsgViewInter {
     };
 
 
-    private VMSignalService mService;
+    private SignalAService mService;
     private NewsServiceConn conn;
 
 
@@ -102,7 +102,7 @@ public class MessageFragment extends Fragment implements IMsgViewInter {
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            mService = ((VMSignalService.LocalBinder) iBinder).getService();
+            mService = ((SignalAService.LocalBinder) iBinder).getService();
             //将当前Activity添加为观察者
             mService.addNewsObservable(new Observer() {
                 @Override
@@ -195,7 +195,7 @@ public class MessageFragment extends Fragment implements IMsgViewInter {
             }
         });
         conn = new NewsServiceConn();
-        context.bindService(new Intent(context, VMSignalService.class), conn, BIND_AUTO_CREATE);
+        context.bindService(new Intent(context, SignalAService.class), conn, BIND_AUTO_CREATE);
     }
 
     @Override

@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.pda.carmanager.R;
 import com.pda.carmanager.base.BaseActivity;
 import com.pda.carmanager.bean.PayCallBackBean;
-import com.pda.carmanager.service.VMSignalService;
+import com.pda.carmanager.service.SignalAService;
 import com.pda.carmanager.util.CountDownTimerUtil;
 
 import java.util.Observable;
@@ -33,7 +33,7 @@ public class ZXingImageActivity extends BaseActivity implements View.OnClickList
     private Toolbar toolbar;
     private ImageView zxing_img;
     private TextView custTime;
-    private VMSignalService mService;
+    private SignalAService mService;
     private PayServiceConn conn;
 
     @Override
@@ -71,7 +71,7 @@ public class ZXingImageActivity extends BaseActivity implements View.OnClickList
             }
         }, 60000);
         conn = new PayServiceConn();
-        bindService(new Intent(this, VMSignalService.class), conn, BIND_AUTO_CREATE);
+        bindService(new Intent(this, SignalAService.class), conn, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class ZXingImageActivity extends BaseActivity implements View.OnClickList
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            mService = ((VMSignalService.LocalBinder) iBinder).getService();
+            mService = ((SignalAService.LocalBinder) iBinder).getService();
             //将当前Activity添加为观察者
             mService.addPayObservable(ZXingImageActivity.this);
         }
