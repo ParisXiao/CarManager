@@ -21,6 +21,7 @@ import com.pda.carmanager.R;
 import com.pda.carmanager.config.AccountConfig;
 import com.pda.carmanager.presenter.LogoutPresenter;
 import com.pda.carmanager.service.VMSignalService;
+import com.pda.carmanager.shouhu.VMCoreService;
 import com.pda.carmanager.util.AMUtil;
 import com.pda.carmanager.util.DialogUtil;
 import com.pda.carmanager.util.OKHttpUtil;
@@ -147,8 +148,9 @@ public class MineFragment extends Fragment implements View.OnClickListener,ILogo
                         if (OKHttpUtil.isConllection(context))
                             DialogUtil.showMessage(context,"正在注销...");
                         logoutPresenter.logout();
-                        Intent intent=new Intent(context, VMSignalService.class);
-                        context.stopService(intent);
+                        context.stopService(new Intent(context, VMCoreService.class));
+                        context.stopService(new Intent(context, VMSignalService.class));
+                        context.stopService(new Intent(context, VMSignalService.SignalAService.class));
                         progressDialog.dismiss();
 
                     }

@@ -52,10 +52,11 @@ import java.util.Observer;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 import static com.pda.carmanager.shouhu.VMWakeReceiver.DAEMON_WAKE_ACTION;
+import static com.zsoft.signala.ConnectionState.Connected;
 
 /**
  * 守护进程
- *
+ * <p>
  * Created by Admin on 2018/1/3.
  */
 
@@ -91,7 +92,7 @@ public class VMSignalService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-       return new LocalBinder();
+        return new LocalBinder();
     }
 
     @Override
@@ -99,6 +100,7 @@ public class VMSignalService extends Service {
         super.onCreate();
 
     }
+
     //初始化声音
     public void InitSound() {
         sp = new SoundPool(3, AudioManager.STREAM_MUSIC, 0);
@@ -129,78 +131,82 @@ public class VMSignalService extends Service {
                 0,// 循环播放次数
                 1);// 回放速度，该值在0.5-2.0之间 1为正常速度
     }
+
     /**
      * 开启推送服务 panderman 2013-10-25
      */
     private void beginConnect() {
-        try {
-            hub = conn.CreateHubProxy("ChatHub");
-        } catch (OperationApplicationException e) {
-            e.printStackTrace();
-        }
-        hub.On("callBack_CarIn", new HubOnDataCallback() {
-            @Override
-            public void OnReceived(JSONArray args) {
-                MyParkBean myParkBeen = new MyParkBean();
-                myParkBeen.setParkingrecordid(args.opt(0).toString());
-                myParkBeen.setParkNum(args.opt(1).toString());
-                myParkBeen.setIn(true);
-                carObservable.notifyChanged(myParkBeen);
-                CarNotifiContent("有车停靠，请前往录入！", args.opt(1).toString());
-                playSound(1,1);
-            }
-        });
-        hub.On("callBack_Login", new HubOnDataCallback() {
-            @Override
-            public void OnReceived(JSONArray args) {
+        if (!conn.getCurrentState().getState().equals(Connected)) {
+            try {
 
+                hub = conn.CreateHubProxy("ChatHub");
+            } catch (OperationApplicationException e) {
+                e.printStackTrace();
             }
-        });
-        hub.On("callBack_CarOut", new HubOnDataCallback() {
-            @Override
-            public void OnReceived(JSONArray args) {
-                MyParkBean myParkBeen = new MyParkBean();
-                myParkBeen.setParkingrecordid(args.opt(0).toString());
-                myParkBeen.setParkNum(args.opt(1).toString());
-                myParkBeen.setOut(true);
-                carObservable.notifyChanged(myParkBeen);
-                CarNotifiContent("有车离开，请前往收费！", args.opt(1).toString());
-                playSound(2,1);
-            }
-        });
-        hub.On("callBack_PublishNews", new HubOnDataCallback() {
-            @Override
-            public void OnReceived(JSONArray args) {
-                MsgBean msgBean = new MsgBean();
-                msgBean.setId(args.opt(0).toString());
-                msgBean.setMsg_title(args.opt(2).toString());
-                if (StringEqualUtil.stringNull(args.opt(3).toString())) {
-                    msgBean.setMsg_titleColor(args.opt(3).toString());
-                } else {
-                    msgBean.setMsg_titleColor("#000000");
+            hub.On("callBack_CarIn", new HubOnDataCallback() {
+                @Override
+                public void OnReceived(JSONArray args) {
+                    MyParkBean myParkBeen = new MyParkBean();
+                    myParkBeen.setParkingrecordid(args.opt(0).toString());
+                    myParkBeen.setParkNum(args.opt(1).toString());
+                    myParkBeen.setIn(true);
+                    carObservable.notifyChanged(myParkBeen);
+                    CarNotifiContent("有车停靠，请前往录入！", args.opt(1).toString());
+                    playSound(1, 1);
                 }
-                msgBean.setMsg_content(args.opt(4).toString());
-                msgBean.setMsg_time(args.opt(5).toString());
-                newsObservable.notifyChanged(msgBean);
-                MsgNotifiContent(args.opt(0).toString(), args.opt(2).toString(), args.opt(2).toString(), msgBean.getMsg_titleColor());
-                playSound(3,1);
-            }
-        });
-        hub.On("callBack_Pay", new HubOnDataCallback() {
-            @Override
-            public void OnReceived(JSONArray args) {
-                PayCallBackBean payCallBackBean = new PayCallBackBean();
-                payCallBackBean.setStutas(args.opt(1).toString());
-                payCallBackBean.setMoney(args.opt(2).toString());
-                payObservable.notifyChanged(payCallBackBean);
-                Intent intent = new Intent(VMSignalService.this, PaySuccessActivity.class);
-                intent.putExtra("payStatus", payCallBackBean.getStutas());
-                intent.putExtra("payMoney", payCallBackBean.getMoney());
-                intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
-            }
-        });
-        conn.Start();
+            });
+            hub.On("callBack_Login", new HubOnDataCallback() {
+                @Override
+                public void OnReceived(JSONArray args) {
+
+                }
+            });
+            hub.On("callBack_CarOut", new HubOnDataCallback() {
+                @Override
+                public void OnReceived(JSONArray args) {
+                    MyParkBean myParkBeen = new MyParkBean();
+                    myParkBeen.setParkingrecordid(args.opt(0).toString());
+                    myParkBeen.setParkNum(args.opt(1).toString());
+                    myParkBeen.setOut(true);
+                    carObservable.notifyChanged(myParkBeen);
+                    CarNotifiContent("有车离开，请前往收费！", args.opt(1).toString());
+                    playSound(2, 1);
+                }
+            });
+            hub.On("callBack_PublishNews", new HubOnDataCallback() {
+                @Override
+                public void OnReceived(JSONArray args) {
+                    MsgBean msgBean = new MsgBean();
+                    msgBean.setId(args.opt(0).toString());
+                    msgBean.setMsg_title(args.opt(2).toString());
+                    if (StringEqualUtil.stringNull(args.opt(3).toString())) {
+                        msgBean.setMsg_titleColor(args.opt(3).toString());
+                    } else {
+                        msgBean.setMsg_titleColor("#000000");
+                    }
+                    msgBean.setMsg_content(args.opt(4).toString());
+                    msgBean.setMsg_time(args.opt(5).toString());
+                    newsObservable.notifyChanged(msgBean);
+                    MsgNotifiContent(args.opt(0).toString(), args.opt(2).toString(), args.opt(2).toString(), msgBean.getMsg_titleColor());
+                    playSound(3, 1);
+                }
+            });
+            hub.On("callBack_Pay", new HubOnDataCallback() {
+                @Override
+                public void OnReceived(JSONArray args) {
+                    PayCallBackBean payCallBackBean = new PayCallBackBean();
+                    payCallBackBean.setStutas(args.opt(1).toString());
+                    payCallBackBean.setMoney(args.opt(2).toString());
+                    payObservable.notifyChanged(payCallBackBean);
+                    Intent intent = new Intent(VMSignalService.this, PaySuccessActivity.class);
+                    intent.putExtra("payStatus", payCallBackBean.getStutas());
+                    intent.putExtra("payMoney", payCallBackBean.getMoney());
+                    intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                }
+            });
+            conn.Start();
+        }
     }
 
     private void login() {
@@ -244,7 +250,7 @@ public class VMSignalService extends Service {
             Log.d("Hub", "OnStateChanged=" + oldState.getState() + " -> " + newState.getState());
             if (newState.getState().toString().equals("Connected")) {
                 login();
-            } else if (isHub && newState.getState().toString().equals("Disconnected")||newState.getState().toString().equals("Reconnecting")) {
+            } else if (isHub&&newState.getState().toString().equals("Disconnected")) {
                 beginConnect();
             }
         }
@@ -375,7 +381,8 @@ public class VMSignalService extends Service {
         }
     }
 
-    @Override public int onStartCommand(Intent intent, int flags, int startId) {
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "VMService->onStartCommand");
         // 利用 Android 漏洞提高进程优先级，
         startForeground(DAEMON_SERVICE_ID, new Notification());
@@ -393,7 +400,7 @@ public class VMSignalService extends Service {
         // 发送唤醒广播来促使挂掉的UI进程重新启动起来
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent();
-            alarmIntent.setAction(DAEMON_WAKE_ACTION);
+        alarmIntent.setAction(DAEMON_WAKE_ACTION);
 
         PendingIntent operation = PendingIntent.getBroadcast(this, WAKE_REQUEST_CODE, alarmIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
@@ -408,6 +415,7 @@ public class VMSignalService extends Service {
          */
         return START_STICKY;
     }
+
     public static class SignalAService extends Service {
 
         @Nullable
@@ -423,14 +431,16 @@ public class VMSignalService extends Service {
         }
 
 
-        @Override public int onStartCommand(Intent intent, int flags, int startId) {
+        @Override
+        public int onStartCommand(Intent intent, int flags, int startId) {
             Log.i(TAG, "Service -> onStartCommand");
             startForeground(DAEMON_SERVICE_ID, new Notification());
             stopSelf();
             return super.onStartCommand(intent, flags, startId);
         }
 
-        @Override public void onDestroy() {
+        @Override
+        public void onDestroy() {
             Log.i(TAG, "Service -> onDestroy");
             super.onDestroy();
         }
