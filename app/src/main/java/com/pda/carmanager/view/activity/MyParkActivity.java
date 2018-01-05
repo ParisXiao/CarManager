@@ -150,7 +150,7 @@ public class MyParkActivity extends BaseActivity implements Observer,View.OnClic
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 if (parkBeanList.get(position).getParkType().equals("3")) {
-                    if (!BaseApplication.isPos) {
+                    if (BaseApplication.isPos) {
                         DialogUtil.showMessage(MyParkActivity.this, getResources().getString(R.string.text_loading));
                         parkPresenter.getPrintInfo(parkBeanList.get(position).getParkingrecordid());
                         return true;
